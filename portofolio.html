@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portofolio — Original.A | Platform Warisan UMKM Indonesia</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── Filters ── */
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 48px;
+    }
+
+    .filter-btn {
+      padding: 8px 20px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-mid);
+      transition: var(--transition);
+    }
+
+    .filter-btn:hover {
+      border-color: var(--green);
+      color: var(--green);
+    }
+
+    .filter-btn.active {
+      background: var(--green);
+      border-color: var(--green);
+      color: var(--white);
+    }
+
+    /* ── Toko Grid ── */
+    .toko-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+      margin-bottom: 64px;
+    }
+
+    .toko-card {
+      background: var(--white);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: var(--transition);
+    }
+
+    .toko-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-4px);
+    }
+
+    .toko-img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: var(--cream-dark);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .toko-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .toko-card:hover .toko-img img {
+      transform: scale(1.05);
+    }
+
+    .toko-body {
+      padding: 20px;
+    }
+
+    .toko-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .toko-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 4px;
+    }
+
+    .toko-cat {
+      font-size: 0.8rem;
+      color: var(--gold);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .toko-rating {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .toko-rating .icon {
+      color: var(--gold);
+    }
+
+    .toko-stats {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 20px;
+      padding-top: 16px;
+      border-top: 1px dashed var(--border-light);
+    }
+
+    .toko-stat .stat-label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+      letter-spacing: 0.05em;
+    }
+
+    .toko-stat .stat-val {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+
+    .btn-toko {
+      width: 100%;
+      text-align: center;
+      justify-content: center;
+      padding: 10px;
+    }
+
+    /* ── Success Stories ── */
+    .story-section {
+      background: var(--cream-dark);
+      padding: 80px 0;
+    }
+
+    .story-card {
+      background: var(--white);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      margin-bottom: 40px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .story-card.reverse {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    @media (min-width: 769px) {
+      .story-card.reverse .story-img {
+        grid-column: 2;
+        grid-row: 1;
+      }
+
+      .story-card.reverse .story-content {
+        grid-column: 1;
+        grid-row: 1;
+      }
+    }
+
+    .story-img {
+      width: 100%;
+      height: 100%;
+      min-height: 400px;
+      background: var(--border);
+    }
+
+    .story-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .story-content {
+      padding: 60px 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .story-tag {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .story-text {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      line-height: 1.6;
+      color: var(--green);
+      margin-bottom: 32px;
+      font-style: italic;
+    }
+
+    .story-meta {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+
+    .story-author .name {
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 2px;
+    }
+
+    .story-author .role {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .story-stat {
+      border-left: 2px solid var(--border);
+      padding-left: 16px;
+    }
+
+    .story-stat .num {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--green);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .story-stat .lbl {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+    }
+
+    @media (max-width: 768px) {
+      .story-card {
+        grid-template-columns: 1fr;
+      }
+
+      .story-img {
+        min-height: 250px;
+      }
+
+      .story-content {
+        padding: 32px 24px;
+      }
+
+      .story-text {
+        font-size: 1.2rem;
+      }
+    }
+
+    /* Image placehoder for portfolio */
+    .img-placeholder-lg {
+      background: var(--border-light);
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">Original.A</a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Beranda</a></li>
+        <li><a href="layanan.html">Layanan</a></li>
+        <li><a href="harga.html">Harga</a></li>
+        <li><a href="portofolio.html" class="active">Portofolio</a></li>
+        <li><a href="kontak.html">Kontak</a></li>
+      </ul>
+      <div class="nav-actions" id="navGuest">
+        <a href="login.html" class="nav-masuk">Masuk</a>
+        <a href="registrasi.html" class="nav-daftar">Daftar</a>
+      </div>
+      <div class="nav-actions nav-user" id="navUser" style="display:none">
+        <a href="checkout.html" class="nav-icon" title="Keranjang" aria-label="Keranjang">🛒<span class="nav-badge">3</span></a>
+        <a href="#" class="nav-icon" title="Notifikasi" aria-label="Notifikasi">🔔</a>
+        <a href="profil-pembeli.html" class="nav-profile" title="Profil Saya">
+          <span class="nav-avatar" id="navUserAvatar">AP</span>
+          <span class="nav-name" id="navUserName">Andi P.</span>
+        </a>
+      </div>
+      <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="container">
+      <span class="badge badge-gold fade-up">Kisah Sukses</span>
+      <h1 class="fade-up">Toko-Toko Inspiratif<br>di Original.A</h1>
+      <p class="fade-up">
+        Mereka telah membuktikannya, sekarang giliran kamu. Temukan kurasi UMKM terbaik yang telah bertransformasi dan
+        berkembang bersama kami.
+      </p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- TOKO GRID SECTION -->
+  <section class="section">
+    <div class="container">
+
+      <div class="filter-row fade-up">
+        <button class="filter-btn active">Semua Kategori</button>
+        <button class="filter-btn">Makanan &amp; Minuman</button>
+        <button class="filter-btn">Fashion</button>
+        <button class="filter-btn">Kerajinan</button>
+        <button class="filter-btn">Kecantikan</button>
+      </div>
+
+      <div class="toko-grid">
+
+        <!-- Toko 1 -->
+        <div class="toko-card fade-up">
+          <div class="toko-img">
+            <div class="img-placeholder-lg"><img src="img/porto kopi.png" alt=""></div>
+          </div>
+          <div class="toko-body">
+            <div class="toko-head">
+              <div>
+                <h4 class="toko-name">Kopi Nusantara</h4>
+                <p class="toko-cat">Makanan &amp; Minuman</p>
+              </div>
+              <p class="toko-rating"><span class="icon">★</span> 4.9</p>
+            </div>
+            <div class="toko-stats">
+              <div class="toko-stat">
+                <p class="stat-label">PRODUK</p>
+                <p class="stat-val">24</p>
+              </div>
+              <div class="toko-stat">
+                <p class="stat-label">TERJUAL</p>
+                <p class="stat-val">1.2k+</p>
+              </div>
+            </div>
+            <button class="btn btn-outline btn-toko">Kunjungi Toko</button>
+          </div>
+        </div>
+
+        <!-- Toko 2 -->
+        <div class="toko-card fade-up">
+          <div class="toko-img">
+            <div class="img-placeholder-lg"><img src="img/porto lini_tenun.png" alt=""></div>
+          </div>
+          <div class="toko-body">
+            <div class="toko-head">
+              <div>
+                <h4 class="toko-name">Lini Tenun</h4>
+                <p class="toko-cat">Fashion</p>
+              </div>
+              <p class="toko-rating"><span class="icon">★</span> 4.8</p>
+            </div>
+            <div class="toko-stats">
+              <div class="toko-stat">
+                <p class="stat-label">PRODUK</p>
+                <p class="stat-val">45</p>
+              </div>
+              <div class="toko-stat">
+                <p class="stat-label">TERJUAL</p>
+                <p class="stat-val">850+</p>
+              </div>
+            </div>
+            <button class="btn btn-outline btn-toko">Kunjungi Toko</button>
+          </div>
+        </div>
+
+        <!-- Toko 3 -->
+        <div class="toko-card fade-up">
+          <div class="toko-img">
+            <div class="img-placeholder-lg"><img src="img/porto tanah_liat.png" alt=""></div>
+          </div>
+          <div class="toko-body">
+            <div class="toko-head">
+              <div>
+                <h4 class="toko-name">Tanah Liat Seru</h4>
+                <p class="toko-cat">Kerajinan</p>
+              </div>
+              <p class="toko-rating"><span class="icon">★</span> 5.0</p>
+            </div>
+            <div class="toko-stats">
+              <div class="toko-stat">
+                <p class="stat-label">PRODUK</p>
+                <p class="stat-val">12</p>
+              </div>
+              <div class="toko-stat">
+                <p class="stat-label">TERJUAL</p>
+                <p class="stat-val">300+</p>
+              </div>
+            </div>
+            <button class="btn btn-outline btn-toko">Kunjungi Toko</button>
+          </div>
+        </div>
+
+        <!-- Toko 4 -->
+        <div class="toko-card fade-up">
+          <div class="toko-img">
+            <div class="img-placeholder-lg"><img src="img/porto aura_alami.png" alt=""></div>
+          </div>
+          <div class="toko-body">
+            <div class="toko-head">
+              <div>
+                <h4 class="toko-name">Aura Alami</h4>
+                <p class="toko-cat">Kecantikan</p>
+              </div>
+              <p class="toko-rating"><span class="icon">★</span> 4.7</p>
+            </div>
+            <div class="toko-stats">
+              <div class="toko-stat">
+                <p class="stat-label">PRODUK</p>
+                <p class="stat-val">18</p>
+              </div>
+              <div class="toko-stat">
+                <p class="stat-label">TERJUAL</p>
+                <p class="stat-val">2.5k+</p>
+              </div>
+            </div>
+            <button class="btn btn-outline btn-toko">Kunjungi Toko</button>
+          </div>
+        </div>
+
+        <!-- Toko 5 -->
+        <div class="toko-card fade-up">
+          <div class="toko-img">
+            <div class="img-placeholder-lg"><img src="img/porto batik_warisan.png" alt=""></div>
+          </div>
+          <div class="toko-body">
+            <div class="toko-head">
+              <div>
+                <h4 class="toko-name">Batik Warisan</h4>
+                <p class="toko-cat">Fashion</p>
+              </div>
+              <p class="toko-rating"><span class="icon">★</span> 4.9</p>
+            </div>
+            <div class="toko-stats">
+              <div class="toko-stat">
+                <p class="stat-label">PRODUK</p>
+                <p class="stat-val">56</p>
+              </div>
+              <div class="toko-stat">
+                <p class="stat-label">TERJUAL</p>
+                <p class="stat-val">1.8k+</p>
+              </div>
+            </div>
+            <button class="btn btn-outline btn-toko">Kunjungi Toko</button>
+          </div>
+        </div>
+
+        <!-- Toko 6 -->
+        <div class="toko-card fade-up">
+          <div class="toko-img">
+            <div class="img-placeholder-lg"><img src="img/porto rasa_warisan.png" alt=""></div>
+          </div>
+          <div class="toko-body">
+            <div class="toko-head">
+              <div>
+                <h4 class="toko-name">Rasa Tradisi</h4>
+                <p class="toko-cat">Makanan &amp; Minuman</p>
+              </div>
+              <p class="toko-rating"><span class="icon">★</span> 4.6</p>
+            </div>
+            <div class="toko-stats">
+              <div class="toko-stat">
+                <p class="stat-label">PRODUK</p>
+                <p class="stat-val">32</p>
+              </div>
+              <div class="toko-stat">
+                <p class="stat-label">TERJUAL</p>
+                <p class="stat-val">3.1k+</p>
+              </div>
+            </div>
+            <button class="btn btn-outline btn-toko">Kunjungi Toko</button>
+          </div>
+        </div>
+
+      </div>
+
+      <div style="text-align:center; margin-top:32px;">
+        <button class="btn btn-primary fade-up">Muat Lebih Banyak</button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SUCCESS STORIES -->
+  <section class="story-section">
+    <div class="container">
+      <div class="section-title-center fade-up" style="margin-bottom:48px;">
+        <h2>Kisah Transformasi UMKM</h2>
+        <p style="margin-top:10px;">Bagaimana Original.A membantu mitra kami berkembang di kancah nasional.</p>
+      </div>
+
+      <!-- Story 1 -->
+      <div class="story-card fade-up">
+        <div class="story-img">
+          <div class="img-placeholder-lg"><img src="img/foto porto_1.png" alt=""></div>
+        </div>
+        <div class="story-content">
+          <span class="story-tag">❝ Testimoni Merchant</span>
+          <p class="story-text">
+            "Original.A bukan sekadar platform jualan, mereka membantu saya menceritakan filosofi di balik setiap helai
+            kain tenun saya. Kini karya kami diapresiasi hingga ke kolektor di luar Jawa."
+          </p>
+          <div class="story-meta">
+            <div class="story-author">
+              <p class="name">Siti Rahma</p>
+              <p class="role">Pendiri Lini Tenun</p>
+            </div>
+            <div class="story-stat">
+              <p class="num">300%</p>
+              <p class="lbl">KENAIKAN OMZET</p>
+            </div>
+            <div class="story-stat">
+              <p class="num">15+</p>
+              <p class="lbl">KOTA JANGKAUAN</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Story 2 (Reverse) -->
+      <div class="story-card reverse fade-up">
+        <div class="story-content">
+          <span class="story-tag">❝ Testimoni Merchant</span>
+          <p class="story-text">
+            "Melalui kurasi ketat tim editorial Original.A, produk kopi kami naik kelas dari sekadar komoditas menjadi
+            produk premium yang dicari para penikmat kopi sejati."
+          </p>
+          <div class="story-meta">
+            <div class="story-author">
+              <p class="name">Bambang Wijaya</p>
+              <p class="role">Pemilik Kopi Nusantara</p>
+            </div>
+            <div class="story-stat">
+              <p class="num">5rb+</p>
+              <p class="lbl">PELANGGAN LOYAL</p>
+            </div>
+            <div class="story-stat">
+              <p class="num">Gold</p>
+              <p class="lbl">MERCHANT BADGE</p>
+            </div>
+          </div>
+        </div>
+        <div class="story-img">
+          <div class="img-placeholder-lg"><img src="img/foto porto_2.png" alt=""></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CTA BOTTOM -->
+  <section class="cta-bottom" style="background:var(--green); padding:80px 0; text-align:center;">
+    <div class="container">
+      <h2 class="fade-up" style="color:var(--white); font-size:clamp(1.8rem,4vw,2.5rem); margin-bottom:16px;">Siap
+        Menjadi Kisah Sukses Berikutnya?</h2>
+      <p class="fade-up" style="color:rgba(255,255,255,0.7); max-width:600px; margin:0 auto 32px;">
+        Bergabunglah dengan ekosistem UMKM terkurasi terbaik di Indonesia dan mulai perjalanan transformasi brand Anda
+        bersama kami.
+      </p>
+      <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
+        <a href="kontak.html" class="btn btn-gold fade-up">Daftar Sekarang</a>
+        <a href="layanan.html" class="btn btn-outline-white fade-up">Pelajari Layanan</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="nav-logo"
+            style="color:var(--white); font-family:var(--font-display); font-size:1.4rem; font-weight:700; margin-bottom:12px;">
+            Original.A</div>
+          <p>Mewadahi karya pengrajin lokal untuk mendunia. Mengkurasi warisan dengan hati dan standar tinggi.</p>
+          <div class="footer-socials" style="margin-top:20px;">
+            <a href="#">🌐</a><a href="#">@</a><a href="#">↗</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h5>Navigasi</h5>
+          <ul>
+            <li><a href="index.html">Beranda</a></li>
+            <li><a href="layanan.html">Layanan</a></li>
+            <li><a href="harga.html">Harga</a></li>
+            <li><a href="portofolio.html" class="active-link">Portofolio</a></li>
+            <li><a href="kontak.html">Kontak</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Kontak</h5>
+          <ul>
+            <li><a href="#">halo@originala.id</a></li>
+            <li><a href="#">+62 812 3456 7890</a></li>
+            <li><a href="#">Jakarta, Indonesia</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Newsletter</h5>
+          <p style="color:rgba(255,255,255,0.6); font-size:0.875rem; margin-bottom:14px;">Dapatkan info terbaru dan
+            promo menarik.</p>
+          <div class="newsletter-form">
+            <input type="email" placeholder="Email Anda" />
+            <button>Kirim ›</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">© 2024 Original.A. Warisan UMKM Indonesia Terkurasi.</div>
+    </div>
+  </footer>
+
+  <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+  <script>
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 40);
+      document.getElementById('scrollTop').classList.toggle('show', window.scrollY > 400);
+    });
+
+    document.getElementById('navToggle').addEventListener('click', () => {
+      document.getElementById('navLinks').classList.toggle('open');
+    });
+
+    // Fade-in on scroll
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i * 80);
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+
+    /* ---- CEK STATUS LOGIN ---- */
+    (function () {
+      const u = localStorage.getItem('oa_user');
+      if (u) {
+        document.getElementById('navGuest').style.display = 'none';
+        document.getElementById('navUser').style.display = 'flex';
+        try { const d = JSON.parse(u); if (d.name) { document.getElementById('navUserName').textContent = d.name; document.getElementById('navUserAvatar').textContent = d.name.substring(0, 2).toUpperCase(); } } catch (e) { }
+      }
+    })();
+  </script>
+
+</body>
+
+</html>

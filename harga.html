@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Harga — Original.A | Platform Warisan UMKM Indonesia</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── Pricing Grid ── */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-top: 48px;
+    }
+
+    .pricing-card {
+      background: var(--white);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 40px 32px;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .pricing-card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-4px);
+      border-color: var(--border);
+    }
+
+    .pricing-card.featured {
+      border-color: var(--gold);
+      background: linear-gradient(135deg, rgba(184,150,46,0.04) 0%, var(--white) 60%);
+    }
+
+    .featured-badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--gold);
+      color: var(--white);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      padding: 4px 16px;
+      border-radius: 100px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .plan-name {
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+
+    .plan-price {
+      font-family: var(--font-display);
+      font-size: 2.6rem;
+      font-weight: 700;
+      color: var(--green);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .plan-price sup {
+      font-size: 1rem;
+      vertical-align: top;
+      margin-top: 10px;
+      display: inline-block;
+    }
+
+    .plan-period {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .plan-desc {
+      font-size: 0.875rem;
+      color: var(--text-mid);
+      line-height: 1.7;
+      margin-bottom: 24px;
+      min-height: 56px;
+    }
+
+    .plan-divider {
+      border: none;
+      border-top: 1px solid var(--border-light);
+      margin-bottom: 20px;
+    }
+
+    .plan-features {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .plan-features li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.875rem;
+      color: var(--text-dark);
+    }
+
+    .plan-features li .feat-icon {
+      width: 20px;
+      height: 20px;
+      min-width: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      font-weight: 700;
+    }
+
+    .feat-icon.yes {
+      background: rgba(184,150,46,0.15);
+      color: var(--gold);
+    }
+
+    .feat-icon.no {
+      background: var(--cream-dark);
+      color: var(--text-muted);
+    }
+
+    .plan-features li.disabled {
+      opacity: 0.45;
+    }
+
+    /* ── Compare Table ── */
+    .compare-wrap {
+      overflow-x: auto;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-light);
+    }
+
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+      min-width: 540px;
+    }
+
+    .compare-table th,
+    .compare-table td {
+      padding: 14px 20px;
+      text-align: center;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .compare-table th {
+      background: var(--cream-dark);
+      color: var(--green);
+      font-weight: 700;
+      font-size: 0.8rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .compare-table th:first-child,
+    .compare-table td:first-child {
+      text-align: left;
+      color: var(--text-dark);
+      font-weight: 500;
+    }
+
+    .compare-table td {
+      color: var(--text-mid);
+      background: var(--white);
+    }
+
+    .compare-table .yes { color: var(--gold); font-weight: 700; }
+    .compare-table .no  { color: var(--text-muted); opacity: 0.5; }
+
+    .compare-table tbody tr:last-child td { border-bottom: none; }
+    .compare-table tbody tr:hover td { background: var(--cream); }
+
+    /* ── FAQ ── */
+    .faq-item {
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .faq-question {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      padding: 20px 0;
+      gap: 16px;
+    }
+
+    .faq-question:hover { color: var(--green); }
+
+    .faq-icon {
+      width: 26px;
+      height: 26px;
+      min-width: 26px;
+      border: 1.5px solid var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      color: var(--gold);
+      transition: var(--transition);
+      line-height: 1;
+    }
+
+    .faq-answer {
+      font-size: 0.875rem;
+      color: var(--text-mid);
+      line-height: 1.8;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.3s ease;
+    }
+
+    .faq-item.open .faq-answer {
+      max-height: 200px;
+      padding-bottom: 20px;
+    }
+
+    .faq-item.open .faq-icon {
+      transform: rotate(45deg);
+      border-color: var(--gold);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">Original.A</a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Beranda</a></li>
+        <li><a href="layanan.html">Layanan</a></li>
+        <li><a href="harga.html" class="active">Harga</a></li>
+        <li><a href="portofolio.html">Portofolio</a></li>
+        <li><a href="kontak.html">Kontak</a></li>
+      </ul>
+      <div class="nav-actions" id="navGuest">
+        <a href="login.html" class="nav-masuk">Masuk</a>
+        <a href="registrasi.html" class="nav-daftar">Daftar</a>
+      </div>
+      <div class="nav-actions nav-user" id="navUser" style="display:none">
+        <a href="checkout.html" class="nav-icon" title="Keranjang" aria-label="Keranjang">🛒<span class="nav-badge">3</span></a>
+        <a href="#" class="nav-icon" title="Notifikasi" aria-label="Notifikasi">🔔</a>
+        <a href="profil-pembeli.html" class="nav-profile" title="Profil Saya">
+          <span class="nav-avatar" id="navUserAvatar">AP</span>
+          <span class="nav-name" id="navUserName">Andi P.</span>
+        </a>
+      </div>
+      <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="container">
+      <span class="badge badge-gold fade-up">Paket &amp; Biaya</span>
+      <h1 class="fade-up">Investasi Terbaik<br>untuk Bisnis Anda</h1>
+      <p class="fade-up">
+        Pilih paket yang sesuai kebutuhan dan skala bisnis Anda.
+        Semua paket sudah mencakup revisi dan dukungan penuh dari tim kami.
+      </p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- PRICING CARDS -->
+  <section class="section">
+    <div class="container">
+      <div class="section-title-center fade-up">
+        <h2>Pilih Paket yang Tepat</h2>
+        <p style="margin-top:10px; font-size:1rem;">
+          Dari proyek kecil hingga skala enterprise, kami punya solusi untuk semua kebutuhan.
+        </p>
+      </div>
+
+      <div class="pricing-grid">
+
+        <!-- Starter -->
+        <div class="pricing-card fade-up">
+          <p class="plan-name">Starter</p>
+          <div class="plan-price"><sup>Rp</sup>1,5 Jt</div>
+          <p class="plan-period">per proyek</p>
+          <p class="plan-desc">Cocok untuk landing page atau kebutuhan desain sederhana yang ingin tampil profesional.</p>
+          <hr class="plan-divider" />
+          <ul class="plan-features">
+            <li><span class="feat-icon yes">✓</span> 1 Halaman Desain</li>
+            <li><span class="feat-icon yes">✓</span> Responsif Mobile</li>
+            <li><span class="feat-icon yes">✓</span> 2x Revisi</li>
+            <li><span class="feat-icon yes">✓</span> Pengiriman 5 Hari Kerja</li>
+            <li class="disabled"><span class="feat-icon no">✕</span> Animasi &amp; Interaksi</li>
+            <li class="disabled"><span class="feat-icon no">✕</span> Source Code</li>
+            <li class="disabled"><span class="feat-icon no">✕</span> Konsultasi Lanjutan</li>
+          </ul>
+          <a href="kontak.html" class="btn btn-outline" style="display:block; text-align:center;">Mulai Sekarang</a>
+        </div>
+
+        <!-- Professional (featured) -->
+        <div class="pricing-card featured fade-up">
+          <span class="featured-badge">Terpopuler</span>
+          <p class="plan-name">Professional</p>
+          <div class="plan-price"><sup>Rp</sup>4,5 Jt</div>
+          <p class="plan-period">per proyek</p>
+          <p class="plan-desc">Solusi lengkap untuk bisnis yang membutuhkan website atau aplikasi dengan kualitas premium.</p>
+          <hr class="plan-divider" />
+          <ul class="plan-features">
+            <li><span class="feat-icon yes">✓</span> Hingga 5 Halaman Desain</li>
+            <li><span class="feat-icon yes">✓</span> Responsif Mobile &amp; Tablet</li>
+            <li><span class="feat-icon yes">✓</span> Revisi Unlimited</li>
+            <li><span class="feat-icon yes">✓</span> Pengiriman 10 Hari Kerja</li>
+            <li><span class="feat-icon yes">✓</span> Animasi &amp; Interaksi</li>
+            <li><span class="feat-icon yes">✓</span> Source Code Lengkap</li>
+            <li class="disabled"><span class="feat-icon no">✕</span> Konsultasi Lanjutan</li>
+          </ul>
+          <a href="kontak.html" class="btn btn-primary" style="display:block; text-align:center;">Pilih Paket Ini</a>
+        </div>
+
+        <!-- Enterprise -->
+        <div class="pricing-card fade-up">
+          <p class="plan-name">Enterprise</p>
+          <div class="plan-price">Custom</div>
+          <p class="plan-period">per proyek</p>
+          <p class="plan-desc">Untuk kebutuhan skala besar, tim enterprise, atau proyek jangka panjang dengan kebutuhan khusus.</p>
+          <hr class="plan-divider" />
+          <ul class="plan-features">
+            <li><span class="feat-icon yes">✓</span> Halaman Tak Terbatas</li>
+            <li><span class="feat-icon yes">✓</span> Responsif Semua Perangkat</li>
+            <li><span class="feat-icon yes">✓</span> Revisi Unlimited</li>
+            <li><span class="feat-icon yes">✓</span> Timeline Fleksibel</li>
+            <li><span class="feat-icon yes">✓</span> Animasi &amp; Interaksi</li>
+            <li><span class="feat-icon yes">✓</span> Source Code + Handoff</li>
+            <li><span class="feat-icon yes">✓</span> Konsultasi &amp; Support 3 Bulan</li>
+          </ul>
+          <a href="kontak.html" class="btn btn-outline" style="display:block; text-align:center;">Hubungi Kami</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- COMPARISON TABLE -->
+  <section class="section" style="background:var(--cream-dark);">
+    <div class="container">
+      <div class="section-title-center fade-up" style="margin-bottom:40px;">
+        <h2>Bandingkan Paket</h2>
+        <p style="margin-top:10px;">Lihat secara detail fitur yang tersedia di setiap paket.</p>
+      </div>
+      <div class="compare-wrap fade-up">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>Fitur</th>
+              <th>Starter</th>
+              <th>Professional</th>
+              <th>Enterprise</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Jumlah Halaman</td>
+              <td>1</td>
+              <td>Hingga 5</td>
+              <td>Tak Terbatas</td>
+            </tr>
+            <tr>
+              <td>Jumlah Revisi</td>
+              <td>2x</td>
+              <td>Unlimited</td>
+              <td>Unlimited</td>
+            </tr>
+            <tr>
+              <td>Responsif Mobile</td>
+              <td class="yes">✓</td>
+              <td class="yes">✓</td>
+              <td class="yes">✓</td>
+            </tr>
+            <tr>
+              <td>Animasi &amp; Interaksi</td>
+              <td class="no">✕</td>
+              <td class="yes">✓</td>
+              <td class="yes">✓</td>
+            </tr>
+            <tr>
+              <td>Source Code</td>
+              <td class="no">✕</td>
+              <td class="yes">✓</td>
+              <td class="yes">✓</td>
+            </tr>
+            <tr>
+              <td>Konsultasi Lanjutan</td>
+              <td class="no">✕</td>
+              <td class="no">✕</td>
+              <td class="yes">✓</td>
+            </tr>
+            <tr>
+              <td>Support Pasca Launch</td>
+              <td class="no">✕</td>
+              <td class="no">✕</td>
+              <td>3 Bulan</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- FAQ -->
+  <section class="section">
+    <div class="container" style="max-width:740px;">
+      <div class="section-title-center fade-up" style="margin-bottom:48px;">
+        <h2>Pertanyaan yang Sering Ditanya</h2>
+        <p style="margin-top:10px;">Tidak menemukan jawaban yang dicari? <a href="kontak.html" style="color:var(--gold); font-weight:600;">Hubungi kami</a>.</p>
+      </div>
+
+      <div id="faqList">
+        <div class="faq-item fade-up">
+          <div class="faq-question">
+            <span>Apakah harga sudah termasuk hosting dan domain?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-answer">Harga yang tertera belum termasuk biaya hosting dan domain. Kami dapat membantu merekomendasikan layanan hosting terbaik sesuai kebutuhan dan anggaran Anda.</div>
+        </div>
+        <div class="faq-item fade-up">
+          <div class="faq-question">
+            <span>Bagaimana sistem pembayarannya?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-answer">Kami menggunakan sistem DP 50% di awal proyek dan 50% sisanya setelah proyek selesai dan disetujui. Untuk paket Enterprise, pembayaran bisa dicicil per milestone.</div>
+        </div>
+        <div class="faq-item fade-up">
+          <div class="faq-question">
+            <span>Berapa lama waktu pengerjaannya?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-answer">Tergantung paket yang dipilih. Starter 5 hari kerja, Professional 10 hari kerja, dan Enterprise fleksibel sesuai scope proyek. Estimasi waktu pasti akan diberikan sebelum pengerjaan dimulai.</div>
+        </div>
+        <div class="faq-item fade-up">
+          <div class="faq-question">
+            <span>Apakah bisa meminta paket custom di luar ketiga pilihan?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-answer">Tentu! Kami sangat terbuka untuk mendiskusikan kebutuhan spesifik Anda. Hubungi kami melalui halaman Kontak dan kami akan menyusun penawaran yang sesuai.</div>
+        </div>
+        <div class="faq-item fade-up">
+          <div class="faq-question">
+            <span>Apakah ada garansi kepuasan?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-answer">Ya! Kami menjamin kepuasan klien. Jika hasil akhir tidak sesuai dengan brief yang telah disepakati, kami akan terus melakukan revisi hingga Anda puas tanpa biaya tambahan.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BOTTOM -->
+  <section class="cta-bottom">
+    <div class="container">
+      <h2 class="fade-up">Siap Mendaftarkan Toko Anda?</h2>
+      <p class="fade-up">Bergabung dengan ribuan UMKM terkurasi dan mulai perjalanan bisnis digital Anda hari ini.</p>
+      <a href="kontak.html" class="btn btn-gold fade-up">Hubungi Tim Kami</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="nav-logo" style="color:var(--white); font-family:var(--font-display); font-size:1.4rem; font-weight:700; margin-bottom:12px;">Original.A</div>
+          <p>Mewadahi karya pengrajin lokal untuk mendunia. Mengkurasi warisan dengan hati dan standar tinggi.</p>
+          <div class="footer-socials" style="margin-top:20px;">
+            <a href="#">🌐</a><a href="#">@</a><a href="#">↗</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h5>Navigasi</h5>
+          <ul>
+            <li><a href="index.html">Beranda</a></li>
+            <li><a href="layanan.html">Layanan</a></li>
+            <li><a href="harga.html" class="active-link">Harga</a></li>
+            <li><a href="portofolio.html">Portofolio</a></li>
+            <li><a href="kontak.html">Kontak</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Kontak</h5>
+          <ul>
+            <li><a href="#">halo@originala.id</a></li>
+            <li><a href="#">+62 812 3456 7890</a></li>
+            <li><a href="#">Jakarta, Indonesia</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Newsletter</h5>
+          <p style="color:rgba(255,255,255,0.6); font-size:0.875rem; margin-bottom:14px;">Dapatkan info terbaru dan promo menarik.</p>
+          <div class="newsletter-form">
+            <input type="email" placeholder="Email Anda" />
+            <button>Kirim ›</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">© 2024 Original.A. Warisan UMKM Indonesia Terkurasi.</div>
+    </div>
+  </footer>
+
+  <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+  <script>
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 40);
+      document.getElementById('scrollTop').classList.toggle('show', window.scrollY > 400);
+    });
+
+    document.getElementById('navToggle').addEventListener('click', () => {
+      document.getElementById('navLinks').classList.toggle('open');
+    });
+
+    // FAQ accordion
+    document.querySelectorAll('.faq-item').forEach(item => {
+      item.querySelector('.faq-question').addEventListener('click', () => {
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+        if (!isOpen) item.classList.add('open');
+      });
+    });
+
+    // Fade-in on scroll
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i * 80);
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+
+    /* ---- CEK STATUS LOGIN ---- */
+    (function(){
+      const u=localStorage.getItem('oa_user');
+      if(u){
+        document.getElementById('navGuest').style.display='none';
+        document.getElementById('navUser').style.display='flex';
+        try{const d=JSON.parse(u);if(d.name){document.getElementById('navUserName').textContent=d.name;document.getElementById('navUserAvatar').textContent=d.name.substring(0,2).toUpperCase();}}catch(e){}
+      }
+    })();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Masuk / Daftar — Original.A</title>
+<link rel="stylesheet" href="style.css"/>
+<style>
+  .auth-wrap { padding-top: calc(var(--nav-height) + 60px); padding-bottom: 60px; background: var(--cream); }
+  .auth-grid { display:grid; grid-template-columns:1fr 1fr; gap:40px; max-width:960px; margin:0 auto; }
+  .auth-card {
+    background:var(--white); border:1px solid var(--border-light);
+    border-radius:var(--radius-lg); padding:40px 36px; box-shadow:var(--shadow-sm);
+  }
+  .auth-icon {
+    width:48px; height:48px; border-radius:50%; background:var(--cream-dark);
+    display:flex; align-items:center; justify-content:center; margin:0 auto 16px;
+    color:var(--green); font-size:1.2rem;
+  }
+  .auth-card h2 { text-align:center; font-size:1.6rem; margin-bottom:8px; }
+  .auth-sub { text-align:center; font-size:0.875rem; color:var(--text-muted); margin-bottom:28px; }
+  .field { margin-bottom:16px; }
+  .field label { display:block; font-size:0.72rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-dark); margin-bottom:6px; }
+  .field input {
+    width:100%; padding:12px 14px; background:var(--cream-dark); border:1px solid transparent;
+    border-radius:var(--radius-sm); font-family:var(--font-body); font-size:0.9rem; color:var(--text-dark);
+    outline:none; transition:var(--transition);
+  }
+  .field input:focus { border-color:var(--green); background:var(--white); }
+  .field-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .form-meta { display:flex; justify-content:space-between; align-items:center; margin:8px 0 18px; font-size:0.82rem; }
+  .form-meta label { display:flex; align-items:center; gap:6px; color:var(--text-mid); }
+  .form-meta a { color:var(--gold); font-weight:600; }
+  .btn-block { width:100%; justify-content:center; padding:14px; }
+  .auth-divider {
+    display:flex; align-items:center; gap:12px; margin:22px 0 16px;
+    font-size:0.7rem; letter-spacing:0.14em; color:var(--text-muted); text-transform:uppercase;
+  }
+  .auth-divider::before, .auth-divider::after { content:''; flex:1; height:1px; background:var(--border); }
+  .btn-google {
+    width:100%; display:flex; align-items:center; justify-content:center; gap:10px;
+    padding:12px; background:var(--white); border:1px solid var(--border);
+    border-radius:var(--radius-sm); font-weight:600; font-size:0.9rem; color:var(--text-dark);
+    transition:var(--transition);
+  }
+  .btn-google:hover { background:var(--cream-dark); }
+  .auth-foot { text-align:center; font-size:0.85rem; color:var(--text-mid); margin-top:18px; }
+  .auth-foot a { color:var(--gold); font-weight:600; }
+  .role-toggle {
+    display:flex; background:var(--cream-dark); border-radius:var(--radius-sm); padding:4px; margin-bottom:22px;
+  }
+  .role-toggle button {
+    flex:1; padding:9px; background:transparent; border-radius:6px;
+    font-size:0.85rem; font-weight:600; color:var(--text-mid); transition:var(--transition);
+  }
+  .role-toggle button.active { background:var(--white); color:var(--green); box-shadow:var(--shadow-sm); }
+  .agree { display:flex; gap:8px; align-items:flex-start; font-size:0.78rem; color:var(--text-mid); margin-bottom:18px; line-height:1.55; }
+  .agree a { color:var(--gold); font-weight:600; }
+
+  /* Filosofi */
+  .filosofi {
+    background:var(--cream-dark); border-radius:var(--radius-lg);
+    margin: 60px auto; max-width:1100px; padding:48px;
+    display:grid; grid-template-columns:1.2fr 1fr; gap:48px; align-items:center;
+  }
+  .filosofi .badge { background:transparent; color:var(--gold); border:0; padding:0; letter-spacing:0.16em; margin-bottom:14px; }
+  .filosofi h2 { margin-bottom:16px; font-size:1.9rem; }
+  .filosofi p { font-size:0.95rem; line-height:1.75; margin-bottom:24px; }
+  .filosofi-trust { display:flex; align-items:center; gap:12px; font-size:0.85rem; color:var(--text-mid); }
+  .filosofi-visual { position:relative; height:320px; }
+  .filosofi-img {
+    position:absolute; width:78%; aspect-ratio:1/1.05; border-radius:var(--radius-md);
+    background:#8a6f4d; box-shadow:var(--shadow-lg); border:6px solid var(--cream);
+  }
+  .filosofi-img.a { top:0; left:0; transform:rotate(-4deg); background:linear-gradient(135deg,#a07a52,#5e4628); }
+  .filosofi-img.b { bottom:0; right:0; transform:rotate(5deg); background:linear-gradient(135deg,#8c6840,#4a3522); }
+
+  @media(max-width:900px){
+    .auth-grid { grid-template-columns:1fr; }
+    .filosofi { grid-template-columns:1fr; padding:32px; }
+    .filosofi-visual { height:260px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Original.A</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Beranda</a></li>
+      <li><a href="layanan.html">Layanan</a></li>
+      <li><a href="harga.html">Harga</a></li>
+      <li><a href="portofolio.html">Portofolio</a></li>
+      <li><a href="kontak.html">Kontak</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="login.html" class="nav-masuk">Masuk</a>
+      <a href="login.html" class="nav-daftar">Daftar</a>
+    </div>
+    <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<section class="auth-wrap">
+  <div class="container">
+    <div class="auth-grid">
+
+      <!-- LOGIN -->
+      <div class="auth-card">
+        <div class="auth-icon">🌱</div>
+        <h2>Selamat Datang Kembali</h2>
+        <p class="auth-sub">Masuk untuk melanjutkan kurasi warisan Nusantara.</p>
+        <form onsubmit="event.preventDefault(); localStorage.setItem('oa_user', JSON.stringify({name:'Andi P.'})); window.location='index-loggedin.html';">
+          <div class="field">
+            <label>Email</label>
+            <input type="email" placeholder="nama@email.com" required/>
+          </div>
+          <div class="field">
+            <label>Password</label>
+            <input type="password" placeholder="••••••••" required/>
+          </div>
+          <div class="form-meta">
+            <label><input type="checkbox"/> Ingat Saya</label>
+            <a href="#">Lupa Password?</a>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Masuk</button>
+          <div class="auth-divider">Atau Masuk Dengan</div>
+          <button type="button" class="btn-google">
+            <span style="display:inline-block;width:16px;height:16px;background:#000;border-radius:3px;color:#fff;font-size:11px;line-height:16px;text-align:center;font-weight:700;">G</span>
+            Google
+          </button>
+          <div class="auth-foot">Belum punya akun? <a href="#daftar">Daftar di sini</a></div>
+        </form>
+      </div>
+
+      <!-- DAFTAR -->
+      <div class="auth-card" id="daftar">
+        <h2>Buat Akun Baru</h2>
+        <p class="auth-sub">Bergabunglah dalam ekosistem kerajinan terbaik.</p>
+        <div class="role-toggle">
+          <button class="active" type="button">Pembeli</button>
+          <button type="button">Penjual (UMKM)</button>
+        </div>
+        <form onsubmit="event.preventDefault(); window.location='profil-pembeli.html';">
+          <div class="field">
+            <label>Nama Lengkap</label>
+            <input type="text" placeholder="Andi Pratama" required/>
+          </div>
+          <div class="field">
+            <label>Email Aktif</label>
+            <input type="email" placeholder="andi@email.com" required/>
+          </div>
+          <div class="field">
+            <label>Nomor HP (WhatsApp)</label>
+            <input type="tel" placeholder="0812xxxxxx" required/>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Password</label>
+              <input type="password" placeholder="••••••••" required/>
+            </div>
+            <div class="field">
+              <label>Konfirmasi</label>
+              <input type="password" placeholder="••••••••" required/>
+            </div>
+          </div>
+          <div class="agree">
+            <input type="checkbox" required/>
+            <span>Saya menyetujui <a href="#">Syarat & Ketentuan</a> serta <a href="#">Kebijakan Privasi</a> Original.A.</span>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Daftar Sekarang</button>
+          <div class="auth-foot">Sudah punya akun? <a href="#">Masuk</a></div>
+        </form>
+      </div>
+    </div>
+
+    <!-- FILOSOFI -->
+    <div class="filosofi">
+      <div>
+        <div class="badge">FILOSOFI KAMI</div>
+        <h2>Membawa Kearifan Lokal ke Genggaman Anda</h2>
+        <p>Setiap karya yang hadir di Original.A adalah hasil kurasi mendalam dari pengrajin di seluruh penjuru Nusantara, memastikan keaslian dan kualitas tertinggi.</p>
+        <div class="filosofi-trust">
+          <div class="trust-avatars">
+            <span>BS</span><span>SA</span><span>AP</span>
+          </div>
+          <strong style="color:var(--green);">1200+ Pengrajin Terkurasi</strong>
+        </div>
+      </div>
+      <div class="filosofi-visual">
+        <div class="filosofi-img a"></div>
+        <div class="filosofi-img b"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="nav-logo" style="color:var(--white);font-size:1.4rem;margin-bottom:12px;">Original.A</div>
+        <p>Warisan UMKM Indonesia Terkurasi. Menghubungkan tradisi dengan masa depan digital.</p>
+        <div class="footer-socials"><a href="#">🌐</a><a href="#">@</a><a href="#">↗</a></div>
+      </div>
+      <div class="footer-col">
+        <h5>Navigasi</h5>
+        <ul>
+          <li><a href="#">Tentang Kami</a></li>
+          <li><a href="#">Produk Unggulan</a></li>
+          <li><a href="#">Kisah Pengrajin</a></li>
+          <li><a href="#">Hubungi Kami</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Bantuan</h5>
+        <ul>
+          <li><a href="#">Syarat & Ketentuan</a></li>
+          <li><a href="#">Kebijakan Privasi</a></li>
+          <li><a href="#">Pusat Bantuan</a></li>
+          <li><a href="#">Lacak Pesanan</a></li>
+        </ul>
+      </div>
+      <div class="footer-col footer-newsletter">
+        <h5>Newsletter</h5>
+        <p>Dapatkan update kurasi terbaru setiap minggunya.</p>
+        <div class="newsletter-form">
+          <input type="email" placeholder="Email Anda"/>
+          <button>›</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+      <span>© 2024 Original.A. Warisan UMKM Indonesia Terkurasi.</span>
+      <span>Bahasa Indonesia · IDR - Rupiah</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('.role-toggle button').forEach(b => {
+    b.addEventListener('click', () => {
+      document.querySelectorAll('.role-toggle button').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+    });
+  });
+  document.getElementById('navToggle').addEventListener('click', () => {
+    document.getElementById('navLinks').classList.toggle('open');
+  });
+</script>
+</body>
+</html>

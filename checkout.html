@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout — Original.A | Warisan UMKM Indonesia Terkurasi</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* =============================================
+       CHECKOUT PAGE
+    ============================================= */
+    .page-checkout { padding-top: var(--nav-height); min-height: 100vh; background: var(--cream); }
+    .checkout-header { padding: 40px 0 24px; }
+    .checkout-header h1 { font-family: var(--font-display); font-size: 2.2rem; color: var(--green); margin-bottom: 6px; }
+    .checkout-header p { color: var(--text-muted); font-size: 0.875rem; }
+    .checkout-grid { display: grid; grid-template-columns: 1fr 380px; gap: 32px; padding-bottom: 60px; align-items: start; }
+    .checkout-card { background: var(--white); border-radius: var(--radius-md); padding: 28px; border: 1px solid var(--border-light); margin-bottom: 20px; }
+    .checkout-card:last-child { margin-bottom: 0; }
+    .checkout-section-title { display: flex; align-items: center; gap: 10px; font-size: 1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 20px; }
+    .checkout-section-title svg { color: var(--gold); }
+
+    /* Address */
+    .address-item {
+      border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 16px;
+      position: relative; cursor: pointer; transition: var(--transition);
+    }
+    .address-item.selected { border-color: var(--green); background: rgba(28,61,46,0.03); }
+    .address-badge { background: var(--green); color: var(--white); font-size: 0.65rem; font-weight: 700; padding: 2px 8px; border-radius: 100px; text-transform: uppercase; position: absolute; top: 12px; right: 12px; }
+    .address-name { font-weight: 700; font-size: 0.875rem; margin-bottom: 4px; }
+    .address-phone { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px; }
+    .address-line { font-size: 0.82rem; color: var(--text-mid); }
+    .btn-add-address { display: flex; align-items: center; gap: 6px; font-size: 0.82rem; font-weight: 600; color: var(--gold); margin-top: 14px; cursor: pointer; }
+
+    /* Shipping */
+    .shipping-options { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+    .shipping-opt {
+      border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 14px;
+      cursor: pointer; transition: var(--transition); position: relative;
+    }
+    .shipping-opt.selected { border-color: var(--green); background: rgba(28,61,46,0.03); }
+    .shipping-opt input[type="radio"] { position: absolute; top: 12px; right: 12px; accent-color: var(--green); width: 16px; height: 16px; }
+    .shipping-tag { font-size: 0.65rem; font-weight: 700; background: var(--cream-dark); color: var(--text-mid); padding: 2px 7px; border-radius: 4px; text-transform: uppercase; margin-bottom: 8px; display: inline-block; }
+    .shipping-name { font-size: 0.875rem; font-weight: 700; color: var(--text-dark); margin-bottom: 2px; }
+    .shipping-eta { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 6px; }
+    .shipping-price { font-family: var(--font-display); font-weight: 700; color: var(--green); font-size: 0.95rem; }
+
+    /* Payment */
+    .payment-group { border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 12px; }
+    .payment-group-title { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: 700; color: var(--text-mid); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px; }
+    .payment-banks { display: flex; gap: 10px; flex-wrap: wrap; }
+    .bank-btn {
+      padding: 8px 18px; border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+      font-size: 0.8rem; font-weight: 700; color: var(--text-mid); cursor: pointer;
+      transition: var(--transition); background: var(--white);
+    }
+    .bank-btn.selected { border-color: var(--green); background: var(--green); color: var(--white); }
+    .bank-btn:hover:not(.selected) { border-color: var(--green-light); color: var(--green); }
+    .payment-cc { display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+    .payment-cc span { font-size: 0.875rem; font-weight: 600; color: var(--text-dark); display: flex; align-items: center; gap: 8px; }
+
+    /* Order Summary */
+    .order-summary { position: sticky; top: calc(var(--nav-height) + 20px); }
+    .summary-title { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 20px; }
+    .summary-items { display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px; }
+    .summary-item { display: flex; gap: 14px; align-items: center; }
+    .summary-item-img { width: 56px; height: 56px; border-radius: var(--radius-sm); background: var(--cream-dark); overflow: hidden; flex-shrink: 0; }
+    .summary-item-img img { width: 100%; height: 100%; object-fit: cover; }
+    .summary-item-name { font-size: 0.875rem; font-weight: 600; flex: 1; }
+    .summary-item-qty { font-size: 0.78rem; color: var(--text-muted); margin-top: 2px; }
+    .summary-item-price { font-size: 0.875rem; font-weight: 700; color: var(--green); white-space: nowrap; }
+    .summary-divider { height: 1px; background: var(--border-light); margin: 16px 0; }
+    .summary-row { display: flex; justify-content: space-between; font-size: 0.875rem; margin-bottom: 10px; }
+    .summary-row span:first-child { color: var(--text-muted); }
+    .summary-row.total { font-weight: 700; font-size: 1rem; color: var(--text-dark); padding-top: 12px; border-top: 1.5px solid var(--border); margin-top: 4px; }
+    .summary-row.total span:last-child { color: var(--green); font-family: var(--font-display); font-size: 1.2rem; }
+    .btn-bayar { width: 100%; padding: 16px; background: var(--green); color: var(--white); border-radius: var(--radius-sm); font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 16px; transition: var(--transition); border: none; cursor: pointer; }
+    .btn-bayar:hover { background: var(--green-mid); }
+    .security-note { display: flex; align-items: flex-start; gap: 10px; background: var(--cream); border-radius: var(--radius-sm); padding: 12px; margin-top: 14px; font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; }
+
+    /* =============================================
+       SUCCESS PAGE
+    ============================================= */
+    .page-success { display: none; padding-top: var(--nav-height); min-height: 100vh; background: var(--cream); }
+    .page-success.active { display: flex; align-items: center; justify-content: center; }
+    .success-card { background: var(--white); border-radius: var(--radius-xl); padding: 60px 48px; text-align: center; max-width: 500px; width: 100%; margin: 40px 24px; box-shadow: var(--shadow-lg); }
+    .success-icon { width: 80px; height: 80px; border-radius: 50%; background: rgba(28,61,46,0.1); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; margin: 0 auto 24px; }
+    .success-card h2 { font-family: var(--font-display); font-size: 1.8rem; color: var(--green); margin-bottom: 12px; }
+    .success-card p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 8px; }
+    .order-id { font-weight: 700; color: var(--gold); font-size: 1rem; margin-bottom: 32px; }
+
+    @media(max-width:1024px) {
+      .checkout-grid { grid-template-columns: 1fr; }
+      .order-summary { position: static; }
+    }
+    @media(max-width:768px) {
+      .shipping-options { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar scrolled" id="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">Original.A</a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Beranda</a></li>
+        <li><a href="layanan.html">Layanan</a></li>
+        <li><a href="harga.html">Harga</a></li>
+        <li><a href="portofolio.html">Portofolio</a></li>
+        <li><a href="kontak.html">Kontak</a></li>
+      </ul>
+      <div class="nav-actions" id="navGuest">
+        <a href="login.html" class="nav-masuk">Masuk</a>
+        <a href="registrasi.html" class="nav-daftar">Daftar</a>
+      </div>
+      <div class="nav-actions nav-user" id="navUser" style="display:none;">
+        <a href="checkout.html" class="nav-icon" title="Keranjang" aria-label="Keranjang">
+          🛒<span class="nav-badge">3</span>
+        </a>
+        <a href="#" class="nav-icon" title="Notifikasi" aria-label="Notifikasi">
+          🔔
+        </a>
+        <a href="profil-pembeli.html" class="nav-profile" title="Profil Saya">
+          <span class="nav-avatar" id="navUserAvatar">US</span>
+          <span class="nav-name" id="navUserName">User</span>
+        </a>
+      </div>
+      <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <!-- =============================================
+       CHECKOUT PAGE
+  ============================================= -->
+  <div id="page-checkout" class="page-checkout active">
+    <div class="container">
+      <div class="checkout-header">
+        <button onclick="window.history.back()" style="display:flex;align-items:center;gap:6px;color:var(--text-muted);font-size:0.82rem;font-weight:600;margin-bottom:16px;cursor:pointer;background:none;border:none;">← Kembali Belanja</button>
+        <h1>Checkout</h1>
+        <p>Selesaikan pesanan Anda untuk membawa pulang karya kerajinan terbaik Indonesia.</p>
+      </div>
+
+      <div class="checkout-grid">
+        <!-- LEFT COLUMN -->
+        <div>
+          <!-- Alamat Pengiriman -->
+          <div class="checkout-card">
+            <div class="checkout-section-title">
+              <span>📍</span> Alamat Pengiriman
+              <button style="margin-left:auto;font-size:0.8rem;color:var(--gold);font-weight:600;cursor:pointer;background:none;border:none;">+ Tambah Alamat Baru</button>
+            </div>
+            <div class="address-item selected">
+              <span class="address-badge">UTAMA</span>
+              <div class="address-name">Andi Pratama</div>
+              <div class="address-phone">(+62) 812-3456-7890</div>
+              <div class="address-line">Jl. Senopati No. 45, Kebayoran Baru, Jakarta Selatan, DKI Jakarta, 12190</div>
+            </div>
+          </div>
+
+          <!-- Metode Pengiriman -->
+          <div class="checkout-card">
+            <div class="checkout-section-title">
+              <span>🚚</span> Metode Pengiriman
+            </div>
+            <div class="shipping-options">
+              <div class="shipping-opt selected" onclick="selectShipping(this,15000)">
+                <input type="radio" name="shipping" checked/>
+                <div class="shipping-tag">JNE Reg</div>
+                <div class="shipping-name">JNE Express</div>
+                <div class="shipping-eta">2-3 Hari Kerja</div>
+                <div class="shipping-price">Rp 15.000</div>
+              </div>
+              <div class="shipping-opt" onclick="selectShipping(this,12000)">
+                <input type="radio" name="shipping"/>
+                <div class="shipping-tag">SiCepat</div>
+                <div class="shipping-name">SiCepat Halu</div>
+                <div class="shipping-eta">1-2 Hari Kerja</div>
+                <div class="shipping-price">Rp 12.000</div>
+              </div>
+              <div class="shipping-opt" onclick="selectShipping(this,45000)">
+                <input type="radio" name="shipping"/>
+                <div class="shipping-tag">GoSend</div>
+                <div class="shipping-name">Instant</div>
+                <div class="shipping-eta">3-6 Jam</div>
+                <div class="shipping-price">Rp 45.000</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Metode Pembayaran -->
+          <div class="checkout-card">
+            <div class="checkout-section-title">
+              <span>💳</span> Metode Pembayaran
+            </div>
+
+            <div class="payment-group">
+              <div class="payment-group-title">🏦 Transfer Bank (Virtual Account)</div>
+              <div class="payment-banks">
+                <button class="bank-btn selected" onclick="selectBank(this)">BCA</button>
+                <button class="bank-btn" onclick="selectBank(this)">Mandiri</button>
+                <button class="bank-btn" onclick="selectBank(this)">BNI</button>
+                <button class="bank-btn" onclick="selectBank(this)">BRI</button>
+              </div>
+            </div>
+
+            <div class="payment-group">
+              <div class="payment-group-title">📱 E-Wallet</div>
+              <div class="payment-banks">
+                <button class="bank-btn" onclick="selectBank(this)">OVO</button>
+                <button class="bank-btn" onclick="selectBank(this)">GOPAY</button>
+                <button class="bank-btn" onclick="selectBank(this)">SHOPEEPAY</button>
+              </div>
+            </div>
+
+            <div class="payment-group">
+              <div class="payment-cc">
+                <span>💳 Kartu Kredit</span>
+                <span style="color:var(--text-muted);font-size:1.2rem;">›</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN — Order Summary -->
+        <div class="order-summary">
+          <div class="checkout-card">
+            <div class="summary-title">Ringkasan Pesanan</div>
+            <div class="summary-items">
+              <div class="summary-item">
+                <div class="summary-item-img">
+                  <div class="img-placeholder" style="font-size:1.2rem;"><img src="img/batik.png" alt="" /></div>
+                </div>
+                <div style="flex:1;">
+                  <div class="summary-item-name">Anyaman Rotan Premium</div>
+                  <div class="summary-item-qty">1 Unit</div>
+                </div>
+                <div class="summary-item-price">Rp 450.000</div>
+              </div>
+              <div class="summary-item">
+                <div class="summary-item-img">
+                  <div class="img-placeholder" style="font-size:1.2rem;"><img src="img/baju batik.png" alt="" /></div>
+                </div>
+                <div style="flex:1;">
+                  <div class="summary-item-name">Sutra Batik Tulis Solo</div>
+                  <div class="summary-item-qty">1 Unit</div>
+                </div>
+                <div class="summary-item-price">Rp 1.250.000</div>
+              </div>
+            </div>
+
+            <div class="summary-divider"></div>
+
+            <div class="summary-row"><span>Subtotal</span><span>Rp 1.700.000</span></div>
+            <div class="summary-row"><span>Biaya Pengiriman</span><span id="shippingDisplay">Rp 15.000</span></div>
+            <div class="summary-row"><span>Biaya Layanan</span><span>Rp 2.000</span></div>
+
+            <div class="summary-row total">
+              <span>Total Tagihan</span>
+              <span id="totalDisplay">Rp 1.717.000</span>
+            </div>
+
+            <button class="btn-bayar" onclick="processCheckout()">
+              🔒 Bayar Sekarang
+            </button>
+
+            <div class="security-note">
+              <span style="font-size:1rem;">🛡️</span>
+              <span>Transaksi Anda dilindungi dengan enkripsi tingkat tinggi. Keamanan data pribadi dan pembayaran adalah prioritas utama kami.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><!-- end #page-checkout -->
+
+  <!-- =============================================
+       SUCCESS PAGE
+  ============================================= -->
+  <div id="page-success" class="page-success">
+    <div class="success-card">
+      <div class="success-icon">✅</div>
+      <h2>Pesanan Berhasil!</h2>
+      <p>Terima kasih atas pesanan Anda. Kami akan segera memproses pesanan Anda.</p>
+      <p>Estimasi pengiriman: <strong>2-3 Hari Kerja</strong></p>
+      <div class="order-id">#ORG-2024-78421</div>
+      <a href="index-loggedin.html" class="btn btn-primary" style="display:flex;width:100%;justify-content:center;margin-bottom:12px;">Kembali Belanja</a>
+      <button class="btn btn-outline" style="width:100%;justify-content:center;">Lacak Pesanan</button>
+    </div>
+  </div>
+
+  <script src="nav.js" onerror="console.log('nav.js not found, using inline script')"></script>
+  <script>
+    // ===== CEK STATUS LOGIN =====
+    (function () {
+      const u = localStorage.getItem('oa_user');
+      if (u) {
+        document.getElementById('navGuest').style.display = 'none';
+        document.getElementById('navUser').style.display = 'flex';
+        try { const d = JSON.parse(u); if (d.name) { document.getElementById('navUserName').textContent = d.name; document.getElementById('navUserAvatar').textContent = d.name.substring(0, 2).toUpperCase(); } } catch (e) { }
+      }
+    })();
+
+    document.getElementById('navToggle').addEventListener('click', () => {
+      document.getElementById('navLinks').classList.toggle('open');
+    });
+
+    // ===== CHECKOUT LOGIC =====
+    let shippingCost = 15000;
+    const BASE = 1702000;
+    function selectShipping(el, cost) {
+      document.querySelectorAll('.shipping-opt').forEach(o => { o.classList.remove('selected'); o.querySelector('input').checked = false; });
+      el.classList.add('selected');
+      el.querySelector('input').checked = true;
+      shippingCost = cost;
+      document.getElementById('shippingDisplay').textContent = 'Rp ' + cost.toLocaleString('id-ID');
+      const total = BASE + cost;
+      document.getElementById('totalDisplay').textContent = 'Rp ' + total.toLocaleString('id-ID');
+    }
+    
+    function selectBank(btn) {
+      document.querySelectorAll('.bank-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+    }
+
+    function processCheckout() {
+      document.getElementById('page-checkout').classList.remove('active');
+      document.getElementById('page-checkout').style.display = 'none';
+      document.getElementById('page-success').classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
+
+</body>
+</html>

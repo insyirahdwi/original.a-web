@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Original.A | Warisan UMKM Indonesia Terkurasi</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    /* ===== DESIGN TOKENS ===== */
+    :root {
+      --green: #1C3D2E;
+      --green-mid: #2A5440;
+      --green-light: #3a6b50;
+      --gold: #B8962E;
+      --gold-light: #D4AF50;
+      --cream: #F5F0E8;
+      --cream-dark: #E8DFD0;
+      --white: #FFFFFF;
+      --text-dark: #1a1a1a;
+      --text-mid: #4a4a4a;
+      --text-muted: #888;
+      --border: #ddd;
+      --border-light: #eee;
+      --nav-height: 72px;
+      --radius-sm: 8px;
+      --radius-md: 12px;  
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+      --shadow-md: 0 8px 30px rgba(0,0,0,0.12);
+      --shadow-lg: 0 20px 60px rgba(0,0,0,0.18);
+      --transition: all 0.25s ease;
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body: 'DM Sans', system-ui, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-body); color: var(--text-dark); background: var(--white); line-height: 1.6; }
+    img { max-width: 100%; display: block; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; border: none; background: none; font-family: inherit; }
+
+    .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+
+    /* ===== BUTTONS ===== */
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 28px; border-radius: var(--radius-sm); font-size: 0.875rem; font-weight: 600; transition: var(--transition); cursor: pointer; border: none; }
+    .btn-primary { background: var(--green); color: var(--white); }
+    .btn-primary:hover { background: var(--green-mid); }
+    .btn-outline { background: transparent; color: var(--green); border: 1.5px solid var(--green); }
+    .btn-outline:hover { background: var(--green); color: var(--white); }
+    .btn-gold { background: var(--gold); color: var(--white); }
+    .btn-gold:hover { background: var(--gold-light); }
+
+    /* ===== NAVBAR ===== */
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      height: var(--nav-height); background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-light);
+      transition: var(--transition);
+    }
+    .navbar.scrolled { box-shadow: var(--shadow-sm); }
+    .nav-inner { display: flex; align-items: center; height: 100%; max-width: 1160px; margin: 0 auto; padding: 0 24px; gap: 40px; }
+    .nav-logo { font-family: var(--font-display); font-size: 1.4rem; font-weight: 700; color: var(--green); }
+    .nav-links { display: flex; list-style: none; gap: 32px; flex: 1; }
+    .nav-links a { font-size: 0.875rem; font-weight: 500; color: var(--text-mid); transition: var(--transition); }
+    .nav-links a:hover, .nav-links a.active { color: var(--green); }
+    .nav-actions { display: flex; align-items: center; gap: 12px; margin-left: auto; }
+    .nav-cart-btn {
+      position: relative; width: 40px; height: 40px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--cream); transition: var(--transition); cursor: pointer;
+    }
+    .nav-cart-btn:hover { background: var(--cream-dark); }
+    .cart-badge {
+      position: absolute; top: -2px; right: -2px; width: 18px; height: 18px;
+      background: var(--gold); color: white; border-radius: 50%;
+      font-size: 0.65rem; font-weight: 700; display: flex; align-items: center; justify-content: center;
+    }
+    .nav-masuk { font-size: 0.875rem; font-weight: 600; color: var(--green); padding: 8px 20px; border-radius: var(--radius-sm); border: 1.5px solid var(--green); transition: var(--transition); }
+    .nav-masuk:hover { background: var(--green); color: var(--white); }
+    .nav-daftar { font-size: 0.875rem; font-weight: 600; background: var(--green); color: var(--white); padding: 8px 20px; border-radius: var(--radius-sm); transition: var(--transition); }
+    .nav-daftar:hover { background: var(--green-mid); }
+    .nav-toggle { display: none; flex-direction: column; gap: 5px; padding: 4px; }
+    .nav-toggle span { width: 22px; height: 2px; background: var(--green); border-radius: 2px; display: block; }
+
+    /* ===== FADE UP ===== */
+    .fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* ===== DIVIDER ===== */
+    .divider { height: 1px; background: var(--border-light); margin: 0; }
+
+    /* ===== SCROLL TOP ===== */
+    .scroll-top {
+      position: fixed; bottom: 28px; right: 28px; width: 44px; height: 44px;
+      background: var(--green); color: var(--white); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+      opacity: 0; pointer-events: none; transition: var(--transition); z-index: 900;
+    }
+    .scroll-top.show { opacity: 1; pointer-events: all; }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100vh; display: flex; align-items: center;
+      padding-top: var(--nav-height); background: var(--cream); overflow: hidden; position: relative;
+    }
+    .hero .container { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; padding: 60px 0; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(184,150,46,0.15); border: 1px solid rgba(184,150,46,0.35);
+      border-radius: 100px; padding: 6px 16px;
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 24px;
+    }
+    .hero h1 { font-family: var(--font-display); font-size: clamp(2.6rem, 5.5vw, 4.2rem); line-height: 1.1; margin-bottom: 20px; color: var(--green); }
+    .hero h1 span { color: var(--gold); font-style: italic; }
+    .hero-desc { font-size: 1rem; line-height: 1.75; color: var(--text-mid); margin-bottom: 32px; max-width: 440px; }
+    .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 40px; }
+    .hero-trust { display: flex; align-items: center; gap: 12px; }
+    .trust-avatars { display: flex; }
+    .trust-avatars span {
+      width: 32px; height: 32px; border-radius: 50%; background: var(--green);
+      color: var(--white); display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem; font-weight: 700; border: 2px solid var(--cream); margin-left: -8px;
+    }
+    .trust-avatars span:first-child { margin-left: 0; }
+    .trust-text { font-size: 0.82rem; color: var(--text-muted); }
+    .trust-text strong { color: var(--green); display: block; }
+    .hero-visual { position: relative; }
+    .hero-img-main { width: 100%; aspect-ratio: 4/5; border-radius: var(--radius-xl); overflow: hidden; background: #D4C5A9; position: relative; }
+    .hero-img-main img { width: 100%; height: 100%; object-fit: cover; }
+    .hero-img-thumb { position: absolute; bottom: -20px; right: -20px; width: 160px; height: 140px; border-radius: var(--radius-lg); overflow: hidden; border: 4px solid var(--cream); box-shadow: var(--shadow-lg); }
+    .hero-img-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .hero-stat-card { position: absolute; top: 24px; left: -24px; background: var(--white); border-radius: var(--radius-md); padding: 14px 18px; box-shadow: var(--shadow-lg); }
+    .hero-stat-card .stat-num { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; color: var(--green); line-height: 1; }
+    .hero-stat-card .stat-lbl { font-size: 0.72rem; color: var(--text-muted); margin-top: 2px; }
+
+    /* ===== KATEGORI ===== */
+    .kategori-section { padding: 60px 0; }
+    .section-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 28px; }
+    .section-header h2 { font-family: var(--font-display); font-size: 1.5rem; }
+    .section-header p { font-size: 0.875rem; color: var(--text-muted); margin-top: 4px; }
+    .kategori-scroll { display: flex; gap: 16px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; }
+    .kategori-scroll::-webkit-scrollbar { display: none; }
+    .kat-item { flex-shrink: 0; width: 130px; cursor: pointer; text-align: center; transition: var(--transition); }
+    .kat-item:hover { transform: translateY(-4px); }
+    .kat-img { width: 130px; height: 110px; border-radius: var(--radius-md); overflow: hidden; background: var(--cream-dark); margin-bottom: 10px; position: relative; }
+    .kat-img img { width: 100%; height: 100%; object-fit: cover; }
+    .kat-overlay { position: absolute; inset: 0; background: rgba(28,61,46,0.4); display: flex; align-items: flex-end; padding: 10px; border-radius: var(--radius-md); }
+    .kat-name { font-size: 0.82rem; font-weight: 600; color: var(--white); }
+
+    /* ===== PRODUK UNGGULAN ===== */
+    .produk-section { padding: 60px 0; }
+    .section-title-center { text-align: center; margin-bottom: 40px; }
+    .section-title-center h2 { font-family: var(--font-display); font-size: 2rem; margin-bottom: 6px; }
+    .section-title-center h2::after { content: ''; display: block; width: 50px; height: 3px; background: var(--gold); margin: 10px auto 0; border-radius: 2px; }
+    .produk-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; }
+    .produk-card { background: var(--white); border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--border-light); transition: var(--transition); cursor: pointer; }
+    .produk-card:hover { box-shadow: var(--shadow-md); transform: translateY(-4px); }
+    .produk-img { width: 100%; aspect-ratio: 1/1; background: var(--cream-dark); position: relative; overflow: hidden; }
+    .produk-img img { width: 100%; height: 100%; object-fit: cover; transition: var(--transition); }
+    .produk-card:hover .produk-img img { transform: scale(1.05); }
+    .produk-label { position: absolute; top: 10px; left: 10px; background: var(--green); color: var(--white); font-size: 0.68rem; font-weight: 700; padding: 3px 9px; border-radius: 100px; text-transform: uppercase; }
+    .produk-label.new { background: var(--gold); }
+    .produk-info { padding: 14px 16px 16px; }
+    .produk-toko { font-size: 0.72rem; color: var(--gold); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .produk-nama { font-size: 0.92rem; font-weight: 600; color: var(--text-dark); margin-bottom: 6px; line-height: 1.35; }
+    .produk-harga { font-family: var(--font-display); font-size: 1rem; font-weight: 700; color: var(--green); margin-bottom: 12px; }
+    .btn-beli { width: 100%; padding: 10px; background: var(--green); color: var(--white); border-radius: var(--radius-sm); font-size: 0.82rem; font-weight: 600; transition: var(--transition); text-align: center; display: block; border: none; cursor: pointer; }
+    .btn-beli:hover { background: var(--green-mid); }
+
+    /* ===== CARA KERJA ===== */
+    .cara-kerja { background: var(--green); padding: 80px 0; }
+    .cara-kerja .section-title-center h2 { color: var(--white); }
+    .cara-kerja .section-title-center h2::after { background: var(--gold); }
+    .cara-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 32px; margin-top: 48px; }
+    .cara-item { text-align: center; }
+    .cara-icon { width: 72px; height: 72px; background: rgba(184,150,46,0.2); border: 1px solid rgba(184,150,46,0.4); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin: 0 auto 20px; }
+    .cara-item h3 { font-family: var(--font-display); color: var(--white); font-size: 1.1rem; margin-bottom: 10px; }
+    .cara-item p { color: rgba(255,255,255,0.65); font-size: 0.875rem; line-height: 1.7; }
+
+    /* ===== TESTIMONI ===== */
+    .testimoni-section { padding: 80px 0; background: var(--cream); }
+    .testi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+    .testi-card { background: var(--white); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 28px; transition: var(--transition); }
+    .testi-card:hover { box-shadow: var(--shadow-md); }
+    .stars { color: var(--gold); font-size: 0.9rem; letter-spacing: 2px; margin-bottom: 14px; }
+    .testi-text { font-size: 0.9rem; color: var(--text-mid); line-height: 1.75; margin-bottom: 20px; font-style: italic; }
+    .testi-author { display: flex; align-items: center; gap: 12px; }
+    .testi-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--green); color: var(--white); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem; flex-shrink: 0; overflow: hidden; }
+    .testi-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .testi-name { font-size: 0.875rem; font-weight: 600; color: var(--text-dark); }
+    .testi-lokasi { font-size: 0.78rem; color: var(--text-muted); }
+
+    /* ===== CTA BOTTOM ===== */
+    .cta-bottom { background: var(--green); padding: 80px 0; text-align: center; }
+    .cta-bottom h2 { font-family: var(--font-display); color: var(--white); font-size: clamp(1.8rem,4vw,2.8rem); margin-bottom: 12px; }
+    .cta-bottom p { color: rgba(255,255,255,0.7); font-size: 1rem; margin-bottom: 32px; max-width: 480px; margin-left: auto; margin-right: auto; }
+    .cta-bottom .btn-gold { font-size: 1rem; padding: 15px 40px; border-radius: var(--radius-sm); }
+
+    /* img placeholders */
+    .img-placeholder { background: var(--cream-dark); display: flex; align-items: center; justify-content: center; font-size: 2rem; color: var(--text-muted); width: 100%; height: 100%; }
+
+    /* ===== FOOTER ===== */
+    footer { background: var(--green); color: rgba(255,255,255,0.8); padding-top: 60px; }
+    .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 48px; padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .footer-brand p { font-size: 0.875rem; line-height: 1.7; color: rgba(255,255,255,0.6); max-width: 280px; margin-top: 10px; }
+    .footer-socials { display: flex; gap: 10px; margin-top: 20px; }
+    .footer-socials a { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 1rem; transition: var(--transition); }
+    .footer-socials a:hover { background: var(--gold); }
+    .footer-col h5 { font-size: 0.875rem; font-weight: 700; color: var(--white); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.06em; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-col ul li a { font-size: 0.875rem; color: rgba(255,255,255,0.6); transition: var(--transition); }
+    .footer-col ul li a:hover { color: var(--gold); }
+    .newsletter-form { display: flex; gap: 0; }
+    .newsletter-form input { flex: 1; padding: 10px 16px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: var(--radius-sm) 0 0 var(--radius-sm); color: var(--white); font-size: 0.875rem; outline: none; }
+    .newsletter-form input::placeholder { color: rgba(255,255,255,0.4); }
+    .newsletter-form button { padding: 10px 18px; background: var(--gold); color: var(--white); font-weight: 600; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; font-size: 0.875rem; transition: var(--transition); }
+    .newsletter-form button:hover { background: var(--gold-light); }
+    .footer-bottom { padding: 20px 0; text-align: center; font-size: 0.8rem; color: rgba(255,255,255,0.4); }
+
+    /* =============================================
+       PRODUCT DETAIL MODAL
+    ============================================= */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(4px); z-index: 2000;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+      padding: 20px;
+    }
+    .modal-overlay.active { opacity: 1; pointer-events: all; }
+    .modal-box {
+      background: var(--white); border-radius: var(--radius-xl);
+      width: 100%; max-width: 860px; max-height: 90vh;
+      overflow-y: auto; position: relative;
+      transform: translateY(20px) scale(0.97);
+      transition: transform 0.3s ease;
+      scrollbar-width: thin;
+    }
+    .modal-overlay.active .modal-box { transform: translateY(0) scale(1); }
+    .modal-close {
+      position: absolute; top: 16px; right: 16px; z-index: 10;
+      width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(0,0,0,0.08); display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; color: var(--text-dark); transition: var(--transition);
+    }
+    .modal-close:hover { background: rgba(0,0,0,0.15); }
+    .modal-content { display: grid; grid-template-columns: 1fr 1fr; }
+    .modal-gallery { padding: 24px; }
+    .modal-main-img {
+      width: 100%; aspect-ratio: 1/1; border-radius: var(--radius-lg);
+      overflow: hidden; background: var(--cream-dark); margin-bottom: 12px; position: relative;
+    }
+    .modal-main-img img { width: 100%; height: 100%; object-fit: cover; }
+    .modal-badge-img { position: absolute; top: 12px; left: 12px; background: var(--green); color: var(--white); font-size: 0.68rem; font-weight: 700; padding: 4px 10px; border-radius: 100px; text-transform: uppercase; }
+    .modal-thumbs { display: flex; gap: 8px; }
+    .modal-thumb {
+      width: 68px; height: 68px; border-radius: var(--radius-sm); overflow: hidden;
+      cursor: pointer; border: 2px solid transparent; transition: var(--transition);
+      background: var(--cream-dark); flex-shrink: 0;
+    }
+    .modal-thumb.active { border-color: var(--green); }
+    .modal-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .modal-info { padding: 28px 28px 28px 4px; display: flex; flex-direction: column; gap: 0; }
+    .modal-title { font-family: var(--font-display); font-size: 1.6rem; font-weight: 700; color: var(--text-dark); margin-bottom: 8px; line-height: 1.2; }
+    .modal-rating { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+    .modal-rating .stars { font-size: 0.85rem; letter-spacing: 1px; margin: 0; }
+    .modal-rating span { font-size: 0.82rem; color: var(--text-muted); }
+    .modal-seller {
+      display: flex; align-items: center; gap: 12px;
+      background: var(--cream); border-radius: var(--radius-sm); padding: 12px 16px;
+      margin-bottom: 16px;
+    }
+    .seller-icon { width: 36px; height: 36px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+    .seller-name { font-size: 0.875rem; font-weight: 600; color: var(--text-dark); }
+    .seller-link { font-size: 0.75rem; color: var(--gold); font-weight: 500; }
+    .modal-price { font-family: var(--font-display); font-size: 2rem; font-weight: 700; color: var(--green); margin-bottom: 18px; }
+    .modal-option-label { font-size: 0.8rem; font-weight: 700; color: var(--text-dark); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+    .modal-sizes { display: flex; gap: 8px; margin-bottom: 16px; }
+    .size-btn { width: 42px; height: 38px; border-radius: var(--radius-sm); border: 1.5px solid var(--border); font-size: 0.8rem; font-weight: 600; color: var(--text-mid); transition: var(--transition); cursor: pointer; background: var(--white); }
+    .size-btn.active, .size-btn:hover { border-color: var(--green); background: var(--green); color: var(--white); }
+    .modal-colors { display: flex; gap: 8px; margin-bottom: 18px; }
+    .color-btn {
+      width: 30px; height: 30px; border-radius: 50%; cursor: pointer;
+      border: 2px solid transparent; transition: var(--transition);
+    }
+    .color-btn.active { border-color: var(--green); outline: 2px solid white; outline-offset: 0px; box-shadow: 0 0 0 3px var(--green); }
+    .modal-qty-row { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+    .qty-control { display: flex; align-items: center; gap: 0; border: 1.5px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; }
+    .qty-btn { width: 36px; height: 36px; background: var(--cream); font-size: 1.1rem; font-weight: 600; color: var(--text-dark); transition: var(--transition); }
+    .qty-btn:hover { background: var(--cream-dark); }
+    .qty-val { width: 40px; text-align: center; font-size: 0.9rem; font-weight: 600; border: none; background: var(--white); padding: 8px 0; }
+    .qty-stock { font-size: 0.8rem; color: var(--text-muted); }
+    .modal-actions { display: flex; gap: 12px; margin-bottom: 20px; }
+    .btn-keranjang { flex: 1; padding: 13px; border: 2px solid var(--green); color: var(--green); background: var(--white); border-radius: var(--radius-sm); font-weight: 600; font-size: 0.875rem; transition: var(--transition); }
+    .btn-keranjang:hover { background: var(--cream); }
+    .btn-beli-modal { flex: 1; padding: 13px; background: var(--green); color: var(--white); border-radius: var(--radius-sm); font-weight: 600; font-size: 0.875rem; transition: var(--transition); }
+    .btn-beli-modal:hover { background: var(--green-mid); }
+    .modal-badges { display: flex; gap: 16px; justify-content: space-around; padding: 16px 0; border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light); margin-bottom: 0; }
+    .modal-badge-item { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .modal-badge-item span:first-child { font-size: 1.2rem; }
+    .modal-badge-item span:last-child { font-size: 0.63rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); text-align: center; }
+
+    /* Modal Tabs */
+    .modal-tabs-section { padding: 20px 28px 28px; border-top: 1px solid var(--border-light); }
+    .modal-tabs-row { display: flex; gap: 0; border-bottom: 2px solid var(--border-light); margin-bottom: 20px; }
+    .modal-tab { padding: 10px 20px; font-size: 0.875rem; font-weight: 600; color: var(--text-muted); border-bottom: 2px solid transparent; margin-bottom: -2px; transition: var(--transition); cursor: pointer; }
+    .modal-tab.active { color: var(--green); border-bottom-color: var(--green); }
+    .modal-tab-content { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    .tab-panel p { font-size: 0.875rem; line-height: 1.8; color: var(--text-mid); }
+    .review-list { display: flex; flex-direction: column; gap: 16px; }
+    .review-item { background: var(--cream); border-radius: var(--radius-sm); padding: 16px; }
+    .review-header { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+    .review-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--green); color: var(--white); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; flex-shrink: 0; }
+    .review-name { font-size: 0.82rem; font-weight: 600; }
+    .review-stars { font-size: 0.7rem; color: var(--gold); }
+    .review-text { font-size: 0.8rem; color: var(--text-mid); font-style: italic; }
+
+    /* =============================================
+       CHECKOUT PAGE
+    ============================================= */
+    .page-checkout { display: none; padding-top: var(--nav-height); min-height: 100vh; background: var(--cream); }
+    .page-checkout.active { display: block; }
+    .checkout-header { padding: 40px 0 24px; }
+    .checkout-header h1 { font-family: var(--font-display); font-size: 2.2rem; color: var(--green); margin-bottom: 6px; }
+    .checkout-header p { color: var(--text-muted); font-size: 0.875rem; }
+    .checkout-grid { display: grid; grid-template-columns: 1fr 380px; gap: 32px; padding-bottom: 60px; align-items: start; }
+    .checkout-card { background: var(--white); border-radius: var(--radius-md); padding: 28px; border: 1px solid var(--border-light); margin-bottom: 20px; }
+    .checkout-card:last-child { margin-bottom: 0; }
+    .checkout-section-title { display: flex; align-items: center; gap: 10px; font-size: 1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 20px; }
+    .checkout-section-title svg { color: var(--gold); }
+
+    /* Address */
+    .address-item {
+      border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 16px;
+      position: relative; cursor: pointer; transition: var(--transition);
+    }
+    .address-item.selected { border-color: var(--green); background: rgba(28,61,46,0.03); }
+    .address-badge { background: var(--green); color: var(--white); font-size: 0.65rem; font-weight: 700; padding: 2px 8px; border-radius: 100px; text-transform: uppercase; position: absolute; top: 12px; right: 12px; }
+    .address-name { font-weight: 700; font-size: 0.875rem; margin-bottom: 4px; }
+    .address-phone { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px; }
+    .address-line { font-size: 0.82rem; color: var(--text-mid); }
+    .btn-add-address { display: flex; align-items: center; gap: 6px; font-size: 0.82rem; font-weight: 600; color: var(--gold); margin-top: 14px; cursor: pointer; }
+
+    /* Shipping */
+    .shipping-options { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+    .shipping-opt {
+      border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 14px;
+      cursor: pointer; transition: var(--transition); position: relative;
+    }
+    .shipping-opt.selected { border-color: var(--green); background: rgba(28,61,46,0.03); }
+    .shipping-opt input[type="radio"] { position: absolute; top: 12px; right: 12px; accent-color: var(--green); width: 16px; height: 16px; }
+    .shipping-tag { font-size: 0.65rem; font-weight: 700; background: var(--cream-dark); color: var(--text-mid); padding: 2px 7px; border-radius: 4px; text-transform: uppercase; margin-bottom: 8px; display: inline-block; }
+    .shipping-name { font-size: 0.875rem; font-weight: 700; color: var(--text-dark); margin-bottom: 2px; }
+    .shipping-eta { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 6px; }
+    .shipping-price { font-family: var(--font-display); font-weight: 700; color: var(--green); font-size: 0.95rem; }
+
+    /* Payment */
+    .payment-group { border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 12px; }
+    .payment-group-title { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: 700; color: var(--text-mid); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px; }
+    .payment-banks { display: flex; gap: 10px; flex-wrap: wrap; }
+    .bank-btn {
+      padding: 8px 18px; border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+      font-size: 0.8rem; font-weight: 700; color: var(--text-mid); cursor: pointer;
+      transition: var(--transition); background: var(--white);
+    }
+    .bank-btn.selected { border-color: var(--green); background: var(--green); color: var(--white); }
+    .bank-btn:hover:not(.selected) { border-color: var(--green-light); color: var(--green); }
+    .payment-cc { display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+    .payment-cc span { font-size: 0.875rem; font-weight: 600; color: var(--text-dark); display: flex; align-items: center; gap: 8px; }
+
+    /* Order Summary */
+    .order-summary { position: sticky; top: calc(var(--nav-height) + 20px); }
+    .summary-title { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 20px; }
+    .summary-items { display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px; }
+    .summary-item { display: flex; gap: 14px; align-items: center; }
+    .summary-item-img { width: 56px; height: 56px; border-radius: var(--radius-sm); background: var(--cream-dark); overflow: hidden; flex-shrink: 0; }
+    .summary-item-img img { width: 100%; height: 100%; object-fit: cover; }
+    .summary-item-name { font-size: 0.875rem; font-weight: 600; flex: 1; }
+    .summary-item-qty { font-size: 0.78rem; color: var(--text-muted); margin-top: 2px; }
+    .summary-item-price { font-size: 0.875rem; font-weight: 700; color: var(--green); white-space: nowrap; }
+    .summary-divider { height: 1px; background: var(--border-light); margin: 16px 0; }
+    .summary-row { display: flex; justify-content: space-between; font-size: 0.875rem; margin-bottom: 10px; }
+    .summary-row span:first-child { color: var(--text-muted); }
+    .summary-row.total { font-weight: 700; font-size: 1rem; color: var(--text-dark); padding-top: 12px; border-top: 1.5px solid var(--border); margin-top: 4px; }
+    .summary-row.total span:last-child { color: var(--green); font-family: var(--font-display); font-size: 1.2rem; }
+    .btn-bayar { width: 100%; padding: 16px; background: var(--green); color: var(--white); border-radius: var(--radius-sm); font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 16px; transition: var(--transition); }
+    .btn-bayar:hover { background: var(--green-mid); }
+    .security-note { display: flex; align-items: flex-start; gap: 10px; background: var(--cream); border-radius: var(--radius-sm); padding: 12px; margin-top: 14px; font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; }
+
+    /* =============================================
+       SUCCESS PAGE
+    ============================================= */
+    .page-success { display: none; padding-top: var(--nav-height); min-height: 100vh; background: var(--cream); }
+    .page-success.active { display: flex; align-items: center; justify-content: center; }
+    .success-card { background: var(--white); border-radius: var(--radius-xl); padding: 60px 48px; text-align: center; max-width: 500px; width: 100%; margin: 40px 24px; box-shadow: var(--shadow-lg); }
+    .success-icon { width: 80px; height: 80px; border-radius: 50%; background: rgba(28,61,46,0.1); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; margin: 0 auto 24px; }
+    .success-card h2 { font-family: var(--font-display); font-size: 1.8rem; color: var(--green); margin-bottom: 12px; }
+    .success-card p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 8px; }
+    .order-id { font-weight: 700; color: var(--gold); font-size: 1rem; margin-bottom: 32px; }
+
+    /* ===== RESPONSIVE ===== */
+    @media(max-width:1024px) {
+      .produk-grid { grid-template-columns: repeat(2,1fr); }
+      .checkout-grid { grid-template-columns: 1fr; }
+      .order-summary { position: static; }
+      .modal-content { grid-template-columns: 1fr; }
+      .modal-info { padding: 0 24px 24px; }
+    }
+    @media(max-width:768px) {
+      .hero .container { grid-template-columns: 1fr; }
+      .hero-visual { display: none; }
+      .cara-grid { grid-template-columns: 1fr; }
+      .testi-grid { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+      .shipping-options { grid-template-columns: 1fr; }
+      .modal-tab-content { grid-template-columns: 1fr; }
+    }
+    @media(max-width:480px) {
+      .produk-grid { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .nav-links.open { display: flex; flex-direction: column; position: fixed; top: var(--nav-height); left: 0; right: 0; background: var(--white); padding: 20px; gap: 16px; border-bottom: 1px solid var(--border-light); z-index: 999; }
+      .nav-toggle { display: flex; }
+    }
+  </style>
+<link rel="stylesheet" href="style.css"/></head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo" onclick="showPage('index')">Original.A</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html" class="active" onclick="showPage('index');return false;">Beranda</a></li>
+      <li><a href="layanan.html">Layanan</a></li>
+      <li><a href="harga.html">Harga</a></li>
+      <li><a href="portofolio.html">Portofolio</a></li>
+      <li><a href="kontak.html">Kontak</a></li>
+    </ul>
+    <div class="nav-actions nav-user">
+      <a href="#" class="nav-icon" title="Keranjang" aria-label="Keranjang">
+        🛒<span class="nav-badge">3</span>
+      </a>
+      <a href="#" class="nav-icon" title="Notifikasi" aria-label="Notifikasi">
+        🔔
+      </a>
+      <a href="profil-pembeli.html" class="nav-profile" title="Profil Saya">
+        <span class="nav-avatar">AP</span>
+        <span class="nav-name">Andi P.</span>
+      </a>
+    </div>
+    <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- =============================================
+     BERANDA PAGE
+============================================= -->
+<div id="page-beranda">
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div>
+      <div class="hero-badge fade-up">🌿 Warisan UMKM Terkurasi</div>
+      <h1 class="fade-up">Promosikan &amp; Jual Produkmu<br>di <span>Satu Tempat</span></h1>
+      <p class="hero-desc fade-up">Promote, Grow and Glory</p>
+      <div class="hero-actions fade-up">
+        <a href="harga.html" class="btn btn-primary">Mulai Berjualan</a>
+        <a href="index.html" class="produk-section">Jelajahi Produk →</a>
+      </div>
+      <div class="hero-trust fade-up">
+        <div class="trust-avatars">
+          <span>BS</span><span>SA</span><span>AP</span><span>+</span>
+        </div>
+        <div class="trust-text">
+          <strong>1.200+ Pengrajin</strong>
+          bergabung dan sukses berjualan
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual fade-up">
+      <div class="hero-img-main">
+        <div class="img-placeholder"><img src="img/home_1.png" alt="" onerror="this.style.display='none'"/></div>
+      </div>
+      <div class="hero-img-thumb">
+        <div class="img-placeholder" style="font-size:1.4rem;"><img src="img/home_2.png" alt="" onerror="this.style.display='none'"/></div>
+      </div>
+      <div class="hero-stat-card">
+        <div class="stat-num">120+</div>
+        <div class="stat-lbl">Produk Terjual Hari Ini</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KATEGORI -->
+<section class="kategori-section">
+  <div class="container">
+    <div class="section-header fade-up">
+      <div>
+        <h2>Kategori Pilihan</h2>
+        <p>Temukan kekayaan nusantara berdasarkan kategori</p>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button style="width:34px;height:34px;border-radius:50%;border:1px solid var(--border);background:var(--white);cursor:pointer;font-size:1rem;">‹</button>
+        <button style="width:34px;height:34px;border-radius:50%;border:1px solid var(--border);background:var(--white);cursor:pointer;font-size:1rem;">›</button>
+      </div>
+    </div>
+    <div class="kategori-scroll fade-up">
+      <div class="kat-item"><div class="kat-img"><div class="img-placeholder"><img src="img/makanan.png" alt="" onerror="this.style.display='none'"/></div><div class="kat-overlay"><span class="kat-name">Makanan</span></div></div></div>
+      <div class="kat-item"><div class="kat-img"><div class="img-placeholder"><img src="img/ootd.png" alt="" onerror="this.style.display='none'"/></div><div class="kat-overlay"><span class="kat-name">Fashion</span></div></div></div>
+      <div class="kat-item"><div class="kat-img"><div class="img-placeholder"><img src="img/kerajinan.png" alt="" onerror="this.style.display='none'"/></div><div class="kat-overlay"><span class="kat-name">Kerajinan</span></div></div></div>
+      <div class="kat-item"><div class="kat-img"><div class="img-placeholder"><img src="img/kecantikan.png" alt="" onerror="this.style.display='none'"/></div><div class="kat-overlay"><span class="kat-name">Kecantikan</span></div></div></div>
+      <div class="kat-item"><div class="kat-img"><div class="img-placeholder"><img src="img/elektronik.png" alt="" onerror="this.style.display='none'"/></div><div class="kat-overlay"><span class="kat-name">Elektronik</span></div></div></div>
+      <div class="kat-item"><div class="kat-img"><div class="img-placeholder"><img src="img/rumah_2.png" alt="" onerror="this.style.display='none'"/></div><div class="kat-overlay"><span class="kat-name">Rumah</span></div></div></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PRODUK UNGGULAN -->
+<section class="produk-section">
+  <div class="container">
+    <div class="section-title-center fade-up">
+      <h2>Produk Unggulan</h2>
+    </div>
+    <div class="produk-grid">
+      <!-- Card 1 -->
+      <div class="produk-card fade-up" onclick="openModal('batik')">
+        <div class="produk-img">
+          <div class="img-placeholder"><img src="img/batik.png" alt="" onerror="this.style.display='none'"/></div>
+          <span class="produk-label">Terlaris</span>
+        </div>
+        <div class="produk-info">
+          <div class="produk-toko">Lestari Batik</div>
+          <div class="produk-nama">Kain Batik Tulis Lasem</div>
+          <div class="produk-harga">Rp 450.000</div>
+          <button class="btn-beli" onclick="event.stopPropagation();openModal('batik')">Beli Sekarang</button>
+        </div>
+      </div>
+      <!-- Card 2 -->
+      <div class="produk-card fade-up" onclick="openModal('kopi')">
+        <div class="produk-img">
+          <div class="img-placeholder"><img src="img/kopi.png" alt="" onerror="this.style.display='none'"/></div>
+          <span class="produk-label new">Baru</span>
+        </div>
+        <div class="produk-info">
+          <div class="produk-toko">Kopi Gayo Hub</div>
+          <div class="produk-nama">Single Origin Gayo</div>
+          <div class="produk-harga">Rp 125.000</div>
+          <button class="btn-beli" onclick="event.stopPropagation();openModal('kopi')">Beli Sekarang</button>
+        </div>
+      </div>
+      <!-- Card 3 -->
+      <div class="produk-card fade-up" onclick="openModal('candle')">
+        <div class="produk-img">
+          <div class="img-placeholder"><img src="img/cream_wajah.png" alt="" onerror="this.style.display='none'"/></div>
+        </div>
+        <div class="produk-info">
+          <div class="produk-toko">Wangi Alam</div>
+          <div class="produk-nama">Scented Candle Java</div>
+          <div class="produk-harga">Rp 89.000</div>
+          <button class="btn-beli" onclick="event.stopPropagation();openModal('candle')">Beli Sekarang</button>
+        </div>
+      </div>
+      <!-- Card 4 -->
+      <div class="produk-card fade-up" onclick="openModal('dress')">
+        <div class="produk-img">
+          <div class="img-placeholder"><img src="img/baju_batik.png" alt="" onerror="this.style.display='none'"/></div>
+          <span class="produk-label">Terlaris</span>
+        </div>
+        <div class="produk-info">
+          <div class="produk-toko">Batik Kemala</div>
+          <div class="produk-nama">Dress Batik Parang</div>
+          <div class="produk-harga">Rp 750.000</div>
+          <button class="btn-beli" onclick="event.stopPropagation();openModal('dress')">Beli Sekarang</button>
+        </div>
+      </div>
+      <!-- Card 5 -->
+      <div class="produk-card fade-up" onclick="openModal('alat')">
+        <div class="produk-img">
+          <div class="img-placeholder"><img src="img/alat_makan.png" alt="" onerror="this.style.display='none'"/></div>
+        </div>
+        <div class="produk-info">
+          <div class="produk-toko">Peralatan Kita</div>
+          <div class="produk-nama">Set Alat Makan Jati</div>
+          <div class="produk-harga">Rp 195.000</div>
+          <button class="btn-beli" onclick="event.stopPropagation();openModal('alat')">Beli Sekarang</button>
+        </div>
+      </div>
+      <!-- Card 6 -->
+      <div class="produk-card fade-up" onclick="openModal('cream')">
+        <div class="produk-img">
+          <div class="img-placeholder"><img src="img/cream_wajah.png" alt="" onerror="this.style.display='none'"/></div>
+          <span class="produk-label new">Baru</span>
+        </div>
+        <div class="produk-info">
+          <div class="produk-toko">Skin Lokal</div>
+          <div class="produk-nama">Face Cream Herbal</div>
+          <div class="produk-harga">Rp 210.000</div>
+          <button class="btn-beli" onclick="event.stopPropagation();openModal('cream')">Beli Sekarang</button>
+        </div>
+      </div>
+      <!-- Card 7 -->
+      <div class="produk-card fade-up" onclick="openModal('tas')">
+        <div class="produk-img">
+          <div class="img-placeholder"><img src="img/tas_rajut.png" alt="" onerror="this.style.display='none'"/></div>
+        </div>
+        <div class="produk-info">
+          <div class="produk-toko">Bali Bags</div>
+          <div class="produk-nama">Rattan Bag Summer</div>
+          <div class="produk-harga">Rp 320.000</div>
+          <button class="btn-beli" onclick="event.stopPropagation();openModal('tas')">Beli Sekarang</button>
+        </div>
+      </div>
+      <!-- Card 8 -->
+      <div class="produk-card fade-up" onclick="openModal('laptop')">
+        <div class="produk-img">
+          <div class="img-placeholder"><img src="img/stand_laptop.png" alt="" onerror="this.style.display='none'"/></div>
+          <span class="produk-label">Terlaris</span>
+        </div>
+        <div class="produk-info">
+          <div class="produk-toko">Indo Tech</div>
+          <div class="produk-nama">Stand Laptop Bamboo</div>
+          <div class="produk-harga">Rp 285.000</div>
+          <button class="btn-beli" onclick="event.stopPropagation();openModal('laptop')">Beli Sekarang</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CARA KERJA -->
+<section class="cara-kerja">
+  <div class="container">
+    <div class="section-title-center fade-up">
+      <h2>Bagaimana Original.A Bekerja</h2>
+      <p style="color:rgba(255,255,255,0.7);margin-top:10px;">Tiga langkah mudah untuk memperkenalkan karya terbaik Anda ke pasar yang lebih luas.</p>
+    </div>
+    <div class="cara-grid">
+      <div class="cara-item fade-up">
+        <div class="cara-icon">🧑‍💼</div>
+        <h3>Daftar Akun</h3>
+        <p>Buat profil toko hanya dalam hitungan menit dan lengkapi dengan informasi identitas.</p>
+      </div>
+      <div class="cara-item fade-up">
+        <div class="cara-icon">📦</div>
+        <h3>Listing Produk</h3>
+        <p>Unggah foto produk terbaik dengan deskripsi yang menarik dan lengkap untuk menjangkau pembeli potensial.</p>
+      </div>
+      <div class="cara-item fade-up">
+        <div class="cara-icon">💳</div>
+        <h3>Mulai Bertransaksi</h3>
+        <p>Terima pesanan secara real-time dan kelola penjualan dengan sistem yang aman.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONI -->
+<section class="testimoni-section">
+  <div class="container">
+    <div class="section-title-center fade-up">
+      <h2>Apa Kata Mereka?</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card fade-up">
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">"Original.A benar-benar membantu produk kerajinan bambu saya menjangkau pembeli di seluruh Indonesia dan luar negeri dari tempat yang sangat premium."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">BS</div>
+          <div><div class="testi-name">Bambang Susilo</div><div class="testi-lokasi">Yogyakarta</div></div>
+        </div>
+      </div>
+      <div class="testi-card fade-up">
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">"Platform ini bukan sekadar pasar, tapi platform seni. Batik saya dihargai dan lebih layak di sini dibanding marketplace lain."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">SA</div>
+          <div><div class="testi-name">Siti Aminah</div><div class="testi-lokasi">Solo</div></div>
+        </div>
+      </div>
+      <div class="testi-card fade-up">
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">"Sistem pembayarannya sangat transparan dan aman. Sangat cocok bagi UMKM yang baru ingin go-digital."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">AP</div>
+          <div><div class="testi-name">Andi Pratama</div><div class="testi-lokasi">Semarang</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BOTTOM -->
+<section class="cta-bottom">
+  <div class="container">
+    <h2 class="fade-up">Siap Memulai? Daftarkan Tokomu Sekarang</h2>
+    <p class="fade-up">Gabung dengan komunitas UMKM terkurasi terbesar di Indonesia dan kembangkan bisnismu hari ini.</p>
+    <a href="#" class="btn btn-gold fade-up" style="font-size:1rem;padding:15px 40px;">Buka Toko Gratis</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div style="font-family:var(--font-display);font-size:1.4rem;font-weight:700;color:var(--white);margin-bottom:12px;">Original.A</div>
+        <p>Mewadahi karya pengrajin lokal untuk mendunia. Mengkurasi warisan dengan hati dan standar tinggi.</p>
+        <div class="footer-socials"><a href="#">🌐</a><a href="#">@</a><a href="#">↗</a></div>
+      </div>
+      <div class="footer-col">
+        <h5>Navigasi</h5>
+        <ul>
+          <li><a href="#">Tentang Kami</a></li>
+          <li><a href="#">Katalog Produk</a></li>
+          <li><a href="#">Portofolio</a></li>
+          <li><a href="#">Kontak Kami</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Dukungan</h5>
+        <ul>
+          <li><a href="#">Pusat Bantuan</a></li>
+          <li><a href="#">Kebijakan Privasi</a></li>
+          <li><a href="#">Syarat &amp; Ketentuan</a></li>
+          <li><a href="#">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Newsletter</h5>
+        <p style="color:rgba(255,255,255,0.6);font-size:0.875rem;margin-bottom:14px;">Dapatkan pembaruan koleksi terbaru dan penawaran eksklusif langsung ke email Anda.</p>
+        <div class="newsletter-form">
+          <input type="email" placeholder="Alamat Email"/>
+          <button>Berlangganan</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container">© 2024 Original.A Indonesian Craftsmanship. Hak Cipta Dilindungi. &nbsp;|&nbsp; 🌐 Indonesia (ID) &nbsp; 💱 IDR</div>
+  </div>
+</footer>
+
+</div><!-- end #page-beranda -->
+
+<!-- =============================================
+     CHECKOUT PAGE
+============================================= -->
+<div id="page-checkout" class="page-checkout">
+  <div class="container">
+    <div class="checkout-header">
+      <button onclick="showPage('beranda')" style="display:flex;align-items:center;gap:6px;color:var(--text-muted);font-size:0.82rem;font-weight:600;margin-bottom:16px;cursor:pointer;background:none;border:none;">← Kembali Belanja</button>
+      <h1>Checkout</h1>
+      <p>Selesaikan pesanan Anda untuk membawa pulang karya kerajinan terbaik Indonesia.</p>
+    </div>
+
+    <div class="checkout-grid">
+      <!-- LEFT COLUMN -->
+      <div>
+        <!-- Alamat Pengiriman -->
+        <div class="checkout-card">
+          <div class="checkout-section-title">
+            <span>📍</span> Alamat Pengiriman
+            <button style="margin-left:auto;font-size:0.8rem;color:var(--gold);font-weight:600;cursor:pointer;background:none;border:none;">+ Tambah Alamat Baru</button>
+          </div>
+          <div class="address-item selected">
+            <span class="address-badge">UTAMA</span>
+            <div class="address-name">Andi Pratama</div>
+            <div class="address-phone">(+62) 812-3456-7890</div>
+            <div class="address-line">Jl. Senopati No. 45, Kebayoran Baru, Jakarta Selatan, DKI Jakarta, 12190</div>
+          </div>
+        </div>
+
+        <!-- Metode Pengiriman -->
+        <div class="checkout-card">
+          <div class="checkout-section-title">
+            <span>🚚</span> Metode Pengiriman
+          </div>
+          <div class="shipping-options">
+            <div class="shipping-opt selected" onclick="selectShipping(this,15000)">
+              <input type="radio" name="shipping" checked/>
+              <div class="shipping-tag">JNE Reg</div>
+              <div class="shipping-name">JNE Express</div>
+              <div class="shipping-eta">2-3 Hari Kerja</div>
+              <div class="shipping-price">Rp 15.000</div>
+            </div>
+            <div class="shipping-opt" onclick="selectShipping(this,12000)">
+              <input type="radio" name="shipping"/>
+              <div class="shipping-tag">SiCepat</div>
+              <div class="shipping-name">SiCepat Halu</div>
+              <div class="shipping-eta">1-2 Hari Kerja</div>
+              <div class="shipping-price">Rp 12.000</div>
+            </div>
+            <div class="shipping-opt" onclick="selectShipping(this,45000)">
+              <input type="radio" name="shipping"/>
+              <div class="shipping-tag">GoSend</div>
+              <div class="shipping-name">Instant</div>
+              <div class="shipping-eta">3-6 Jam</div>
+              <div class="shipping-price">Rp 45.000</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metode Pembayaran -->
+        <div class="checkout-card">
+          <div class="checkout-section-title">
+            <span>💳</span> Metode Pembayaran
+          </div>
+
+          <div class="payment-group">
+            <div class="payment-group-title">🏦 Transfer Bank (Virtual Account)</div>
+            <div class="payment-banks">
+              <button class="bank-btn selected" onclick="selectBank(this)">BCA</button>
+              <button class="bank-btn" onclick="selectBank(this)">Mandiri</button>
+              <button class="bank-btn" onclick="selectBank(this)">BNI</button>
+              <button class="bank-btn" onclick="selectBank(this)">BRI</button>
+            </div>
+          </div>
+
+          <div class="payment-group">
+            <div class="payment-group-title">📱 E-Wallet</div>
+            <div class="payment-banks">
+              <button class="bank-btn" onclick="selectBank(this)">OVO</button>
+              <button class="bank-btn" onclick="selectBank(this)">GOPAY</button>
+              <button class="bank-btn" onclick="selectBank(this)">SHOPEEPAY</button>
+            </div>
+          </div>
+
+          <div class="payment-group">
+            <div class="payment-cc">
+              <span>💳 Kartu Kredit</span>
+              <span style="color:var(--text-muted);font-size:1.2rem;">›</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN — Order Summary -->
+      <div class="order-summary">
+        <div class="checkout-card">
+          <div class="summary-title">Ringkasan Pesanan</div>
+          <div class="summary-items">
+            <div class="summary-item">
+              <div class="summary-item-img">
+                <div class="img-placeholder" style="font-size:1.2rem;"><img src="img/batik.png" alt="" onerror="this.style.display='none'"/></div>
+              </div>
+              <div style="flex:1;">
+                <div class="summary-item-name">Anyaman Rotan Premium</div>
+                <div class="summary-item-qty">1 Unit</div>
+              </div>
+              <div class="summary-item-price">Rp 450.000</div>
+            </div>
+            <div class="summary-item">
+              <div class="summary-item-img">
+                <div class="img-placeholder" style="font-size:1.2rem;"><img src="img/baju_batik.png" alt="" onerror="this.style.display='none'"/></div>
+              </div>
+              <div style="flex:1;">
+                <div class="summary-item-name">Sutra Batik Tulis Solo</div>
+                <div class="summary-item-qty">1 Unit</div>
+              </div>
+              <div class="summary-item-price">Rp 1.250.000</div>
+            </div>
+          </div>
+
+          <div class="summary-divider"></div>
+
+          <div class="summary-row"><span>Subtotal</span><span>Rp 1.700.000</span></div>
+          <div class="summary-row"><span>Biaya Pengiriman</span><span id="shippingDisplay">Rp 15.000</span></div>
+          <div class="summary-row"><span>Biaya Layanan</span><span>Rp 2.000</span></div>
+
+          <div class="summary-row total">
+            <span>Total Tagihan</span>
+            <span id="totalDisplay">Rp 1.717.000</span>
+          </div>
+
+          <button class="btn-bayar" onclick="showPage('success')">
+            🔒 Bayar Sekarang
+          </button>
+
+          <div class="security-note">
+            <span style="font-size:1rem;">🛡️</span>
+            <span>Transaksi Anda dilindungi dengan enkripsi tingkat tinggi. Keamanan data pribadi dan pembayaran adalah prioritas utama kami.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- end #page-checkout -->
+
+<!-- =============================================
+     SUCCESS PAGE
+============================================= -->
+<div id="page-success" class="page-success">
+  <div class="success-card">
+    <div class="success-icon">✅</div>
+    <h2>Pesanan Berhasil!</h2>
+    <p>Terima kasih atas pesanan Anda. Kami akan segera memproses pesanan Anda.</p>
+    <p>Estimasi pengiriman: <strong>2-3 Hari Kerja</strong></p>
+    <div class="order-id">#ORG-2024-78421</div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;margin-bottom:12px;" onclick="showPage('beranda')">Kembali Belanja</button>
+    <button class="btn btn-outline" style="width:100%;justify-content:center;">Lacak Pesanan</button>
+  </div>
+</div>
+
+<!-- =============================================
+     PRODUCT DETAIL MODAL
+============================================= -->
+<div class="modal-overlay" id="productModal" onclick="handleModalOverlayClick(event)">
+  <div class="modal-box" id="modalBox">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+
+    <div class="modal-content">
+      <!-- Gallery -->
+      <div class="modal-gallery">
+        <div class="modal-main-img">
+          <img id="modalMainImg" src="img/batik.png" alt="Produk" onerror="this.style.display='none'"/>
+          <span class="modal-badge-img" id="modalBadge">Terlaris</span>
+        </div>
+        <div class="modal-thumbs" id="modalThumbs">
+          <div class="modal-thumb active" onclick="switchThumb(this,'img/batik.png')"><img src="img/batik.png" alt="" onerror="this.style.display='none'"/></div>
+          <div class="modal-thumb" onclick="switchThumb(this,'img/baju_batik.png')"><img src="img/baju_batik.png" alt="" onerror="this.style.display='none'"/></div>
+          <div class="modal-thumb" onclick="switchThumb(this,'img/kopi.png')"><img src="img/kopi.png" alt="" onerror="this.style.display='none'"/></div>
+          <div class="modal-thumb" onclick="switchThumb(this,'img/tas_rajut.png')"><img src="img/tas_rajut.png" alt="" onerror="this.style.display='none'"/></div>
+        </div>
+      </div>
+
+      <!-- Info -->
+      <div class="modal-info">
+        <div class="modal-title" id="modalTitle">Kain Batik Tulis Lasem</div>
+        <div class="modal-rating">
+          <div class="stars">★★★★★</div>
+          <span id="modalReviewCount">(128 ulasan)</span>
+        </div>
+        <div class="modal-seller">
+          <div class="seller-icon">🏪</div>
+          <div>
+            <div class="seller-name" id="modalSeller">Lestari Batik</div>
+            <div class="seller-link">Kunjungi Toko</div>
+          </div>
+        </div>
+        <div class="modal-price" id="modalPrice">Rp 450.000</div>
+
+        <div class="modal-option-label">Ukuran</div>
+        <div class="modal-sizes">
+          <button class="size-btn" onclick="selectSize(this)">S</button>
+          <button class="size-btn active" onclick="selectSize(this)">M</button>
+          <button class="size-btn" onclick="selectSize(this)">L</button>
+          <button class="size-btn" onclick="selectSize(this)">XL</button>
+        </div>
+
+        <div class="modal-option-label">Warna</div>
+        <div class="modal-colors">
+          <div class="color-btn active" style="background:#2D5A3D;" onclick="selectColor(this)"></div>
+          <div class="color-btn" style="background:#6B3A2A;" onclick="selectColor(this)"></div>
+          <div class="color-btn" style="background:#B8622A;" onclick="selectColor(this)"></div>
+          <div class="color-btn" style="background:#D4A52A;" onclick="selectColor(this)"></div>
+        </div>
+
+        <div class="modal-qty-row">
+          <div class="qty-control">
+            <button class="qty-btn" onclick="changeQty(-1)">−</button>
+            <input class="qty-val" id="qtyVal" type="text" value="1" readonly/>
+            <button class="qty-btn" onclick="changeQty(1)">+</button>
+          </div>
+          <span class="qty-stock">Sisa 12 produk</span>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn-keranjang" onclick="addToCart()">Masukkan Keranjang</button>
+          <button class="btn-beli-modal" onclick="buyNow()">Beli Sekarang</button>
+        </div>
+
+        <div class="modal-badges">
+          <div class="modal-badge-item"><span>🔒</span><span>TRANSAKSI AMAN</span></div>
+          <div class="modal-badge-item"><span>🚚</span><span>GRATIS ONGKIR</span></div>
+          <div class="modal-badge-item"><span>↩️</span><span>BISA RETUR 7 HARI</span></div>
+        </div>
+      </div>
+    </div><!-- end .modal-content -->
+
+    <!-- Tabs -->
+    <div class="modal-tabs-section">
+      <div class="modal-tabs-row">
+        <button class="modal-tab active" onclick="switchTab(this,'desc')">Deskripsi</button>
+        <button class="modal-tab" onclick="switchTab(this,'spec')">Spesifikasi</button>
+        <button class="modal-tab" onclick="switchTab(this,'review')">Ulasan (128)</button>
+      </div>
+      <div class="modal-tab-content">
+        <div>
+          <div class="tab-panel active" id="tab-desc">
+            <p>Kain Batik Tulis Lasem ini merupakan hasil karya maestro perajin pesisir yang dikerjakan sepenuhnya menggunakan tangan selama 3-4 bulan. Setiap motif "Sekar Jagad" yang tertuang memiliki filosofi tentang keindahan keberagaman dunia.</p>
+            <br/>
+            <p>Menggunakan pewarna alami dari akar mengkudu dan kayu secang, kain ini memberikan sentuhan warna merah muda khas Lasem yang elegan dan tidak luntur. Tekstur kain katun primisima berkualitas tinggi memberikan kenyamanan maksimal.</p>
+          </div>
+          <div class="tab-panel" id="tab-spec">
+            <p><strong>Material:</strong> Katun Primisima 100%<br/>
+            <strong>Teknik:</strong> Batik Tulis Tangan<br/>
+            <strong>Pewarna:</strong> Alami (Mengkudu, Kayu Secang)<br/>
+            <strong>Ukuran:</strong> 200 x 110 cm<br/>
+            <strong>Berat:</strong> ±350 gram<br/>
+            <strong>Asal:</strong> Lasem, Rembang, Jawa Tengah<br/>
+            <strong>Sertifikasi:</strong> HAKI Terdaftar</p>
+          </div>
+          <div class="tab-panel" id="tab-review">
+            <div class="review-list">
+              <div class="review-item">
+                <div class="review-header"><div class="review-avatar">AP</div><div><div class="review-name">Andini P.</div><div class="review-stars">★★★★★</div></div></div>
+                <div class="review-text">"Kualitas kainnya juara, warnanya lebih cantik aslinya."</div>
+              </div>
+              <div class="review-item">
+                <div class="review-header"><div class="review-avatar">BS</div><div><div class="review-name">Budi Santoso</div><div class="review-stars">★★★★★</div></div></div>
+                <div class="review-text">"Detail tulisnya halus sekali. Sangat puas dengan pelayanan toko."</div>
+              </div>
+              <div class="review-item">
+                <div class="review-header"><div class="review-avatar">SA</div><div><div class="review-name">Siti Aminah</div><div class="review-stars">★★★★★</div></div></div>
+                <div class="review-text">"Pengemasan sangat rapi dan premium, cocok untuk kado."</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="review-sidebar" style="display:none;"><!-- reserved --></div>
+      </div>
+    </div>
+
+  </div><!-- end .modal-box -->
+</div><!-- end .modal-overlay -->
+
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+  // ===== PAGE ROUTING =====
+  function showPage(page) {
+    document.getElementById('page-beranda').style.display = page === 'beranda' ? '' : 'none';
+    const co = document.getElementById('page-checkout');
+    co.classList.toggle('active', page === 'checkout');
+    const sc = document.getElementById('page-success');
+    sc.classList.toggle('active', page === 'success');
+    window.scrollTo({top:0, behavior:'smooth'});
+    closeModal();
+  }
+  // Initialize
+  document.getElementById('page-checkout').classList.remove('active');
+  document.getElementById('page-success').classList.remove('active');
+
+  // ===== NAVBAR =====
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 40);
+    document.getElementById('scrollTop').classList.toggle('show', window.scrollY > 400);
+  });
+  document.getElementById('navToggle').addEventListener('click', () => {
+    document.getElementById('navLinks').classList.toggle('open');
+  });
+
+  // ===== FADE UP =====
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach((e,i) => { if(e.isIntersecting) setTimeout(()=>e.target.classList.add('visible'), i*80); });
+  }, {threshold:0.1});
+  document.querySelectorAll('.fade-up').forEach(el=>obs.observe(el));
+
+  // ===== PRODUCT DATA =====
+  const products = {
+    batik: { title:'Kain Batik Tulis Lasem', seller:'Lestari Batik', price:'Rp 450.000', badge:'Terlaris', img:'img/batik.png', reviews:128 },
+    kopi:  { title:'Single Origin Gayo', seller:'Kopi Gayo Hub', price:'Rp 125.000', badge:'Baru', img:'img/kopi.png', reviews:84 },
+    candle:{ title:'Scented Candle Java', seller:'Wangi Alam', price:'Rp 89.000', badge:null, img:'img/cream wajah.png', reviews:56 },
+    dress: { title:'Dress Batik Parang', seller:'Batik Kemala', price:'Rp 750.000', badge:'Terlaris', img:'img/baju batik.png', reviews:203 },
+    alat:  { title:'Set Alat Makan Jati', seller:'Peralatan Kita', price:'Rp 195.000', badge:null, img:'img/alat makan.png', reviews:42 },
+    cream: { title:'Face Cream Herbal', seller:'Skin Lokal', price:'Rp 210.000', badge:'Baru', img:'img/cream wajah.png', reviews:67 },
+    tas:   { title:'Rattan Bag Summer', seller:'Bali Bags', price:'Rp 320.000', badge:null, img:'img/tas rajut.png', reviews:91 },
+    laptop:{ title:'Stand Laptop Bamboo', seller:'Indo Tech', price:'Rp 285.000', badge:'Terlaris', img:'img/stand laptop.png', reviews:38 },
+  };
+
+  // ===== MODAL =====
+  function openModal(id) {
+    const p = products[id] || products.batik;
+    document.getElementById('modalTitle').textContent = p.title;
+    document.getElementById('modalSeller').textContent = p.seller;
+    document.getElementById('modalPrice').textContent = p.price;
+    document.getElementById('modalReviewCount').textContent = '(' + p.reviews + ' ulasan)';
+    document.getElementById('modalMainImg').src = p.img;
+    const badge = document.getElementById('modalBadge');
+    if (p.badge) { badge.textContent = p.badge; badge.style.display = ''; }
+    else { badge.style.display = 'none'; }
+    document.getElementById('qtyVal').value = 1;
+    // reset size
+    document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.size-btn')[1].classList.add('active');
+    // reset color
+    document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.color-btn')[0].classList.add('active');
+    // reset tab
+    switchTab(document.querySelector('.modal-tab'), 'desc');
+    document.getElementById('productModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    document.getElementById('productModal').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+  function handleModalOverlayClick(e) {
+    if (e.target === document.getElementById('productModal')) closeModal();
+  }
+  document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
+
+  function switchThumb(el, src) {
+    document.querySelectorAll('.modal-thumb').forEach(t=>t.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('modalMainImg').src = src;
+  }
+  function selectSize(btn) {
+    document.querySelectorAll('.size-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+  function selectColor(el) {
+    document.querySelectorAll('.color-btn').forEach(b=>b.classList.remove('active'));
+    el.classList.add('active');
+  }
+  function changeQty(delta) {
+    const el = document.getElementById('qtyVal');
+    let val = parseInt(el.value) + delta;
+    if (val < 1) val = 1;
+    if (val > 12) val = 12;
+    el.value = val;
+  }
+  function switchTab(btn, id) {
+    document.querySelectorAll('.modal-tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-'+id).classList.add('active');
+  }
+  function addToCart() {
+    const badge = document.getElementById('cartBadge');
+    badge.textContent = parseInt(badge.textContent) + 1;
+    closeModal();
+    // small toast
+    showToast('Produk ditambahkan ke keranjang!');
+  }
+  function buyNow() {
+    closeModal();
+    showPage('checkout');
+  }
+
+  // ===== TOAST =====
+  function showToast(msg) {
+    const t = document.createElement('div');
+    t.textContent = msg;
+    t.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--green);color:white;padding:12px 24px;border-radius:100px;font-size:0.875rem;font-weight:600;z-index:9999;box-shadow:0 8px 24px rgba(0,0,0,0.2);animation:fadeInUp 0.3s ease;';
+    document.body.appendChild(t);
+    setTimeout(()=>t.remove(), 2500);
+  }
+
+  // ===== CHECKOUT LOGIC =====
+  let shippingCost = 15000;
+  const BASE = 1702000;
+  function selectShipping(el, cost) {
+    document.querySelectorAll('.shipping-opt').forEach(o=>{ o.classList.remove('selected'); o.querySelector('input').checked=false; });
+    el.classList.add('selected');
+    el.querySelector('input').checked = true;
+    shippingCost = cost;
+    document.getElementById('shippingDisplay').textContent = 'Rp ' + cost.toLocaleString('id-ID');
+    const total = BASE + cost;
+    document.getElementById('totalDisplay').textContent = 'Rp ' + total.toLocaleString('id-ID');
+  }
+  function selectBank(btn) {
+    document.querySelectorAll('.bank-btn').forEach(b=>b.classList.remove('selected'));
+    btn.classList.add('selected');
+  }
+</script>
+
+<style>
+@keyframes fadeInUp {
+  from { opacity:0; transform:translateX(-50%) translateY(10px); }
+  to   { opacity:1; transform:translateX(-50%) translateY(0); }
+}
+</style>
+
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Profil Pembeli — Original.A</title>
+<link rel="stylesheet" href="style.css"/>
+<style>
+  body { background:var(--cream); }
+  .progress-wrap { padding:36px 20px 0; max-width:780px; margin:0 auto; text-align:center; }
+  .progress-lbl { font-size:0.78rem; letter-spacing:0.16em; color:var(--gold); font-weight:700; margin-bottom:14px; }
+  .progress-bar { height:4px; background:var(--border); border-radius:3px; overflow:hidden; }
+  .progress-bar > span { display:block; height:100%; width:100%; background:var(--green); }
+
+  .form-wrap { max-width:780px; margin:40px auto 60px; padding:0 20px; }
+  .form-card {
+    background:var(--white); border:1px solid var(--border-light);
+    border-radius:var(--radius-lg); padding:48px;
+  }
+  .form-card h1 { text-align:center; font-size:2rem; margin-bottom:8px; }
+  .form-card .lead { text-align:center; color:var(--text-mid); font-size:0.95rem; margin-bottom:36px; }
+
+  .avatar-up { display:flex; flex-direction:column; align-items:center; margin-bottom:32px; }
+  .avatar-circle {
+    width:110px; height:110px; border-radius:50%; background:var(--cream-dark);
+    border:2px dashed #c7bfae; display:flex; align-items:center; justify-content:center;
+    color:var(--text-muted); font-size:1.6rem; position:relative; cursor:pointer;
+  }
+  .avatar-edit {
+    position:absolute; bottom:4px; right:4px; width:28px; height:28px; background:var(--green);
+    border-radius:50%; color:var(--white); display:flex; align-items:center; justify-content:center; font-size:0.75rem;
+  }
+  .avatar-up p { margin-top:10px; font-size:0.85rem; color:var(--text-mid); }
+
+  .row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:18px; }
+  .row.three { grid-template-columns:1fr 1fr 1fr; }
+  .field label { display:block; font-size:0.88rem; font-weight:600; color:var(--text-dark); margin-bottom:8px; }
+  .field input, .field select, .field textarea {
+    width:100%; padding:13px 14px; background:var(--cream-dark); border:1px solid transparent;
+    border-radius:var(--radius-sm); font-family:var(--font-body); font-size:0.92rem; color:var(--text-dark); outline:none;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus { border-color:var(--green); background:var(--white); }
+  .field textarea { min-height:90px; resize:vertical; }
+  .gender-toggle { display:grid; grid-template-columns:1fr 1fr; gap:0; background:var(--cream-dark); padding:4px; border-radius:var(--radius-sm); }
+  .gender-toggle button { padding:11px; background:transparent; border-radius:6px; font-weight:600; color:var(--text-mid); font-size:0.9rem; }
+  .gender-toggle button.active { background:var(--white); color:var(--green); box-shadow:var(--shadow-sm); }
+
+  .actions { text-align:center; margin-top:36px; }
+  .actions .btn { padding:15px 48px; font-size:0.95rem; }
+  .skip { display:block; margin-top:14px; color:var(--text-mid); font-size:0.85rem; }
+
+  footer.mini { background:var(--cream-dark); padding:24px 0; border-top:1px solid var(--border); }
+  footer.mini .row-foot { display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; font-size:0.82rem; color:var(--text-mid); }
+  footer.mini .row-foot strong { color:var(--green); font-family:var(--font-display); }
+  footer.mini .row-foot a { color:var(--text-mid); margin-right:18px; }
+
+  @media(max-width:700px){
+    .row, .row.three { grid-template-columns:1fr; }
+    .form-card { padding:30px 22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-wrap">
+  <div class="progress-lbl">LANGKAH 1 DARI 1</div>
+  <div class="progress-bar"><span></span></div>
+</div>
+
+<div class="form-wrap">
+  <form class="form-card" onsubmit="event.preventDefault(); window.location='index-loggedin.html';">
+    <h1>Lengkapi Profil Pembeli</h1>
+    <p class="lead">Satu langkah lagi untuk menjelajahi kurasi warisan nusantara.</p>
+
+    <div class="avatar-up">
+      <div class="avatar-circle">📷<div class="avatar-edit">✎</div></div>
+      <p>Unggah Foto Profil</p>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label>Tanggal Lahir</label>
+        <input type="date"/>
+      </div>
+      <div class="field">
+        <label>Jenis Kelamin</label>
+        <div class="gender-toggle">
+          <button type="button" class="active">Pria</button>
+          <button type="button">Wanita</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="field" style="margin-bottom:18px;">
+      <label>Alamat Pengiriman Utama</label>
+      <textarea placeholder="Nama Jalan, No. Rumah, RT/RW"></textarea>
+    </div>
+
+    <div class="row three">
+      <div class="field">
+        <label>Provinsi</label>
+        <select><option>Pilih Provinsi</option><option>DKI Jakarta</option><option>DI Yogyakarta</option><option>Jawa Barat</option></select>
+      </div>
+      <div class="field">
+        <label>Kota</label>
+        <select><option>Pilih Kota</option></select>
+      </div>
+      <div class="field">
+        <label>Kode Pos</label>
+        <input type="text" placeholder="12345"/>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button type="submit" class="btn btn-primary">Mulai Belanja →</button>
+      <a href="index-loggedin.html" class="skip">Lewati, isi nanti</a>
+    </div>
+  </form>
+</div>
+
+<footer class="mini">
+  <div class="container">
+    <div class="row-foot">
+      <strong>Original.A</strong>
+      <div>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Craftsmanship</a>
+        <a href="#">Help Center</a>
+      </div>
+      <span>© 2024 Original.A — The Curated Heritage of Indonesia. All rights reserved.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('.gender-toggle button').forEach(b => {
+    b.addEventListener('click', () => {
+      document.querySelectorAll('.gender-toggle button').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>

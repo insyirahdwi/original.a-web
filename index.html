@@ -1,0 +1,510 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Beranda â€” Original.A | Warisan UMKM Indonesia Terkurasi</title>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    .hero{min-height:100vh;display:flex;align-items:center;padding-top:var(--nav-height);background:var(--cream);overflow:hidden;position:relative;}
+    .hero .container{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;padding:60px 0;}
+    .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(184,150,46,0.15);border:1px solid rgba(184,150,46,0.35);border-radius:100px;padding:6px 16px;font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin-bottom:24px;}
+    .hero h1{font-size:clamp(2.6rem,5.5vw,4.2rem);line-height:1.1;margin-bottom:20px;color:var(--green);}
+    .hero h1 span{color:var(--gold);font-style:italic;}
+    .hero-desc{font-size:1rem;line-height:1.75;color:var(--text-mid);margin-bottom:32px;max-width:440px;}
+    .hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:40px;}
+    .hero-trust{display:flex;align-items:center;gap:12px;}
+    .trust-avatars{display:flex;}
+    .trust-avatars span{width:32px;height:32px;border-radius:50%;background:var(--green);color:var(--white);display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;border:2px solid var(--cream);margin-left:-8px;}
+    .trust-avatars span:first-child{margin-left:0;}
+    .trust-text{font-size:0.82rem;color:var(--text-muted);}
+    .trust-text strong{color:var(--green);display:block;}
+    .hero-visual{position:relative;}
+    .hero-img-main{width:100%;aspect-ratio:4/5;border-radius:var(--radius-xl);overflow:hidden;background:#D4C5A9;position:relative;}
+    .hero-img-main img,.hero-img-thumb img{width:100%;height:100%;object-fit:cover;}
+    .hero-img-thumb{position:absolute;bottom:-20px;right:-20px;width:160px;height:140px;border-radius:var(--radius-lg);overflow:hidden;border:4px solid var(--cream);box-shadow:var(--shadow-lg);}
+    .hero-stat-card{position:absolute;top:24px;left:-24px;background:var(--white);border-radius:var(--radius-md);padding:14px 18px;box-shadow:var(--shadow-lg);}
+    .hero-stat-card .stat-num{font-family:var(--font-display);font-size:1.5rem;font-weight:700;color:var(--green);line-height:1;}
+    .hero-stat-card .stat-lbl{font-size:0.72rem;color:var(--text-muted);margin-top:2px;}
+    .kategori-section{padding:60px 0;}
+    .section-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:28px;}
+    .section-header h2{font-size:1.5rem;}
+    .section-header p{font-size:0.875rem;color:var(--text-muted);margin-top:4px;}
+    .kategori-scroll{display:flex;gap:16px;overflow-x:auto;padding-bottom:8px;scrollbar-width:none;}
+    .kategori-scroll::-webkit-scrollbar{display:none;}
+    .kat-item{flex-shrink:0;width:130px;cursor:pointer;text-align:center;transition:var(--transition);}
+    .kat-item:hover{transform:translateY(-4px);}
+    .kat-img{width:130px;height:110px;border-radius:var(--radius-md);overflow:hidden;background:var(--cream-dark);margin-bottom:10px;position:relative;}
+    .kat-img img{width:100%;height:100%;object-fit:cover;}
+    .kat-overlay{position:absolute;inset:0;background:rgba(28,61,46,0.4);display:flex;align-items:flex-end;padding:10px;border-radius:var(--radius-md);}
+    .kat-name{font-size:0.82rem;font-weight:600;color:var(--white);}
+    .produk-section{padding:60px 0;}
+    .section-title-center{text-align:center;margin-bottom:40px;}
+    .section-title-center h2{font-size:2rem;margin-bottom:6px;}
+    .section-title-center h2::after{content:'';display:block;width:50px;height:3px;background:var(--gold);margin:10px auto 0;border-radius:2px;}
+    .produk-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+    .produk-card{background:var(--white);border-radius:var(--radius-md);overflow:hidden;border:1px solid var(--border-light);transition:var(--transition);}
+    .produk-card:hover{box-shadow:var(--shadow-md);transform:translateY(-4px);}
+    .produk-img{width:100%;aspect-ratio:1/1;background:var(--cream-dark);position:relative;overflow:hidden;}
+    .produk-img img{width:100%;height:100%;object-fit:cover;transition:var(--transition);}
+    .produk-card:hover .produk-img img{transform:scale(1.05);}
+    .produk-label{position:absolute;top:10px;left:10px;background:var(--green);color:var(--white);font-size:0.68rem;font-weight:700;padding:3px 9px;border-radius:100px;text-transform:uppercase;}
+    .produk-label.new{background:var(--gold);}
+    .produk-info{padding:14px 16px 16px;}
+    .produk-toko{font-size:0.72rem;color:var(--gold);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;}
+    .produk-nama{font-size:0.92rem;font-weight:600;color:var(--text-dark);margin-bottom:6px;line-height:1.35;}
+    .produk-harga{font-family:var(--font-display);font-size:1rem;font-weight:700;color:var(--green);margin-bottom:12px;}
+    .btn-beli{width:100%;padding:10px;background:var(--green);color:var(--white);border-radius:var(--radius-sm);font-size:0.82rem;font-weight:600;transition:var(--transition);text-align:center;display:block;}
+    .btn-beli:hover{background:var(--green-mid);}
+    .cara-kerja{background:var(--green);padding:80px 0;}
+    .cara-kerja .section-title-center h2{color:var(--white);}
+    .cara-kerja .section-title-center h2::after{background:var(--gold);}
+    .cara-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:48px;}
+    .cara-item{text-align:center;}
+    .cara-icon{width:72px;height:72px;background:rgba(184,150,46,0.2);border:1px solid rgba(184,150,46,0.4);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;}
+    .cara-item h3{color:var(--white);font-size:1.1rem;margin-bottom:10px;}
+    .cara-item p{color:rgba(255,255,255,0.65);font-size:0.875rem;line-height:1.7;}
+    .testimoni-section{padding:80px 0;background:var(--cream);}
+    .testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+    .testi-card{background:var(--white);border:1px solid var(--border-light);border-radius:var(--radius-md);padding:28px;transition:var(--transition);}
+    .testi-card:hover{box-shadow:var(--shadow-md);}
+    .stars{color:var(--gold);font-size:0.9rem;letter-spacing:2px;margin-bottom:14px;}
+    .testi-text{font-size:0.9rem;color:var(--text-mid);line-height:1.75;margin-bottom:20px;font-style:italic;}
+    .testi-author{display:flex;align-items:center;gap:12px;}
+    .testi-avatar{width:40px;height:40px;border-radius:50%;background:var(--green);color:var(--white);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;flex-shrink:0;}
+    .testi-name{font-size:0.875rem;font-weight:600;color:var(--text-dark);}
+    .testi-lokasi{font-size:0.78rem;color:var(--text-muted);}
+    .cta-bottom{background:var(--green);padding:80px 0;text-align:center;}
+    .cta-bottom h2{color:var(--white);font-size:clamp(1.8rem,4vw,2.8rem);margin-bottom:12px;}
+    .cta-bottom p{color:rgba(255,255,255,0.7);font-size:1rem;margin-bottom:32px;max-width:480px;margin-left:auto;margin-right:auto;}
+    .cta-bottom .btn-gold{font-size:1rem;padding:15px 40px;border-radius:var(--radius-sm);}
+    .img-placeholder{background:var(--cream-dark);display:flex;align-items:center;justify-content:center;font-size:2rem;color:var(--text-muted);width:100%;height:100%;}
+    .login-modal-overlay{position:fixed;inset:0;z-index:2000;background:rgba(28,61,46,0.55);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.3s ease;}
+    .login-modal-overlay.active{opacity:1;pointer-events:auto;}
+    .login-modal-box{background:var(--white);border-radius:var(--radius-xl);padding:48px 40px;max-width:400px;width:90%;text-align:center;position:relative;box-shadow:var(--shadow-lg);transform:translateY(20px) scale(0.97);transition:transform 0.3s ease;}
+    .login-modal-overlay.active .login-modal-box{transform:translateY(0) scale(1);}
+    .login-modal-icon{font-size:3rem;margin-bottom:14px;}
+    .login-modal-box h3{font-size:1.4rem;color:var(--green);margin-bottom:10px;}
+    .login-modal-box p{font-size:0.9rem;color:var(--text-mid);margin-bottom:28px;line-height:1.65;}
+    .login-modal-actions{display:flex;flex-direction:column;gap:10px;}
+    .login-modal-close{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;background:var(--cream);color:var(--text-mid);font-size:0.9rem;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;transition:var(--transition);}
+    .login-modal-close:hover{background:var(--cream-dark);color:var(--green);}
+    @media(max-width:1024px){.produk-grid{grid-template-columns:repeat(2,1fr);}}
+    @media(max-width:768px){.hero .container{grid-template-columns:1fr;}.hero-visual{display:none;}.cara-grid{grid-template-columns:1fr;}.testi-grid{grid-template-columns:1fr;}.produk-grid{grid-template-columns:repeat(2,1fr);}}
+    @media(max-width:480px){.produk-grid{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="beranda.html" class="nav-logo">Original.A</a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" class="active">Beranda</a></li>
+        <li><a href="layanan.html">Layanan</a></li>
+        <li><a href="harga.html">Harga</a></li>
+        <li><a href="portofolio.html">Portofolio</a></li>
+        <li><a href="kontak.html">Kontak</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="login.html" class="nav-masuk">Masuk</a>
+        <a href="registrasi.html" class="nav-daftar">Daftar</a>
+      </div>
+      <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <div>
+        <div class="hero-badge fade-up">ðŸŒ¿ Warisan UMKM Terkurasi</div>
+        <h1 class="fade-up">Promosikan &amp; Jual Produkmu<br>di <span>Satu Tempat</span></h1>
+        <p class="hero-desc fade-up">Promote, Grow and Glory</p>
+        <div class="hero-actions fade-up">
+          <a href="registrasi.html" class="btn btn-primary">Mulai Berjualan</a>
+          <a href="portofolio.html" class="btn btn-outline">Jelajahi Produk â†’</a>
+        </div>
+        <div class="hero-trust fade-up">
+          <div class="trust-avatars">
+            <span>BS</span><span>SA</span><span>AP</span><span>+</span>
+          </div>
+          <div class="trust-text">
+            <strong>1.200+ Pengrajin</strong>
+            bergabung dan sukses berjualan
+          </div>
+        </div>
+      </div>
+      <div class="hero-visual fade-up">
+        <div class="hero-img-main">
+          <div class="img-placeholder"><img src="img/home 1.png" alt=""></div>
+        </div>
+        <div class="hero-img-thumb">
+          <div class="img-placeholder" style="font-size:1.4rem;"><img src="img/home 2.png" alt=""></div>
+        </div>
+        <div class="hero-stat-card">
+          <div class="stat-num">120+</div>
+          <div class="stat-lbl">Produk Terjual Hari Ini</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KATEGORI -->
+  <section class="kategori-section">
+    <div class="container">
+      <div class="section-header fade-up">
+        <div>
+          <h2>Kategori Pilihan</h2>
+          <p>Temukan kekayaan nusantara berdasarkan kategori</p>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button
+            style="width:34px;height:34px;border-radius:50%;border:1px solid var(--border);background:var(--white);cursor:pointer;font-size:1rem;">â€¹</button>
+          <button
+            style="width:34px;height:34px;border-radius:50%;border:1px solid var(--border);background:var(--white);cursor:pointer;font-size:1rem;">â€º</button>
+        </div>
+      </div>
+      <div class="kategori-scroll fade-up">
+        <div class="kat-item">
+          <div class="kat-img">
+            <div class="img-placeholder"><img src="img/makanan.png" alt=""></div>
+            <div class="kat-overlay"><span class="kat-name">Makanan</span></div>
+          </div>
+        </div>
+        <div class="kat-item">
+          <div class="kat-img">
+            <div class="img-placeholder"><img src="img/ootd.png" alt=""></div>
+            <div class="kat-overlay"><span class="kat-name">Fashion</span></div>
+          </div>
+        </div>
+        <div class="kat-item">
+          <div class="kat-img">
+            <div class="img-placeholder"><img src="img/kerajinan.png" alt=""></div>
+            <div class="kat-overlay"><span class="kat-name">Kerajinan</span></div>
+          </div>
+        </div>
+        <div class="kat-item">
+          <div class="kat-img">
+            <div class="img-placeholder"><img src="img/kecantikan.png" alt=""></div>
+            <div class="kat-overlay"><span class="kat-name">Kecantikan</span></div>
+          </div>
+        </div>
+        <div class="kat-item">
+          <div class="kat-img">
+            <div class="img-placeholder"><img src="img/elektronik.png" alt=""></div>
+            <div class="kat-overlay"><span class="kat-name">Elektronik</span></div>
+          </div>
+        </div>
+        <div class="kat-item">
+          <div class="kat-img">
+            <div class="img-placeholder"><img src="img/rumah 2.png" alt=""></div>
+            <div class="kat-overlay"><span class="kat-name">Rumah</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- PRODUK UNGGULAN -->
+  <section class="produk-section">
+    <div class="container">
+      <div class="section-title-center fade-up">
+        <h2>Produk Unggulan</h2>
+      </div>
+      <div class="produk-grid">
+        <div class="produk-card fade-up">
+          <div class="produk-img">
+            <div class="img-placeholder"><img src="img/batik.png" alt=""></div>
+            <span class="produk-label">Terlaris</span>
+          </div>
+          <div class="produk-info">
+            <div class="produk-toko">Lestari Batik</div>
+            <div class="produk-nama">Kain Batik Tulis Lasem</div>
+            <div class="produk-harga">Rp 450.000</div>
+            <a href="#" onclick="requireLogin(event)" class="btn-beli">Beli Sekarang</a>
+          </div>
+        </div>
+        <div class="produk-card fade-up">
+          <div class="produk-img">
+            <div class="img-placeholder"><img src="img/kopi.png" alt=""></div>
+            <span class="produk-label new">Baru</span>
+          </div>
+          <div class="produk-info">
+            <div class="produk-toko">Kopi Gayo Hub</div>
+            <div class="produk-nama">Single Origin Gayo</div>
+            <div class="produk-harga">Rp 125.000</div>
+            <a href="#" onclick="requireLogin(event)" class="btn-beli">Beli Sekarang</a>
+          </div>
+        </div>
+        <div class="produk-card fade-up">
+          <div class="produk-img">
+            <div class="img-placeholder"><img src="img/cream wajah.png" alt=""></div>
+          </div>
+          <div class="produk-info">
+            <div class="produk-toko">Wangi Alam</div>
+            <div class="produk-nama">Scented Candle Java</div>
+            <div class="produk-harga">Rp 89.000</div>
+            <a href="#" onclick="requireLogin(event)" class="btn-beli">Beli Sekarang</a>
+          </div>
+        </div>
+        <div class="produk-card fade-up">
+          <div class="produk-img">
+            <div class="img-placeholder"><img src="img/baju batik.png" alt=""></div>
+            <span class="produk-label">Terlaris</span>
+          </div>
+          <div class="produk-info">
+            <div class="produk-toko">Batik Kemala</div>
+            <div class="produk-nama">Dress Batik Parang</div>
+            <div class="produk-harga">Rp 750.000</div>
+            <a href="#" onclick="requireLogin(event)" class="btn-beli">Beli Sekarang</a>
+          </div>
+        </div>
+        <div class="produk-card fade-up">
+          <div class="produk-img">
+            <div class="img-placeholder"><img src="img/alat makan.png" alt=""></div>
+          </div>
+          <div class="produk-info">
+            <div class="produk-toko">Mebel Kayu</div>
+            <div class="produk-nama">Set Alat Makan Jati</div>
+            <div class="produk-harga">Rp 195.000</div>
+            <a href="#" onclick="requireLogin(event)" class="btn-beli">Beli Sekarang</a>
+          </div>
+        </div>
+        <div class="produk-card fade-up">
+          <div class="produk-img">
+            <div class="img-placeholder"><img src="img/cream wajah.png" alt=""></div>
+            <span class="produk-label new">Baru</span>
+          </div>
+          <div class="produk-info">
+            <div class="produk-toko">Skin Lokal</div>
+            <div class="produk-nama">Face Cream Herbal</div>
+            <div class="produk-harga">Rp 210.000</div>
+            <a href="#" onclick="requireLogin(event)" class="btn-beli">Beli Sekarang</a>
+          </div>
+        </div>
+        <div class="produk-card fade-up">
+          <div class="produk-img">
+            <div class="img-placeholder"><img src="img/tas rajut.png" alt=""></div>
+          </div>
+          <div class="produk-info">
+            <div class="produk-toko">Bali Eco</div>
+            <div class="produk-nama">Rattan Bag Summer</div>
+            <div class="produk-harga">Rp 320.000</div>
+            <a href="#" onclick="requireLogin(event)" class="btn-beli">Beli Sekarang</a>
+          </div>
+        </div>
+        <div class="produk-card fade-up">
+          <div class="produk-img">
+            <div class="img-placeholder"><img src="img/stand laptop.png" alt=""></div>
+          </div>
+          <div class="produk-info">
+            <div class="produk-toko">Indo Wood</div>
+            <div class="produk-nama">Stand Laptop Bamboo</div>
+            <div class="produk-harga">Rp 285.000</div>
+            <a href="#" onclick="requireLogin(event)" class="btn-beli">Beli Sekarang</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CARA KERJA -->
+  <section class="cara-kerja">
+    <div class="container">
+      <div class="section-title-center fade-up">
+        <h2>Bagaimana Original.A Bekerja</h2>
+        <p style="color:rgba(255,255,255,0.7);margin-top:10px;">Tiga langkah mudah untuk memperkenalkan karya terbaik
+          Anda ke pasar yang lebih luas.</p>
+      </div>
+      <div class="cara-grid">
+        <div class="cara-item fade-up">
+          <div class="cara-icon"><img src="img/Background 1.png" alt=""></div>
+          <h3>Daftar Akun</h3>
+          <p>Buat profil toko hanya dalam hitungan menit dan lengkapi dengan informasi identitas.</p>
+        </div>
+        <div class="cara-item fade-up">
+          <div class="cara-icon"><img src="img/Background 2.png" alt=""></div>
+          <h3>Listing Produk</h3>
+          <p>Unggah foto produk terbaik dengan deskripsi yang menarik dan lengkap untuk menjangkau pembeli potensial.
+          </p>
+        </div>
+        <div class="cara-item fade-up">
+          <div class="cara-icon"><img src="img/Background 3.png" alt=""></div>
+          <h3>Mulai Bertransaksi</h3>
+          <p>Terima pesanan secara real-time dan kelola penjualan dengan sistem yang aman.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONI -->
+  <section class="testimoni-section">
+    <div class="container">
+      <div class="section-title-center fade-up">
+        <h2>Apa Kata Mereka?</h2>
+      </div>
+      <div class="testi-grid">
+        <div class="testi-card fade-up">
+          <div class="stars">â˜…â˜…â˜…â˜…â˜…</div>
+          <p class="testi-text">"Original.A benar-benar membantu produk kerajinan bambu saya menjangkau pembeli di
+            seluruh Indonesia dan luar negeri dari tempat yang sangat premium."</p>
+          <div class="testi-author">
+            <div class="testi-avatar"><img src="img/bambang.png" alt=""></div>
+            <div>
+              <div class="testi-name">Bambang Susilo</div>
+              <div class="testi-lokasi">Yogyakarta</div>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card fade-up">
+          <div class="stars">â˜…â˜…â˜…â˜…â˜…</div>
+          <p class="testi-text">"Platform ini bukan sekadar pasar, tapi platform seni. Batik saya dihargai dan lebih
+            layak di sini dibanding marketplace lain."</p>
+          <div class="testi-author">
+            <div class="testi-avatar"><img src="img/siti.png" alt=""></div>
+            <div>
+              <div class="testi-name">Siti Aminah</div>
+              <div class="testi-lokasi">Solo</div>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card fade-up">
+          <div class="stars">â˜…â˜…â˜…â˜…â˜…</div>
+          <p class="testi-text">"Sistem pembayarannya sangat transparan dan aman. Sangat cocok bagi UMKM yang baru ingin
+            go-digital."</p>
+          <div class="testi-author">
+            <div class="testi-avatar"><img src="img/andi.png" alt=""></div>
+            <div>
+              <div class="testi-name">Andi Pratama</div>
+              <div class="testi-lokasi">Semarang</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BOTTOM -->
+  <section class="cta-bottom">
+    <div class="container">
+      <h2 class="fade-up">Siap Memulai? Daftarkan Tokomu Sekarang</h2>
+      <p class="fade-up">Gabung dengan komunitas UMKM terkurasi terbesar di Indonesia dan kembangkan bisnismu hari ini.
+      </p>
+      <a href="pendaftaran-toko.html" class="btn btn-gold fade-up">Buka Toko Gratis</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="nav-logo"
+            style="color:var(--white);font-family:var(--font-display);font-size:1.4rem;font-weight:700;margin-bottom:12px;">
+            Original.A</div>
+          <p>Mewadahi karya pengrajin lokal untuk mendunia. Mengkurasi warisan dengan hati dan standar tinggi.</p>
+          <div class="footer-socials" style="margin-top:20px;">
+            <a href="#">ðŸŒ</a><a href="#">@</a><a href="#">â†—</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h5>Tautan Cepat</h5>
+          <ul>
+            <li><a href="beranda.html">Tentang Kami</a></li>
+            <li><a href="layanan.html">Layanan &amp; Fitur</a></li>
+            <li><a href="harga.html">Kebijakan Biaya</a></li>
+            <li><a href="portofolio.html">Pasar Bersama</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Kontak</h5>
+          <ul>
+            <li><a href="#">halo@originala.id</a></li>
+            <li><a href="#">+62 812 3456 7890</a></li>
+            <li><a href="#">Jakarta, Indonesia</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Newsletter</h5>
+          <p style="color:rgba(255,255,255,0.6);font-size:0.875rem;margin-bottom:14px;">Dapatkan info produk terbaru dan
+            promo menarik.</p>
+          <div class="newsletter-form">
+            <input type="email" placeholder="Email Anda" />
+            <button>Kirim â€º</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">Â© 2024 Original.A. Warisan UMKM Indonesia Terkurasi.</div>
+    </div>
+  </footer>
+
+  <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">â†‘</button>
+
+  <!-- MODAL LOGIN REQUIRED -->
+  <div class="login-modal-overlay" id="loginModal">
+    <div class="login-modal-box">
+      <button class="login-modal-close" onclick="closeLoginModal()">âœ•</button>
+      <div class="login-modal-icon">ðŸ”’</div>
+      <h3>Login Diperlukan</h3>
+      <p>Untuk membeli produk, Anda perlu masuk ke akun terlebih dahulu.</p>
+      <div class="login-modal-actions">
+        <a href="login.html" class="btn btn-primary">Masuk Sekarang</a>
+        <a href="registrasi.html" class="btn btn-outline">Daftar Gratis</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 40);
+      document.getElementById('scrollTop').classList.toggle('show', window.scrollY > 400);
+    });
+    document.getElementById('navToggle').addEventListener('click', () => {
+      document.getElementById('navLinks').classList.toggle('open');
+    });
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach((e, i) => { if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i * 80); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+
+    function requireLogin(e) {
+      e.preventDefault();
+      document.getElementById('loginModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLoginModal() {
+      document.getElementById('loginModal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+    document.getElementById('loginModal').addEventListener('click', function (e) {
+      if (e.target === this) closeLoginModal();
+    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLoginModal(); });
+
+    /* ---- CEK STATUS LOGIN ---- */
+    (function checkLoginNav(){
+      const u = localStorage.getItem('oa_user');
+      if(u){
+        document.getElementById('navGuest').style.display='none';
+        document.getElementById('navUser').style.display='flex';
+        try{
+          const d=JSON.parse(u);
+          if(d.name){
+            document.getElementById('navUserName').textContent=d.name;
+            document.getElementById('navUserAvatar').textContent=d.name.substring(0,2).toUpperCase();
+          }
+        }catch(e){}
+      }
+    })();
+  </script>
+</body>
+
+</html>
+

@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Layanan — Original.A | Platform Warisan UMKM Indonesia</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── Service Cards ── */
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+    }
+
+    .service-card {
+      background: var(--white);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: var(--transition);
+    }
+
+    .service-card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-4px);
+      border-color: var(--border);
+    }
+
+    .service-card-header {
+      padding: 28px 28px 20px;
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .service-icon {
+      width: 52px;
+      height: 52px;
+      min-width: 52px;
+      background: rgba(184, 150, 46, 0.1);
+      border: 1px solid rgba(184, 150, 46, 0.25);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+
+    .service-card-header h3 {
+      font-size: 1.1rem;
+      margin-bottom: 6px;
+    }
+
+    .service-card-header p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .service-card-body {
+      padding: 20px 28px 28px;
+    }
+
+    .service-feat-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .service-feat-list li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.875rem;
+      color: var(--text-dark);
+    }
+
+    .feat-check {
+      width: 18px;
+      height: 18px;
+      min-width: 18px;
+      background: rgba(184, 150, 46, 0.15);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold);
+      font-size: 0.6rem;
+      font-weight: 700;
+    }
+
+    .tool-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tool-tag {
+      padding: 4px 12px;
+      background: var(--cream-dark);
+      border: 1px solid var(--border-light);
+      border-radius: 100px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* ── Process Steps ── */
+    .process-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .process-step {
+      display: grid;
+      grid-template-columns: 52px 1fr;
+      gap: 20px;
+      align-items: start;
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .process-step:last-child {
+      border-bottom: none;
+    }
+
+    .step-number {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--border);
+      line-height: 1;
+    }
+
+    .step-content h3 {
+      font-size: 1.05rem;
+      margin-bottom: 6px;
+    }
+
+    .step-content p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    /* ── FAQ ── */
+    .faq-item {
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .faq-question {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      padding: 20px 0;
+      gap: 16px;
+    }
+
+    .faq-question:hover {
+      color: var(--green);
+    }
+
+    .faq-icon {
+      width: 26px;
+      height: 26px;
+      min-width: 26px;
+      border: 1.5px solid var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      color: var(--gold);
+      transition: var(--transition);
+      line-height: 1;
+    }
+
+    .faq-answer {
+      font-size: 0.875rem;
+      color: var(--text-mid);
+      line-height: 1.8;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.3s ease;
+    }
+
+    .faq-item.open .faq-answer {
+      max-height: 200px;
+      padding-bottom: 20px;
+    }
+
+    .faq-item.open .faq-icon {
+      transform: rotate(45deg);
+      border-color: var(--gold);
+    }
+
+    @media (max-width: 768px) {
+      .process-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">Original.A</a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Beranda</a></li>
+        <li><a href="layanan.html" class="active">Layanan</a></li>
+        <li><a href="harga.html">Harga</a></li>
+        <li><a href="portofolio.html">Portofolio</a></li>
+        <li><a href="kontak.html">Kontak</a></li>
+      </ul>
+      <div class="nav-actions" id="navGuest">
+        <a href="login.html" class="nav-masuk">Masuk</a>
+        <a href="registrasi.html" class="nav-daftar">Daftar</a>
+      </div>
+      <div class="nav-actions nav-user" id="navUser" style="display:none">
+        <a href="checkout.html" class="nav-icon" title="Keranjang" aria-label="Keranjang">🛒<span class="nav-badge">3</span></a>
+        <a href="#" class="nav-icon" title="Notifikasi" aria-label="Notifikasi">🔔</a>
+        <a href="profil-pembeli.html" class="nav-profile" title="Profil Saya">
+          <span class="nav-avatar" id="navUserAvatar">AP</span>
+          <span class="nav-name" id="navUserName">Andi P.</span>
+        </a>
+      </div>
+      <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="container">
+      <span class="badge badge-gold fade-up">Katalog Layanan</span>
+      <h1 class="fade-up">Layanan Kami untuk<br>Bisnis Anda</h1>
+      <p class="fade-up">
+        Semua yang kamu butuhkan untuk berkembang bersama Original.A.
+        Kami mengkurasi setiap langkah pertumbuhan UMKM Anda.
+      </p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- SERVICES GRID -->
+  <section class="section">
+    <div class="container">
+      <div class="section-title-center fade-up" style="margin-bottom:48px;">
+        <h2>Solusi Lengkap untuk UMKM</h2>
+        <p style="margin-top:10px;">Dari promosi hingga analitik, semua dalam satu ekosistem terpadu.</p>
+      </div>
+      <div class="service-grid">
+
+        <div class="service-card fade-up">
+          <div class="service-card-header">
+            <div class="service-icon"><img src="img/layanan_1.png" alt=""></div>
+            <div>
+              <h3>Promosi Produk</h3>
+              <p>Pajang produk unggulan di halaman utama kami dengan strategi visual editorial yang menarik perhatian
+                pelanggan premium.</p>
+            </div>
+          </div>
+          <div class="service-card-body">
+            <ul class="service-feat-list">
+              <li><span class="feat-check">✓</span> Penempatan Editorial Pilihan</li>
+              <li><span class="feat-check">✓</span> Foto Produk Profesional</li>
+              <li><span class="feat-check">✓</span> Copywriting Persuasif</li>
+              <li><span class="feat-check">✓</span> Distribusi ke Jaringan Pembeli</li>
+            </ul>
+            <div class="tool-tags">
+              <span class="tool-tag">Editorial</span>
+              <span class="tool-tag">Foto Studio</span>
+              <span class="tool-tag">Copywriting</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="service-card fade-up">
+          <div class="service-card-header">
+            <div class="service-icon"><img src="img/layanan_2.png" alt=""></div>
+            <div>
+              <h3>Manajemen Toko</h3>
+              <p>Kelola inventaris, pesanan, dan profil toko dalam satu dashboard intuitif yang dirancang untuk
+                kemudahan operasional.</p>
+            </div>
+          </div>
+          <div class="service-card-body">
+            <ul class="service-feat-list">
+              <li><span class="feat-check">✓</span> Dashboard Toko Real-time</li>
+              <li><span class="feat-check">✓</span> Manajemen Inventaris</li>
+              <li><span class="feat-check">✓</span> Pelacakan Pesanan Otomatis</li>
+              <li><span class="feat-check">✓</span> Laporan Penjualan Harian</li>
+            </ul>
+            <div class="tool-tags">
+              <span class="tool-tag">Dashboard</span>
+              <span class="tool-tag">Inventory</span>
+              <span class="tool-tag">Laporan</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="service-card fade-up">
+          <div class="service-card-header">
+            <div class="service-icon"><img src="img/layanan_3.png" alt=""></div>
+            <div>
+              <h3>Iklan Berbayar</h3>
+              <p>Targetkan audiens yang tepat dengan algoritma cerdas kami. Tingkatkan konversi penjualan hingga tiga
+                kali lipat secara efektif.</p>
+            </div>
+          </div>
+          <div class="service-card-body">
+            <ul class="service-feat-list">
+              <li><span class="feat-check">✓</span> Targeting Audiens Presisi</li>
+              <li><span class="feat-check">✓</span> A/B Testing Iklan</li>
+              <li><span class="feat-check">✓</span> Optimasi Budget Otomatis</li>
+              <li><span class="feat-check">✓</span> Laporan Konversi Mingguan</li>
+            </ul>
+            <div class="tool-tags">
+              <span class="tool-tag">Targeting</span>
+              <span class="tool-tag">A/B Test</span>
+              <span class="tool-tag">Analytics</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="service-card fade-up">
+          <div class="service-card-header">
+            <div class="service-icon"><img src="img/layanan_4.png" alt=""></div>
+            <div>
+              <h3>Analitik Penjualan</h3>
+              <p>Dapatkan laporan mendalam tentang tren pasar dan perilaku pembeli untuk membantu pengambilan keputusan
+                bisnis yang tepat.</p>
+            </div>
+          </div>
+          <div class="service-card-body">
+            <ul class="service-feat-list">
+              <li><span class="feat-check">✓</span> Tren Pasar Real-time</li>
+              <li><span class="feat-check">✓</span> Analisis Perilaku Pembeli</li>
+              <li><span class="feat-check">✓</span> Rekomendasi Produk Cerdas</li>
+              <li><span class="feat-check">✓</span> Export Laporan PDF/Excel</li>
+            </ul>
+            <div class="tool-tags">
+              <span class="tool-tag">Big Data</span>
+              <span class="tool-tag">Insight</span>
+              <span class="tool-tag">Export</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="service-card fade-up">
+          <div class="service-card-header">
+            <div class="service-icon"><img src="img/layanan_5.png" alt=""></div>
+            <div>
+              <h3>Proteksi Transaksi</h3>
+              <p>Sistem pembayaran aman yang melindungi penjual dan pembeli. Menjamin ketenangan dalam setiap transaksi
+                yang terjadi.</p>
+            </div>
+          </div>
+          <div class="service-card-body">
+            <ul class="service-feat-list">
+              <li><span class="feat-check">✓</span> Escrow Pembayaran Aman</li>
+              <li><span class="feat-check">✓</span> Verifikasi Identitas 2 Pihak</li>
+              <li><span class="feat-check">✓</span> Jaminan Pengembalian Dana</li>
+              <li><span class="feat-check">✓</span> Enkripsi SSL/TLS</li>
+            </ul>
+            <div class="tool-tags">
+              <span class="tool-tag">Escrow</span>
+              <span class="tool-tag">SSL</span>
+              <span class="tool-tag">Verifikasi</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="service-card fade-up">
+          <div class="service-card-header">
+            <div class="service-icon"><img src="img/layanan_6.png" alt=""></div>
+            <div>
+              <h3>Dukungan Penjual</h3>
+              <p>Tim ahli kami siap membantu Anda 24/7. Mulai dari masalah teknis hingga konsultasi pengembangan produk
+                kreatif.</p>
+            </div>
+          </div>
+          <div class="service-card-body">
+            <ul class="service-feat-list">
+              <li><span class="feat-check">✓</span> Live Chat 24/7</li>
+              <li><span class="feat-check">✓</span> Konsultasi Produk Gratis</li>
+              <li><span class="feat-check">✓</span> Panduan Onboarding</li>
+              <li><span class="feat-check">✓</span> Komunitas Merchant Eksklusif</li>
+            </ul>
+            <div class="tool-tags">
+              <span class="tool-tag">Live Chat</span>
+              <span class="tool-tag">Konsultasi</span>
+              <span class="tool-tag">Komunitas</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- PROCESS -->
+  <section class="section" style="background:var(--cream-dark);">
+    <div class="container">
+      <div class="process-grid">
+        <div>
+          <span class="badge badge-gold fade-up">Cara Kerja Kami</span>
+          <h2 class="fade-up" style="margin-top:16px;">Proses yang Transparan &amp; Terstruktur</h2>
+          <p class="fade-up" style="margin-top:14px;">
+            Kami percaya pada komunikasi terbuka dan proses yang terstruktur
+            untuk menghasilkan produk terbaik bagi setiap merchant.
+          </p>
+          <a href="kontak.html" class="btn btn-primary fade-up" style="margin-top:28px;">Mulai Bersama Kami</a>
+        </div>
+        <div>
+          <div class="process-step fade-up">
+            <div class="step-number">01</div>
+            <div class="step-content">
+              <h3>Daftar &amp; Verifikasi</h3>
+              <p>Buat profil toko dalam hitungan menit dan lengkapi dokumen identitas untuk verifikasi cepat oleh tim
+                kami.</p>
+            </div>
+          </div>
+          <div class="process-step fade-up">
+            <div class="step-number">02</div>
+            <div class="step-content">
+              <h3>Kurasi Produk</h3>
+              <p>Tim editorial kami membantu menyempurnakan tampilan produk agar siap bersaing di pasar premium.</p>
+            </div>
+          </div>
+          <div class="process-step fade-up">
+            <div class="step-number">03</div>
+            <div class="step-content">
+              <h3>Listing &amp; Promosi</h3>
+              <p>Produk Anda dipajang dan dipromosikan ke ribuan pembeli potensial melalui saluran distribusi kami.</p>
+            </div>
+          </div>
+          <div class="process-step fade-up">
+            <div class="step-number">04</div>
+            <div class="step-content">
+              <h3>Transaksi &amp; Pencairan</h3>
+              <p>Terima pesanan secara real-time dan dana langsung diteruskan ke rekening Anda setelah transaksi
+                selesai.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- FAQ -->
+  <section class="section">
+    <div class="container" style="max-width:740px;">
+      <div class="section-title-center fade-up" style="margin-bottom:48px;">
+        <h2>Pertanyaan yang Sering Ditanya</h2>
+        <p style="margin-top:10px;">Tidak menemukan jawaban? <a href="kontak.html"
+            style="color:var(--gold); font-weight:600;">Hubungi kami langsung</a>.</p>
+      </div>
+      <div id="faqList">
+        <div class="faq-item fade-up">
+          <div class="faq-question">
+            <span>Apakah ada biaya pendaftaran untuk bergabung?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-answer">Tidak ada biaya pendaftaran. Kami hanya sukses jika Anda juga sukses memasarkan
+            produk. Cukup daftar, lengkapi profil, dan mulai berjualan.</div>
+        </div>
+        <div class="faq-item fade-up">
+          <div class="faq-question">
+            <span>Berapa lama proses verifikasi toko berlangsung?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-answer">Proses verifikasi biasanya memakan waktu 1–2 hari kerja setelah dokumen lengkap
+            diterima. Tim kami akan menghubungi Anda untuk konfirmasi.</div>
+        </div>
+        <div class="faq-item fade-up">
+          <div class="faq-question">
+            <span>Apakah saya bisa mendaftarkan lebih dari satu toko?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-answer">Ya, Anda bisa memiliki beberapa toko dengan kategori produk berbeda dalam satu akun.
+            Setiap toko akan melalui proses kurasi tersendiri.</div>
+        </div>
+        <div class="faq-item fade-up">
+          <div class="faq-question">
+            <span>Bagaimana sistem komisi penjualan?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-answer">Komisi bervariasi berdasarkan kategori produk dan paket layanan yang dipilih. Detail
+            komisi akan dijelaskan secara transparan sebelum Anda bergabung.</div>
+        </div>
+        <div class="faq-item fade-up">
+          <div class="faq-question">
+            <span>Apakah bisa konsultasi gratis sebelum mendaftar?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-answer">Tentu! Konsultasi awal 30–60 menit sepenuhnya gratis tanpa komitmen apapun. Hubungi
+            kami melalui halaman Kontak untuk menjadwalkan sesi.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BOTTOM -->
+  <section class="cta-bottom">
+    <div class="container">
+      <h2 class="fade-up">Siap Membawa UMKM Anda ke Level Berikutnya?</h2>
+      <p class="fade-up">Bergabung dengan ribuan pengrajin lokal yang sudah membuktikan bersama Original.A.</p>
+      <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
+        <a href="kontak.html" class="btn btn-gold fade-up">Mulai Bergabung</a>
+        <a href="harga.html" class="btn btn-outline-white fade-up">Lihat Harga</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="nav-logo"
+            style="color:var(--white); font-family:var(--font-display); font-size:1.4rem; font-weight:700; margin-bottom:12px;">
+            Original.A</div>
+          <p>Mewadahi karya pengrajin lokal untuk mendunia. Mengkurasi warisan dengan hati dan standar tinggi.</p>
+          <div class="footer-socials" style="margin-top:20px;">
+            <a href="#">🌐</a><a href="#">@</a><a href="#">↗</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h5>Navigasi</h5>
+          <ul>
+            <li><a href="index.html">Beranda</a></li>
+            <li><a href="layanan.html" class="active-link">Layanan</a></li>
+            <li><a href="harga.html">Harga</a></li>
+            <li><a href="portofolio.html">Portofolio</a></li>
+            <li><a href="kontak.html">Kontak</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Kontak</h5>
+          <ul>
+            <li><a href="#">halo@originala.id</a></li>
+            <li><a href="#">+62 812 3456 7890</a></li>
+            <li><a href="#">Jakarta, Indonesia</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Newsletter</h5>
+          <p style="color:rgba(255,255,255,0.6); font-size:0.875rem; margin-bottom:14px;">Dapatkan info terbaru dan
+            promo menarik.</p>
+          <div class="newsletter-form">
+            <input type="email" placeholder="Email Anda" />
+            <button>Kirim ›</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">© 2024 Original.A. Warisan UMKM Indonesia Terkurasi.</div>
+    </div>
+  </footer>
+
+  <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+  <script>
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 40);
+      document.getElementById('scrollTop').classList.toggle('show', window.scrollY > 400);
+    });
+
+    document.getElementById('navToggle').addEventListener('click', () => {
+      document.getElementById('navLinks').classList.toggle('open');
+    });
+
+    // FAQ accordion
+    document.querySelectorAll('.faq-item').forEach(item => {
+      item.querySelector('.faq-question').addEventListener('click', () => {
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+        if (!isOpen) item.classList.add('open');
+      });
+    });
+
+    // Fade-in on scroll
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i * 80);
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+
+    /* ---- CEK STATUS LOGIN ---- */
+    (function () {
+      const u = localStorage.getItem('oa_user');
+      if (u) {
+        document.getElementById('navGuest').style.display = 'none';
+        document.getElementById('navUser').style.display = 'flex';
+        try { const d = JSON.parse(u); if (d.name) { document.getElementById('navUserName').textContent = d.name; document.getElementById('navUserAvatar').textContent = d.name.substring(0, 2).toUpperCase(); } } catch (e) { }
+      }
+    })();
+  </script>
+
+</body>
+
+</html>

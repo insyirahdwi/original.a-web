@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Registrasi — Original.A</title>
+<link rel="stylesheet" href="style.css"/>
+<style>
+  body { background:var(--cream); }
+  .top-strip { height:6px; background:linear-gradient(90deg,var(--gold),var(--green)); }
+  .reg-wrap { padding:60px 20px; display:flex; justify-content:center; }
+  .reg-card {
+    width:100%; max-width:520px; background:var(--white); border-radius:var(--radius-lg);
+    padding:48px 44px; box-shadow:var(--shadow-sm); border:1px solid var(--border-light);
+  }
+  .reg-card h1.logo { text-align:center; font-style:italic; color:var(--green); font-size:2.2rem; margin-bottom:16px; }
+  .reg-card h2 { text-align:center; font-size:1.5rem; margin-bottom:8px; }
+  .reg-sub { text-align:center; font-size:0.88rem; color:var(--text-mid); margin-bottom:32px; }
+  .reg-sub a { color:var(--gold); font-weight:600; }
+  .field { margin-bottom:18px; }
+  .field label { display:block; font-size:0.72rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-dark); margin-bottom:8px; }
+  .input-wrap { position:relative; }
+  .input-wrap .ico {
+    position:absolute; left:14px; top:50%; transform:translateY(-50%);
+    color:var(--text-muted); font-size:0.95rem;
+  }
+  .input-wrap .eye { position:absolute; right:14px; top:50%; transform:translateY(-50%); color:var(--text-muted); cursor:pointer; }
+  .input-wrap input {
+    width:100%; padding:13px 14px 13px 42px; background:var(--cream-dark); border:1px solid transparent;
+    border-radius:var(--radius-sm); font-family:var(--font-body); font-size:0.92rem; color:var(--text-dark); outline:none;
+  }
+  .input-wrap input:focus { border-color:var(--green); background:var(--white); }
+  .strength { display:flex; gap:6px; margin-top:8px; }
+  .strength span { flex:1; height:4px; border-radius:3px; background:var(--border); }
+  .strength span.on { background:var(--gold); }
+  .strength-lbl { font-size:0.78rem; color:var(--text-muted); margin-top:6px; }
+  .err { color:#b32424; font-size:0.78rem; font-weight:600; margin-top:6px; }
+  .agree { display:flex; gap:10px; align-items:flex-start; font-size:0.85rem; color:var(--text-mid); margin:6px 0 22px; line-height:1.6; }
+  .agree a { color:var(--green); text-decoration:underline; font-weight:600; }
+  .btn-block { width:100%; justify-content:center; padding:15px; font-size:0.95rem; }
+  .auth-divider { display:flex; align-items:center; gap:12px; margin:24px 0 16px; font-size:0.7rem; letter-spacing:0.16em; color:var(--text-muted); text-transform:uppercase; }
+  .auth-divider::before, .auth-divider::after { content:''; flex:1; height:1px; background:var(--border); }
+  .btn-google {
+    width:100%; display:flex; align-items:center; justify-content:center; gap:10px;
+    padding:13px; background:var(--white); border:1px solid var(--border);
+    border-radius:var(--radius-sm); font-weight:600; font-size:0.9rem; color:var(--text-dark); cursor:pointer;
+  }
+  .btn-google .g {
+    width:18px; height:18px; border-radius:50%;
+    background:conic-gradient(from 0deg,#4285F4 0 25%,#34A853 25% 50%,#FBBC05 50% 75%,#EA4335 75% 100%);
+  }
+  .reg-foot { text-align:center; margin-top:28px; font-size:0.72rem; letter-spacing:0.12em; color:var(--text-muted); line-height:1.8; }
+</style>
+</head>
+<body>
+<div class="top-strip"></div>
+
+<div class="reg-wrap">
+  <div class="reg-card">
+    <h1 class="logo">Original.A</h1>
+    <h2>Buat Akun Baru</h2>
+    <p class="reg-sub">Sudah punya akun? <a href="login.html">Masuk di sini</a></p>
+
+    <form onsubmit="event.preventDefault(); window.location='profil-pembeli.html';">
+      <div class="field">
+        <label>Nama Lengkap</label>
+        <div class="input-wrap">
+          <span class="ico">👤</span>
+          <input type="text" placeholder="Masukkan nama lengkap Anda" required/>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Email</label>
+        <div class="input-wrap">
+          <span class="ico">✉</span>
+          <input type="email" placeholder="contoh@email.com" required/>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Nomor HP/WhatsApp</label>
+        <div class="input-wrap">
+          <span class="ico">📱</span>
+          <input type="tel" placeholder="08xx xxxx xxxx" required/>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Password</label>
+        <div class="input-wrap">
+          <span class="ico">🔒</span>
+          <input type="password" id="pw" placeholder="Min. 8 karakter" required/>
+          <span class="eye" onclick="const i=document.getElementById('pw'); i.type=i.type==='password'?'text':'password';">👁</span>
+        </div>
+        <div class="strength"><span class="on"></span><span class="on"></span><span></span><span></span></div>
+        <div class="strength-lbl">Kekuatan password: Menengah</div>
+      </div>
+
+      <div class="field">
+        <label>Konfirmasi Password</label>
+        <div class="input-wrap">
+          <span class="ico">🔒</span>
+          <input type="password" placeholder="Ulangi password Anda" required/>
+        </div>
+        <div class="err">Password tidak cocok</div>
+      </div>
+
+      <label class="agree">
+        <input type="checkbox" required/>
+        <span>Saya menyetujui <a href="#">Syarat & Ketentuan</a> serta <a href="#">Kebijakan Privasi</a> yang berlaku di Original.A.</span>
+      </label>
+
+      <button type="submit" class="btn btn-primary btn-block">Daftar Sekarang</button>
+
+      <div class="auth-divider">Atau Daftar Dengan</div>
+      <button type="button" class="btn-google"><span class="g"></span> Lanjutkan dengan Google</button>
+
+      <div class="reg-foot">
+        © 2024 ORIGINAL.A — THE CURATED HERITAGE OF INDONESIA.<br>
+        HANDCRAFTED SECURITY FOR YOUR ARTISAN EXPERIENCE.
+      </div>
+    </form>
+  </div>
+</div>
+</body>
+</html>
