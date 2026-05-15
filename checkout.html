@@ -118,7 +118,7 @@
       </div>
       <div class="nav-actions nav-user" id="navUser" style="display:none;">
         <a href="checkout.html" class="nav-icon" title="Keranjang" aria-label="Keranjang">
-          🛒<span class="nav-badge">3</span>
+          🛒<span class="nav-badge" style="display:none;">0</span>
         </a>
         <a href="#" class="nav-icon" title="Notifikasi" aria-label="Notifikasi">
           🔔
@@ -228,38 +228,19 @@
         <div class="order-summary">
           <div class="checkout-card">
             <div class="summary-title">Ringkasan Pesanan</div>
-            <div class="summary-items">
-              <div class="summary-item">
-                <div class="summary-item-img">
-                  <div class="img-placeholder" style="font-size:1.2rem;"><img src="img/batik.png" alt="" /></div>
-                </div>
-                <div style="flex:1;">
-                  <div class="summary-item-name">Anyaman Rotan Premium</div>
-                  <div class="summary-item-qty">1 Unit</div>
-                </div>
-                <div class="summary-item-price">Rp 450.000</div>
-              </div>
-              <div class="summary-item">
-                <div class="summary-item-img">
-                  <div class="img-placeholder" style="font-size:1.2rem;"><img src="img/baju batik.png" alt="" /></div>
-                </div>
-                <div style="flex:1;">
-                  <div class="summary-item-name">Sutra Batik Tulis Solo</div>
-                  <div class="summary-item-qty">1 Unit</div>
-                </div>
-                <div class="summary-item-price">Rp 1.250.000</div>
-              </div>
+            <div class="summary-items" id="summaryItemsContainer">
+              <!-- Dynamically populated -->
             </div>
 
             <div class="summary-divider"></div>
 
-            <div class="summary-row"><span>Subtotal</span><span>Rp 1.700.000</span></div>
+            <div class="summary-row"><span>Subtotal</span><span id="subtotalDisplay">Rp 0</span></div>
             <div class="summary-row"><span>Biaya Pengiriman</span><span id="shippingDisplay">Rp 15.000</span></div>
             <div class="summary-row"><span>Biaya Layanan</span><span>Rp 2.000</span></div>
 
             <div class="summary-row total">
               <span>Total Tagihan</span>
-              <span id="totalDisplay">Rp 1.717.000</span>
+              <span id="totalDisplay">Rp 0</span>
             </div>
 
             <button class="btn-bayar" onclick="processCheckout()">
@@ -309,15 +290,57 @@
 
     // ===== CHECKOUT LOGIC =====
     let shippingCost = 15000;
-    const BASE = 1702000;
+    let baseTotal = 0;
+    
+    function parsePrice(str) {
+      if(!str) return 0;
+      return parseInt(str.replace(/[^0-9]/g, '')) || 0;
+    }
+    
+    function renderCart() {
+      const items = JSON.parse(localStorage.getItem('oa_cart_items') || '[]');
+      const container = document.getElementById('summaryItemsContainer');
+      container.innerHTML = '';
+      baseTotal = 0;
+      
+      if(items.length === 0) {
+        container.innerHTML = '<div style="font-size:0.875rem;color:var(--text-muted);text-align:center;padding:20px;">Keranjang kosong</div>';
+      }
+      
+      items.forEach(item => {
+        const itemPrice = parsePrice(item.price);
+        baseTotal += itemPrice * item.qty;
+        
+        container.innerHTML += `
+          <div class="summary-item">
+            <div class="summary-item-img">
+              <div class="img-placeholder" style="font-size:1.2rem;"><img src="${item.img}" alt="" /></div>
+            </div>
+            <div style="flex:1;">
+              <div class="summary-item-name">${item.name}</div>
+              <div class="summary-item-qty">${item.qty} Unit</div>
+            </div>
+            <div class="summary-item-price">${item.price}</div>
+          </div>
+        `;
+      });
+      
+      document.getElementById('subtotalDisplay').textContent = 'Rp ' + baseTotal.toLocaleString('id-ID');
+      updateTotal();
+    }
+    
+    function updateTotal() {
+      const total = baseTotal > 0 ? baseTotal + shippingCost + 2000 : 0;
+      document.getElementById('totalDisplay').textContent = 'Rp ' + total.toLocaleString('id-ID');
+    }
+
     function selectShipping(el, cost) {
       document.querySelectorAll('.shipping-opt').forEach(o => { o.classList.remove('selected'); o.querySelector('input').checked = false; });
       el.classList.add('selected');
       el.querySelector('input').checked = true;
       shippingCost = cost;
       document.getElementById('shippingDisplay').textContent = 'Rp ' + cost.toLocaleString('id-ID');
-      const total = BASE + cost;
-      document.getElementById('totalDisplay').textContent = 'Rp ' + total.toLocaleString('id-ID');
+      updateTotal();
     }
     
     function selectBank(btn) {
@@ -326,12 +349,19 @@
     }
 
     function processCheckout() {
+      // Clear the cart on successful checkout
+      localStorage.setItem('oa_cart_count', 0);
+      localStorage.setItem('oa_cart_items', '[]');
+      if (typeof updateCartBadge === 'function') updateCartBadge();
+      
       document.getElementById('page-checkout').classList.remove('active');
       document.getElementById('page-checkout').style.display = 'none';
       document.getElementById('page-success').classList.add('active');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+    
+    renderCart();
   </script>
-
+<script src="cart.js"></script>
 </body>
 </html>
