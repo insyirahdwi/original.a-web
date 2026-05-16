@@ -61,12 +61,12 @@
     <h2>Buat Akun Baru</h2>
     <p class="reg-sub">Sudah punya akun? <a href="login.html">Masuk di sini</a></p>
 
-    <form onsubmit="event.preventDefault(); window.location='profil-pembeli.html';">
+    <form id="regForm">
       <div class="field">
         <label>Nama Lengkap</label>
         <div class="input-wrap">
           <span class="ico">👤</span>
-          <input type="text" placeholder="Masukkan nama lengkap Anda" required/>
+          <input type="text" id="regName" placeholder="Masukkan nama lengkap Anda" required/>
         </div>
       </div>
 
@@ -74,7 +74,7 @@
         <label>Email</label>
         <div class="input-wrap">
           <span class="ico">✉</span>
-          <input type="email" placeholder="contoh@email.com" required/>
+          <input type="email" id="regEmail" placeholder="contoh@email.com" required/>
         </div>
       </div>
 
@@ -82,7 +82,7 @@
         <label>Nomor HP/WhatsApp</label>
         <div class="input-wrap">
           <span class="ico">📱</span>
-          <input type="tel" placeholder="08xx xxxx xxxx" required/>
+          <input type="tel" id="regPhone" placeholder="08xx xxxx xxxx" required/>
         </div>
       </div>
 
@@ -123,6 +123,18 @@
     </form>
   </div>
 </div>
+<script>
+  document.getElementById('regForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const userData = {
+      name: document.getElementById('regName').value,
+      email: document.getElementById('regEmail').value,
+      phone: document.getElementById('regPhone').value
+    };
+    localStorage.setItem('oa_user', JSON.stringify(userData));
+    window.location.href = 'profil-pembeli.html';
+  });
+</script>
 <script src="cart.js"></script>
 </body>
 </html>

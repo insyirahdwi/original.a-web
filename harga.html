@@ -185,57 +185,101 @@
     .compare-table tbody tr:last-child td { border-bottom: none; }
     .compare-table tbody tr:hover td { background: var(--cream); }
 
-    /* ── FAQ ── */
-    .faq-item {
-      border-bottom: 1px solid var(--border-light);
+    /* ── Shipping Calc ── */
+    .calc-card {
+      background: var(--white);
+      border-radius: var(--radius-xl);
+      padding: 48px;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border-light);
+      max-width: 900px;
+      margin: 0 auto;
     }
 
-    .faq-question {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      cursor: pointer;
-      font-size: 0.95rem;
-      font-weight: 600;
+    .calc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 180px;
+      gap: 20px;
+      align-items: flex-end;
+    }
+
+    .calc-field label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 700;
       color: var(--text-dark);
-      padding: 20px 0;
-      gap: 16px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
 
-    .faq-question:hover { color: var(--green); }
-
-    .faq-icon {
-      width: 26px;
-      height: 26px;
-      min-width: 26px;
-      border: 1.5px solid var(--border);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-      color: var(--gold);
+    .calc-field select {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--cream);
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      outline: none;
       transition: var(--transition);
-      line-height: 1;
     }
 
-    .faq-answer {
-      font-size: 0.875rem;
-      color: var(--text-mid);
-      line-height: 1.8;
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.4s ease, padding 0.3s ease;
+    .calc-field select:focus { border-color: var(--green); background: var(--white); }
+
+    .calc-result {
+      margin-top: 32px;
+      padding-top: 32px;
+      border-top: 1px dashed var(--border);
+      display: none;
+      animation: fadeIn 0.4s ease;
     }
 
-    .faq-item.open .faq-answer {
-      max-height: 200px;
-      padding-bottom: 20px;
+    .calc-result.active { display: block; }
+
+    .ship-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px;
+      background: var(--cream-dark);
+      border-radius: var(--radius-sm);
+      margin-bottom: 12px;
     }
 
-    .faq-item.open .faq-icon {
-      transform: rotate(45deg);
-      border-color: var(--gold);
+    .ship-info { display: flex; align-items: center; gap: 12px; }
+    .ship-icon { font-size: 1.5rem; }
+    .ship-name { font-weight: 700; color: var(--text-dark); font-size: 0.9rem; }
+    .ship-eta { font-size: 0.75rem; color: var(--text-muted); }
+    .ship-price { font-family: var(--font-display); font-weight: 700; color: var(--green); font-size: 1.1rem; }
+
+    /* ── Buyer Info ── */
+    .buyer-info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 32px;
+      margin-top: 48px;
+    }
+
+    .buyer-card {
+      background: var(--white);
+      padding: 32px;
+      border-radius: var(--radius-lg);
+      text-align: center;
+      border: 1px solid var(--border-light);
+      transition: var(--transition);
+    }
+
+    .buyer-card:hover { border-color: var(--gold); transform: translateY(-5px); }
+    .buyer-card .icon { font-size: 2.5rem; margin-bottom: 20px; display: block; }
+    .buyer-card h4 { font-size: 1.1rem; margin-bottom: 12px; color: var(--green); }
+    .buyer-card p { font-size: 0.875rem; color: var(--text-muted); line-height: 1.6; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 768px) {
+      .calc-grid { grid-template-columns: 1fr; }
+      .calc-card { padding: 30px 20px; }
     }
   </style>
 </head>
@@ -358,18 +402,114 @@
 
   <div class="divider"></div>
 
-  <!-- COMPARISON TABLE -->
+  <!-- BUYER INFO -->
+  <section class="section">
+    <div class="container">
+      <div class="section-title-center fade-up">
+        <span class="badge badge-gold">Untuk Pembeli</span>
+        <h2>Transparansi Biaya & Layanan</h2>
+        <p style="margin-top:10px;">Kami berkomitmen memberikan keamanan dan kenyamanan bagi setiap kolektor warisan Nusantara.</p>
+      </div>
+
+      <div class="buyer-info-grid fade-up">
+        <div class="buyer-card">
+          <span class="icon">🛡️</span>
+          <h4>Perlindungan Pembeli</h4>
+          <p>Dana Anda aman bersama kami. Pembayaran baru akan diteruskan ke pengrajin setelah Anda mengonfirmasi pesanan diterima dengan baik.</p>
+        </div>
+        <div class="buyer-card">
+          <span class="icon">🏷️</span>
+          <h4>Biaya Layanan Tetap</h4>
+          <p>Hanya <strong>Rp 2.000</strong> per transaksi untuk mendukung operasional platform dan program pemberdayaan UMKM lokal.</p>
+        </div>
+        <div class="buyer-card">
+          <span class="icon">🔄</span>
+          <h4>Garansi 100% Uang Kembali</h4>
+          <p>Jika produk yang diterima tidak sesuai deskripsi atau rusak saat pengiriman, kami menjamin pengembalian dana penuh.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- SHIPPING CALCULATOR -->
   <section class="section" style="background:var(--cream-dark);">
     <div class="container">
       <div class="section-title-center fade-up" style="margin-bottom:40px;">
-        <h2>Bandingkan Paket</h2>
-        <p style="margin-top:10px;">Lihat secara detail fitur yang tersedia di setiap paket.</p>
+        <span class="badge badge-gold">Logistik</span>
+        <h2>Simulasi Estimasi Ongkir</h2>
+        <p style="margin-top:10px;">Cek perkiraan biaya pengiriman dari sentra UMKM ke lokasi Anda.</p>
+      </div>
+
+      <div class="calc-card fade-up">
+        <div class="calc-grid">
+          <div class="calc-field">
+            <label>Asal Pengiriman (Sentra UMKM)</label>
+            <select id="originCity">
+              <option value="Yogyakarta">Yogyakarta (Kerajinan & Batik)</option>
+              <option value="Aceh">Aceh (Kopi Gayo)</option>
+              <option value="Bali">Bali (Kecantikan & Kerajinan)</option>
+              <option value="Solo">Solo (Batik Warisan)</option>
+              <option value="Jepara">Jepara (Mebel & Ukiran)</option>
+            </select>
+          </div>
+          <div class="calc-field">
+            <label>Tujuan Pengiriman</label>
+            <select id="destCity">
+              <option value="Jakarta">Jakarta</option>
+              <option value="Surabaya">Surabaya</option>
+              <option value="Bandung">Bandung</option>
+              <option value="Medan">Medan</option>
+              <option value="Makassar">Makassar</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" onclick="calculateShipping()">Cek Biaya</button>
+        </div>
+
+        <div id="calcResult" class="calc-result">
+          <div style="margin-bottom:20px; font-weight:700; color:var(--text-dark); font-size:1rem;">Opsi Pengiriman Tersedia:</div>
+          
+          <div class="ship-row">
+            <div class="ship-info">
+              <div class="ship-icon">📦</div>
+              <div>
+                <div class="ship-name">JNE Reguler</div>
+                <div class="ship-eta">Estimasi 2-3 Hari Kerja</div>
+              </div>
+            </div>
+            <div class="ship-price" id="priceReg">Rp 15.000</div>
+          </div>
+
+          <div class="ship-row">
+            <div class="ship-info">
+              <div class="ship-icon">⚡</div>
+              <div>
+                <div class="ship-name">SiCepat Ekspres</div>
+                <div class="ship-eta">Estimasi 1-2 Hari Kerja</div>
+              </div>
+            </div>
+            <div class="ship-price" id="priceFast">Rp 22.000</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- COMPARISON TABLE (Existing) -->
+  <section class="section">
+    <div class="container">
+      <div class="section-title-center fade-up" style="margin-bottom:40px;">
+        <h2>Bandingkan Paket Seller</h2>
+        <p style="margin-top:10px;">Lihat secara detail fitur yang tersedia untuk mitra UMKM.</p>
       </div>
       <div class="compare-wrap fade-up">
         <table class="compare-table">
           <thead>
             <tr>
-              <th>Fitur</th>
+              <th>Fitur Utama</th>
               <th>Starter</th>
               <th>Professional</th>
               <th>Enterprise</th>
@@ -377,46 +517,28 @@
           </thead>
           <tbody>
             <tr>
-              <td>Jumlah Halaman</td>
-              <td>1</td>
-              <td>Hingga 5</td>
-              <td>Tak Terbatas</td>
-            </tr>
-            <tr>
-              <td>Jumlah Revisi</td>
-              <td>2x</td>
-              <td>Unlimited</td>
+              <td>Listing Produk</td>
+              <td>Hingga 10</td>
+              <td>Hingga 100</td>
               <td>Unlimited</td>
             </tr>
             <tr>
-              <td>Responsif Mobile</td>
-              <td class="yes">✓</td>
-              <td class="yes">✓</td>
-              <td class="yes">✓</td>
+              <td>Dashboard Analitik</td>
+              <td>Dasar</td>
+              <td>Lengkap</td>
+              <td>Kustom</td>
             </tr>
             <tr>
-              <td>Animasi &amp; Interaksi</td>
-              <td class="no">✕</td>
-              <td class="yes">✓</td>
-              <td class="yes">✓</td>
-            </tr>
-            <tr>
-              <td>Source Code</td>
+              <td>Promosi Platform</td>
               <td class="no">✕</td>
               <td class="yes">✓</td>
               <td class="yes">✓</td>
             </tr>
             <tr>
-              <td>Konsultasi Lanjutan</td>
+              <td>Manajer Akun Khusus</td>
               <td class="no">✕</td>
               <td class="no">✕</td>
               <td class="yes">✓</td>
-            </tr>
-            <tr>
-              <td>Support Pasca Launch</td>
-              <td class="no">✕</td>
-              <td class="no">✕</td>
-              <td>3 Bulan</td>
             </tr>
           </tbody>
         </table>
@@ -540,6 +662,24 @@
       document.getElementById('navLinks').classList.toggle('open');
     });
 
+    // Shipping Calculator Logic
+    function calculateShipping() {
+      const origin = document.getElementById('originCity').value;
+      const dest = document.getElementById('destCity').value;
+      const resultBox = document.getElementById('calcResult');
+      
+      // Basic logic simulation
+      let basePrice = 15000;
+      if (origin === dest) basePrice = 9000;
+      else if ((origin === 'Aceh' && dest === 'Makassar') || (origin === 'Bali' && dest === 'Medan')) basePrice = 45000;
+      else if (origin === 'Aceh' || dest === 'Medan' || dest === 'Makassar') basePrice = 30000;
+
+      document.getElementById('priceReg').textContent = `Rp ${basePrice.toLocaleString('id-ID')}`;
+      document.getElementById('priceFast').textContent = `Rp ${(basePrice + 7000).toLocaleString('id-ID')}`;
+      
+      resultBox.classList.add('active');
+    }
+
     // FAQ accordion
     document.querySelectorAll('.faq-item').forEach(item => {
       item.querySelector('.faq-question').addEventListener('click', () => {
@@ -563,6 +703,10 @@
       if(u){
         document.getElementById('navGuest').style.display='none';
         document.getElementById('navUser').style.display='flex';
+        // Update Beranda links to index-loggedin.html
+        document.querySelectorAll('a[href="index.html"], a[href="beranda.html"]').forEach(link => {
+          link.href = 'index-loggedin.html';
+        });
         try{const d=JSON.parse(u);if(d.name){document.getElementById('navUserName').textContent=d.name;document.getElementById('navUserAvatar').textContent=d.name.substring(0,2).toUpperCase();}}catch(e){}
       }
     })();

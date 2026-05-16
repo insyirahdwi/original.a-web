@@ -203,6 +203,17 @@
       b.classList.add('active');
     });
   });
+
+  /* ---- CEK STATUS LOGIN ---- */
+  (function(){
+    const u=localStorage.getItem('oa_user');
+    if(u){
+      // Update Beranda and Batal links to index-loggedin.html
+      document.querySelectorAll('a[href="index.html"], a[href="beranda.html"]').forEach(link => {
+        link.href = 'index-loggedin.html';
+      });
+    }
+  })();
 </script>
 <script src="cart.js"></script>
 </body>

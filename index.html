@@ -1037,15 +1037,8 @@
     (function checkLoginNav() {
       const u = localStorage.getItem('oa_user');
       if (u) {
-        document.getElementById('navGuest').style.display = 'none';
-        document.getElementById('navUser').style.display = 'flex';
-        try {
-          const d = JSON.parse(u);
-          if (d.name) {
-            document.getElementById('navUserName').textContent = d.name;
-            document.getElementById('navUserAvatar').textContent = d.name.substring(0, 2).toUpperCase();
-          }
-        } catch (e) { }
+        window.location.replace('index-loggedin.html');
+        return;
       }
     })();
   </script>

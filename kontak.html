@@ -413,6 +413,10 @@
       if(u){
         document.getElementById('navGuest').style.display='none';
         document.getElementById('navUser').style.display='flex';
+        // Update Beranda links to index-loggedin.html
+        document.querySelectorAll('a[href="index.html"], a[href="beranda.html"]').forEach(link => {
+          link.href = 'index-loggedin.html';
+        });
         try{const d=JSON.parse(u);if(d.name){document.getElementById('navUserName').textContent=d.name;document.getElementById('navUserAvatar').textContent=d.name.substring(0,2).toUpperCase();}}catch(e){}
       }
     })();

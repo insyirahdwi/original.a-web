@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 
 <head>
@@ -651,10 +651,49 @@
       color: var(--green);
     }
 
+    /* ===== NOTIFICATION DROPDOWN ===== */
+    .nav-icon.notif-wrapper { position: relative; cursor: pointer; }
+    .notif-dropdown {
+      position: absolute; top: calc(100% + 15px); right: -10px; width: 320px;
+      background: var(--white); border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg); box-shadow: var(--shadow-lg);
+      padding: 0; opacity: 0; visibility: hidden; transform: translateY(10px);
+      transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); z-index: 1000;
+    }
+    .nav-icon:hover .notif-dropdown, .notif-dropdown.active {
+      opacity: 1; visibility: visible; transform: translateY(0);
+    }
+    .notif-header {
+      padding: 16px 20px; border-bottom: 1px solid var(--border-light);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .notif-header h4 { font-size: 0.95rem; font-weight: 700; color: var(--green); }
+    .notif-header .clear-all { font-size: 0.75rem; color: var(--gold); font-weight: 600; cursor: pointer; }
+    
+    .notif-list { max-height: 360px; overflow-y: auto; list-style: none; }
+    .notif-item {
+      padding: 14px 20px; border-bottom: 1px solid var(--border-light);
+      display: flex; gap: 12px; transition: var(--transition); cursor: pointer;
+    }
+    .notif-item:hover { background: var(--cream); }
+    .notif-item:last-child { border-bottom: none; }
+    .notif-icon {
+      width: 38px; height: 38px; border-radius: 50%; background: var(--cream-dark);
+      display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0;
+    }
+    .notif-content { flex: 1; }
+    .notif-title { font-size: 0.85rem; font-weight: 600; color: var(--text-dark); margin-bottom: 2px; }
+    .notif-text { font-size: 0.78rem; color: var(--text-mid); line-height: 1.4; }
+    .notif-time { font-size: 0.7rem; color: var(--text-muted); margin-top: 6px; }
+    
+    .notif-footer { padding: 12px; text-align: center; border-top: 1px solid var(--border-light); }
+    .notif-footer a { font-size: 0.8rem; font-weight: 600; color: var(--green); }
+
     @media(max-width:600px) {
       .nav-name {
         display: none;
       }
+      .notif-dropdown { width: 280px; right: -50px; }
     }
 
     /* ===== MODAL PRODUK ===== */
@@ -871,12 +910,49 @@
         <a href="checkout.html" class="nav-icon" title="Keranjang" aria-label="Keranjang">
           🛒<span class="nav-badge" style="display:none;">0</span>
         </a>
-        <a href="#" class="nav-icon" title="Notifikasi" aria-label="Notifikasi">
+        <div class="nav-icon notif-wrapper" title="Notifikasi" aria-label="Notifikasi">
           🔔
-        </a>
+          <span class="nav-badge">3</span>
+          
+          <div class="notif-dropdown">
+            <div class="notif-header">
+              <h4>Notifikasi</h4>
+              <span class="clear-all">Tandai dibaca</span>
+            </div>
+            <ul class="notif-list">
+              <li class="notif-item">
+                <div class="notif-icon">📦</div>
+                <div class="notif-content">
+                  <div class="notif-title">Pesanan Dikirim</div>
+                  <div class="notif-text">Pesanan <strong>#OA-202401</strong> sedang menuju lokasi Anda.</div>
+                  <div class="notif-time">2 menit yang lalu</div>
+                </div>
+              </li>
+              <li class="notif-item">
+                <div class="notif-icon">✨</div>
+                <div class="notif-content">
+                  <div class="notif-title">Promo Terbatas!</div>
+                  <div class="notif-text">Diskon 30% untuk koleksi Batik Tulis hari ini.</div>
+                  <div class="notif-time">1 jam yang lalu</div>
+                </div>
+              </li>
+              <li class="notif-item">
+                <div class="notif-icon">🏺</div>
+                <div class="notif-content">
+                  <div class="notif-title">Produk Baru</div>
+                  <div class="notif-text">Toko <strong>Aruna Keramik</strong> baru saja mengunggah koleksi vas terbaru.</div>
+                  <div class="notif-time">3 jam yang lalu</div>
+                </div>
+              </li>
+            </ul>
+            <div class="notif-footer">
+              <a href="#">Lihat Semua Notifikasi</a>
+            </div>
+          </div>
+        </div>
         <a href="profil-pembeli.html" class="nav-profile" title="Profil Saya">
-          <span class="nav-avatar">AP</span>
-          <span class="nav-name">Andi P.</span>
+          <span class="nav-avatar" id="navUserAvatar">??</span>
+          <span class="nav-name" id="navUserName">User</span>
         </a>
       </div>
       <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
@@ -1235,6 +1311,19 @@
       entries.forEach((e, i) => { if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i * 80); });
     }, { threshold: 0.1 });
     document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+    
+    /* ===== NOTIF TOGGLE ===== */
+    const notifBtn = document.querySelector('.notif-wrapper');
+    const notifDrop = document.querySelector('.notif-dropdown');
+    if (notifBtn) {
+      notifBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        notifDrop.classList.toggle('active');
+      });
+    }
+    document.addEventListener('click', () => {
+      if (notifDrop) notifDrop.classList.remove('active');
+    });
 
     /* ===== MODAL PRODUK ===== */
     const products = {
@@ -1311,6 +1400,25 @@
 
       window.location.href = 'checkout.html';
     }
+
+    /* ---- CEK STATUS LOGIN ---- */
+    (function () {
+      const u = localStorage.getItem('oa_user');
+      if (u) {
+        // Update Beranda links and Logo to index-loggedin.html
+        document.querySelectorAll('a[href="index.html"], a[href="beranda.html"]').forEach(link => {
+          link.href = 'index-loggedin.html';
+        });
+        
+        try {
+          const d = JSON.parse(u);
+          if (d.name) {
+            document.getElementById('navUserName').textContent = d.name;
+            document.getElementById('navUserAvatar').textContent = d.name.substring(0, 2).toUpperCase();
+          }
+        } catch (e) { }
+      }
+    })();
 
     document.getElementById('modalOverlay').addEventListener('click', function (e) {
       if (e.target === this) closeModal();

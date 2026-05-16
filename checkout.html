@@ -89,12 +89,37 @@
     .success-card p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 8px; }
     .order-id { font-weight: 700; color: var(--gold); font-size: 1rem; margin-bottom: 32px; }
 
+    /* =============================================
+       PAYMENT MODAL
+    ============================================= */
+    .payment-modal {
+      position: fixed; inset: 0; z-index: 3000;
+      background: rgba(28,61,46,0.8); backdrop-filter: blur(8px);
+      display: none; align-items: center; justify-content: center; padding: 20px;
+    }
+    .payment-modal.active { display: flex; }
+    .pay-card {
+      background: var(--white); border-radius: var(--radius-xl); padding: 40px;
+      width: min(500px, 100%); box-shadow: var(--shadow-lg); text-align: center;
+    }
+    .pay-va-box {
+      background: var(--cream); border: 2px dashed var(--gold); border-radius: var(--radius-md);
+      padding: 24px; margin: 24px 0; position: relative;
+    }
+    .pay-va-num { font-family: var(--font-display); font-size: 1.8rem; color: var(--green); letter-spacing: 2px; font-weight: 700; }
+    .pay-copy { position: absolute; top: 10px; right: 10px; color: var(--gold); font-size: 0.75rem; font-weight: 700; cursor: pointer; }
+    .pay-timer { font-size: 0.85rem; color: #b32424; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .pay-instruction { text-align: left; background: var(--cream-dark); padding: 16px; border-radius: var(--radius-sm); margin-bottom: 24px; }
+    .pay-instruction li { font-size: 0.8rem; color: var(--text-mid); margin-bottom: 8px; margin-left: 16px; }
+    .pay-qris { width: 200px; margin: 0 auto 20px; display: none; }
+
     @media(max-width:1024px) {
       .checkout-grid { grid-template-columns: 1fr; }
       .order-summary { position: static; }
     }
     @media(max-width:768px) {
       .shipping-options { grid-template-columns: 1fr; }
+      .pay-card { padding: 30px 20px; }
     }
   </style>
 </head>
@@ -207,19 +232,41 @@
             </div>
 
             <div class="payment-group">
-              <div class="payment-group-title">📱 E-Wallet</div>
+              <div class="payment-group-title">📱 E-Wallet & QRIS</div>
               <div class="payment-banks">
-                <button class="bank-btn" onclick="selectBank(this)">OVO</button>
+                <button class="bank-btn" onclick="selectBank(this)">QRIS</button>
                 <button class="bank-btn" onclick="selectBank(this)">GOPAY</button>
+                <button class="bank-btn" onclick="selectBank(this)">OVO</button>
                 <button class="bank-btn" onclick="selectBank(this)">SHOPEEPAY</button>
+                <button class="bank-btn" onclick="selectBank(this)">DANA</button>
               </div>
             </div>
 
             <div class="payment-group">
+              <div class="payment-group-title">⏳ PayLater</div>
+              <div class="payment-banks">
+                <button class="bank-btn" onclick="selectBank(this)">GoPayLater</button>
+                <button class="bank-btn" onclick="selectBank(this)">Akulaku</button>
+                <button class="bank-btn" onclick="selectBank(this)">Kredivo</button>
+              </div>
+            </div>
+
+            <div class="payment-group" style="cursor:pointer;" onclick="alert('Fitur Kartu Kredit segera hadir!')">
               <div class="payment-cc">
-                <span>💳 Kartu Kredit</span>
+                <span>💳 Kartu Kredit / Debit</span>
                 <span style="color:var(--text-muted);font-size:1.2rem;">›</span>
               </div>
+            </div>
+
+            <div class="summary-divider"></div>
+            
+            <div class="field" style="margin-top:20px;">
+              <label style="font-size:0.85rem;font-weight:700;color:var(--text-dark);margin-bottom:10px;display:block;">🎟️ Punya Kode Promo?</label>
+              <div style="display:flex;gap:10px;">
+                <input type="text" id="promoCode" placeholder="Masukkan kode voucher" style="flex:1;padding:12px;background:var(--cream-dark);border:1px solid var(--border);border-radius:var(--radius-sm);outline:none;font-size:0.9rem;"/>
+                <button class="btn btn-outline" style="padding:10px 20px;" onclick="applyPromo()">Gunakan</button>
+              </div>
+              <div id="promoMsg" style="font-size:0.75rem;margin-top:8px;font-weight:600;"></div>
             </div>
           </div>
         </div>
@@ -266,9 +313,53 @@
       <h2>Pesanan Berhasil!</h2>
       <p>Terima kasih atas pesanan Anda. Kami akan segera memproses pesanan Anda.</p>
       <p>Estimasi pengiriman: <strong>2-3 Hari Kerja</strong></p>
-      <div class="order-id">#ORG-2024-78421</div>
+      <div class="order-id" id="finalOrderId">#ORG-2024-78421</div>
       <a href="index-loggedin.html" class="btn btn-primary" style="display:flex;width:100%;justify-content:center;margin-bottom:12px;">Kembali Belanja</a>
-      <button class="btn btn-outline" style="width:100%;justify-content:center;">Lacak Pesanan</button>
+      <button class="btn btn-outline" style="width:100%;justify-content:center;" onclick="alert('Fitur Lacak Pesanan akan dikirim ke email Anda.')">Lacak Pesanan</button>
+    </div>
+  </div>
+
+  <!-- =============================================
+       PAYMENT INSTRUCTION MODAL (DEEP FEATURE)
+  ============================================= -->
+  <div id="paymentModal" class="payment-modal">
+    <div class="pay-card">
+      <h2 id="payMethodTitle">Selesaikan Pembayaran</h2>
+      <p id="payMethodSub">Silakan transfer tepat sesuai nominal hingga digit terakhir.</p>
+      
+      <div class="pay-timer">
+        <span>⏱️</span> Sisa waktu pembayaran: <span id="timerText">23:59:59</span>
+      </div>
+
+      <div class="pay-va-box" id="vaBox">
+        <div class="pay-copy" onclick="copyVA()">SALIN</div>
+        <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.1em;">Nomor Virtual Account</div>
+        <div class="pay-va-num" id="vaNumber">8801 0812 3456 7890</div>
+      </div>
+
+      <div class="pay-qris" id="qrisBox">
+        <img src="img/qris.png" alt="QRIS" style="width:100%;border:1px solid var(--border);border-radius:var(--radius-sm);"/>
+        <p style="font-size:0.75rem;color:var(--text-muted);margin-top:10px;">Scan QRIS di atas menggunakan aplikasi m-banking atau e-wallet Anda.</p>
+      </div>
+
+      <div class="summary-row" style="margin-bottom:24px;padding:12px;background:var(--cream);border-radius:var(--radius-sm);">
+        <span style="font-weight:700;color:var(--text-dark);">Total Tagihan</span>
+        <span style="font-weight:700;color:var(--green);font-size:1.1rem;" id="modalTotal">Rp 0</span>
+      </div>
+
+      <div class="pay-instruction">
+        <div style="font-size:0.85rem;font-weight:700;margin-bottom:12px;color:var(--green);">Petunjuk Pembayaran:</div>
+        <ul id="payInstructions">
+          <li>Buka aplikasi mobile banking atau ATM pilihan Anda.</li>
+          <li>Pilih menu Transfer > Virtual Account.</li>
+          <li>Masukkan nomor Virtual Account yang tertera di atas.</li>
+          <li>Pastikan nominal sesuai dengan total tagihan Anda.</li>
+          <li>Simpan bukti transaksi Anda.</li>
+        </ul>
+      </div>
+
+      <button class="btn btn-primary" style="width:100%;padding:15px;" onclick="confirmPayment()">Saya Sudah Bayar</button>
+      <button class="btn btn-outline" style="width:100%;margin-top:10px;border:none;color:var(--text-muted);" onclick="closePaymentModal()">Nanti Saja</button>
     </div>
   </div>
 
@@ -280,6 +371,10 @@
       if (u) {
         document.getElementById('navGuest').style.display = 'none';
         document.getElementById('navUser').style.display = 'flex';
+        // Update Beranda links to index-loggedin.html
+        document.querySelectorAll('a[href="index.html"], a[href="beranda.html"]').forEach(link => {
+          link.href = 'index-loggedin.html';
+        });
         try { const d = JSON.parse(u); if (d.name) { document.getElementById('navUserName').textContent = d.name; document.getElementById('navUserAvatar').textContent = d.name.substring(0, 2).toUpperCase(); } } catch (e) { }
       }
     })();
@@ -329,9 +424,51 @@
       updateTotal();
     }
     
+    let promoDiscount = 0;
+
+    function applyPromo() {
+      const code = document.getElementById('promoCode').value.toUpperCase();
+      const msg = document.getElementById('promoMsg');
+      
+      if(code === 'ORIGINALA') {
+        promoDiscount = 50000;
+        msg.textContent = 'Selamat! Anda mendapatkan potongan Rp 50.000';
+        msg.style.color = 'var(--green)';
+      } else if(code === 'DISKONHERITAGE') {
+        promoDiscount = Math.floor(baseTotal * 0.1);
+        msg.textContent = 'Voucher 10% berhasil digunakan!';
+        msg.style.color = 'var(--green)';
+      } else {
+        promoDiscount = 0;
+        msg.textContent = 'Kode promo tidak valid atau sudah kadaluarsa.';
+        msg.style.color = '#b32424';
+      }
+      updateTotal();
+    }
+
     function updateTotal() {
-      const total = baseTotal > 0 ? baseTotal + shippingCost + 2000 : 0;
-      document.getElementById('totalDisplay').textContent = 'Rp ' + total.toLocaleString('id-ID');
+      const total = baseTotal > 0 ? (baseTotal + shippingCost + 2000 - promoDiscount) : 0;
+      const finalTotal = Math.max(0, total);
+      
+      let promoRow = document.getElementById('promoRow');
+      if(promoDiscount > 0) {
+        if(!promoRow) {
+          const row = document.createElement('div');
+          row.className = 'summary-row';
+          row.id = 'promoRow';
+          row.style.color = 'var(--green)';
+          row.style.fontWeight = '600';
+          row.innerHTML = '<span>Diskon Promo</span><span>- Rp ' + promoDiscount.toLocaleString('id-ID') + '</span>';
+          document.querySelector('.summary-row.total').before(row);
+        } else {
+          promoRow.innerHTML = '<span>Diskon Promo</span><span>- Rp ' + promoDiscount.toLocaleString('id-ID') + '</span>';
+          promoRow.style.display = 'flex';
+        }
+      } else if(promoRow) {
+        promoRow.style.display = 'none';
+      }
+
+      document.getElementById('totalDisplay').textContent = 'Rp ' + finalTotal.toLocaleString('id-ID');
     }
 
     function selectShipping(el, cost) {
@@ -349,15 +486,101 @@
     }
 
     function processCheckout() {
+      if(baseTotal === 0) {
+        alert('Keranjang Anda kosong. Silakan belanja terlebih dahulu.');
+        return;
+      }
+      
+      const selectedPayBtn = document.querySelector('.bank-btn.selected');
+      const payMethod = selectedPayBtn ? selectedPayBtn.textContent : 'Transfer Bank';
+      const totalText = document.getElementById('totalDisplay').textContent;
+      
+      // Setup Modal Content
+      document.getElementById('modalTotal').textContent = totalText;
+      document.getElementById('payMethodTitle').textContent = `Bayar via ${payMethod}`;
+      
+      if(payMethod === 'QRIS') {
+        document.getElementById('vaBox').style.display = 'none';
+        document.getElementById('qrisBox').style.display = 'block';
+        document.getElementById('payInstructions').innerHTML = `
+          <li>Buka aplikasi e-wallet atau mobile banking Anda.</li>
+          <li>Klik menu 'Scan' atau 'Bayar'.</li>
+          <li>Arahkan kamera ke kode QRIS di atas.</li>
+          <li>Pastikan nama merchant adalah 'Original.A Indonesia'.</li>
+          <li>Selesaikan transaksi di aplikasi Anda.</li>
+        `;
+      } else {
+        document.getElementById('vaBox').style.display = 'block';
+        document.getElementById('qrisBox').style.display = 'none';
+        // Generate random VA
+        const vaPrefix = payMethod === 'BCA' ? '8801' : (payMethod === 'Mandiri' ? '9001' : '8201');
+        document.getElementById('vaNumber').textContent = `${vaPrefix} ${Math.floor(Math.random()*9000 + 1000)} ${Math.floor(Math.random()*9000 + 1000)} ${Math.floor(Math.random()*9000 + 1000)}`;
+        document.getElementById('payInstructions').innerHTML = `
+          <li>Buka aplikasi mobile banking atau ATM pilihan Anda.</li>
+          <li>Pilih menu Transfer > Virtual Account.</li>
+          <li>Masukkan nomor Virtual Account yang tertera di atas.</li>
+          <li>Pastikan nominal sesuai dengan total tagihan Anda.</li>
+          <li>Simpan bukti transaksi Anda.</li>
+        `;
+      }
+
+      // Show Modal
+      document.getElementById('paymentModal').classList.add('active');
+      startTimer(23 * 3600 + 59 * 60 + 59);
+    }
+
+    function startTimer(duration) {
+      let timer = duration, hours, minutes, seconds;
+      const display = document.getElementById('timerText');
+      const interval = setInterval(function () {
+        hours = parseInt(timer / 3600, 10);
+        minutes = parseInt((timer % 3600) / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+
+        hours = hours < 10 ? "0" + hours : hours;
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        display.textContent = hours + ":" + minutes + ":" + seconds;
+
+        if (--timer < 0) {
+          clearInterval(interval);
+          display.textContent = "KADALUARSA";
+        }
+      }, 1000);
+      
+      // Store interval to clear if needed
+      window.payTimer = interval;
+    }
+
+    function confirmPayment() {
       // Clear the cart on successful checkout
       localStorage.setItem('oa_cart_count', 0);
       localStorage.setItem('oa_cart_items', '[]');
       if (typeof updateCartBadge === 'function') updateCartBadge();
       
+      // Generate Order ID
+      const orderId = '#ORG-' + Math.floor(Math.random()*90000 + 10000);
+      document.getElementById('finalOrderId').textContent = orderId;
+
+      document.getElementById('paymentModal').classList.remove('active');
       document.getElementById('page-checkout').classList.remove('active');
       document.getElementById('page-checkout').style.display = 'none';
       document.getElementById('page-success').classList.add('active');
       window.scrollTo({ top: 0, behavior: 'smooth' });
+      if(window.payTimer) clearInterval(window.payTimer);
+    }
+
+    function closePaymentModal() {
+      document.getElementById('paymentModal').classList.remove('active');
+      if(window.payTimer) clearInterval(window.payTimer);
+    }
+
+    function copyVA() {
+      const va = document.getElementById('vaNumber').textContent;
+      navigator.clipboard.writeText(va).then(() => {
+        alert('Nomor Virtual Account disalin: ' + va);
+      });
     }
     
     renderCart();

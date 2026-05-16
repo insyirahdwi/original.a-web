@@ -25,6 +25,7 @@
     width:110px; height:110px; border-radius:50%; background:var(--cream-dark);
     border:2px dashed #c7bfae; display:flex; align-items:center; justify-content:center;
     color:var(--text-muted); font-size:1.6rem; position:relative; cursor:pointer;
+    background-size: cover; background-position: center;
   }
   .avatar-edit {
     position:absolute; bottom:4px; right:4px; width:28px; height:28px; background:var(--green);
@@ -68,46 +69,100 @@
 </div>
 
 <div class="form-wrap">
-  <form class="form-card" onsubmit="event.preventDefault(); window.location='index-loggedin.html';">
-    <h1>Lengkapi Profil Pembeli</h1>
-    <p class="lead">Satu langkah lagi untuk menjelajahi kurasi warisan nusantara.</p>
+  <form id="profileForm" class="form-card">
+    <h1>Halo, <span id="displayUserName">Pembeli</span>!</h1>
+    <p class="lead">Satu langkah lagi untuk melengkapi profil Anda.</p>
 
     <div class="avatar-up">
-      <div class="avatar-circle">📷<div class="avatar-edit">✎</div></div>
+      <div class="avatar-circle" id="profileAvatar" onclick="document.getElementById('avatarInput').click();">
+        <span id="avatarPlaceholder">📷</span>
+        <div class="avatar-edit">✎</div>
+      </div>
+      <input type="file" id="avatarInput" accept="image/*" style="display:none;"/>
       <p>Unggah Foto Profil</p>
+    </div>
+
+    <div class="field" style="margin-bottom:18px;">
+      <label>Nama Lengkap</label>
+      <input type="text" id="inputName" placeholder="Masukkan nama lengkap Anda" required/>
+    </div>
+
+    <div class="field" style="margin-bottom:18px;">
+      <label>Email</label>
+      <input type="email" id="inputEmail" placeholder="email@contoh.com" required/>
     </div>
 
     <div class="row">
       <div class="field">
         <label>Tanggal Lahir</label>
-        <input type="date"/>
+        <input type="date" id="inputBirthDate"/>
       </div>
       <div class="field">
         <label>Jenis Kelamin</label>
-        <div class="gender-toggle">
-          <button type="button" class="active">Pria</button>
-          <button type="button">Wanita</button>
+        <div class="gender-toggle" id="genderToggle">
+          <button type="button" class="active" data-gender="Pria">Pria</button>
+          <button type="button" data-gender="Wanita">Wanita</button>
         </div>
       </div>
     </div>
 
     <div class="field" style="margin-bottom:18px;">
       <label>Alamat Pengiriman Utama</label>
-      <textarea placeholder="Nama Jalan, No. Rumah, RT/RW"></textarea>
+      <textarea id="inputAddress" placeholder="Nama Jalan, No. Rumah, RT/RW"></textarea>
     </div>
 
     <div class="row three">
       <div class="field">
         <label>Provinsi</label>
-        <select><option>Pilih Provinsi</option><option>DKI Jakarta</option><option>DI Yogyakarta</option><option>Jawa Barat</option></select>
+        <select id="selectProvinsi">
+          <option value="">Pilih Provinsi</option>
+          <option>Aceh</option>
+          <option>Bali</option>
+          <option>Banten</option>
+          <option>Bengkulu</option>
+          <option>DI Yogyakarta</option>
+          <option>DKI Jakarta</option>
+          <option>Gorontalo</option>
+          <option>Jambi</option>
+          <option>Jawa Barat</option>
+          <option>Jawa Tengah</option>
+          <option>Jawa Timur</option>
+          <option>Kalimantan Barat</option>
+          <option>Kalimantan Selatan</option>
+          <option>Kalimantan Tengah</option>
+          <option>Kalimantan Timur</option>
+          <option>Kalimantan Utara</option>
+          <option>Kepulauan Bangka Belitung</option>
+          <option>Kepulauan Riau</option>
+          <option>Lampung</option>
+          <option>Maluku</option>
+          <option>Maluku Utara</option>
+          <option>Nusa Tenggara Barat</option>
+          <option>Nusa Tenggara Timur</option>
+          <option>Papua</option>
+          <option>Papua Barat</option>
+          <option>Papua Pegunungan</option>
+          <option>Papua Selatan</option>
+          <option>Papua Tengah</option>
+          <option>Papua Barat Daya</option>
+          <option>Riau</option>
+          <option>Sulawesi Barat</option>
+          <option>Sulawesi Selatan</option>
+          <option>Sulawesi Tengah</option>
+          <option>Sulawesi Tenggara</option>
+          <option>Sulawesi Utara</option>
+          <option>Sumatera Barat</option>
+          <option>Sumatera Selatan</option>
+          <option>Sumatera Utara</option>
+        </select>
       </div>
       <div class="field">
         <label>Kota</label>
-        <select><option>Pilih Kota</option></select>
+        <select id="selectKota"><option value="">Pilih Kota</option></select>
       </div>
       <div class="field">
         <label>Kode Pos</label>
-        <input type="text" placeholder="12345"/>
+        <input type="text" id="inputZip" placeholder="12345"/>
       </div>
     </div>
 
@@ -133,12 +188,149 @@
 </footer>
 
 <script>
+  // Data Kota per Provinsi (Contoh populer untuk memperlengkap)
+  const cityData = {
+    "Aceh": ["Banda Aceh", "Lhokseumawe", "Sabang", "Meulaboh", "Langsa"],
+    "Bali": ["Denpasar", "Kuta", "Ubud", "Singaraja", "Tabanan"],
+    "Banten": ["Tangerang", "Serang", "Cilegon", "Tangerang Selatan", "Pandeglang"],
+    "DI Yogyakarta": ["Yogyakarta", "Sleman", "Bantul", "Kulon Progo", "Gunungkidul"],
+    "DKI Jakarta": ["Jakarta Pusat", "Jakarta Utara", "Jakarta Barat", "Jakarta Selatan", "Jakarta Timur"],
+    "Jawa Barat": ["Bandung", "Bekasi", "Depok", "Bogor", "Cimahi", "Tasikmalaya", "Cirebon"],
+    "Jawa Tengah": ["Semarang", "Surakarta", "Magelang", "Pekalongan", "Salatiga", "Tegal"],
+    "Jawa Timur": ["Surabaya", "Malang", "Batu", "Kediri", "Madiun", "Mojokerto", "Pasuruan", "Probolinggo"],
+    "Sumatera Utara": ["Medan", "Binjai", "Pematangsiantar", "Tanjungbalai", "Tebing Tinggi"],
+    "Sumatera Barat": ["Padang", "Bukittinggi", "Payakumbuh", "Solok"],
+    "Riau": ["Pekanbaru", "Dumai"],
+    "Kepulauan Riau": ["Batam", "Tanjungpinang"],
+    "Lampung": ["Bandar Lampung", "Metro"],
+    "Sulawesi Selatan": ["Makassar", "Palopo", "Parepare"],
+    "Sulawesi Utara": ["Manado", "Bitung", "Tomohon"],
+    "Kalimantan Timur": ["Samarinda", "Balikpapan", "Bontang"],
+    "Kalimantan Selatan": ["Banjarmasin", "Banjarbaru"],
+    "Nusa Tenggara Barat": ["Mataram", "Bima"],
+    "Nusa Tenggara Timur": ["Kupang"],
+    "Papua": ["Jayapura"]
+  };
+
+  const provSelect = document.getElementById('selectProvinsi');
+  const citySelect = document.getElementById('selectKota');
+  const avatarInput = document.getElementById('avatarInput');
+  const profileAvatar = document.getElementById('profileAvatar');
+  const avatarPlaceholder = document.getElementById('avatarPlaceholder');
+  let currentAvatarData = null;
+
+  avatarInput.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        currentAvatarData = event.target.result;
+        profileAvatar.style.backgroundImage = `url(${currentAvatarData})`;
+        avatarPlaceholder.style.display = 'none';
+        profileAvatar.style.borderStyle = 'solid';
+        profileAvatar.style.borderColor = 'var(--border)';
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  provSelect.addEventListener('change', function() {
+    const prov = this.value;
+    citySelect.innerHTML = '<option value="">Pilih Kota</option>';
+    
+    if (cityData[prov]) {
+      cityData[prov].forEach(city => {
+        const opt = document.createElement('option');
+        opt.value = city;
+        opt.textContent = city;
+        citySelect.appendChild(opt);
+      });
+    } else if (prov) {
+      // Jika data kota tidak ada di mapping, beri opsi default atau input manual
+      const opt = document.createElement('option');
+      opt.value = "Lainnya";
+      opt.textContent = "Lainnya (Pilih Provinsi lain atau Hubungi Kami)";
+      citySelect.appendChild(opt);
+    }
+  });
+
+  let selectedGender = "Pria";
   document.querySelectorAll('.gender-toggle button').forEach(b => {
     b.addEventListener('click', () => {
       document.querySelectorAll('.gender-toggle button').forEach(x=>x.classList.remove('active'));
       b.classList.add('active');
+      selectedGender = b.getAttribute('data-gender');
     });
   });
+
+  const profileForm = document.getElementById('profileForm');
+  profileForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Ambil data dari form
+    const userData = {
+      name: document.getElementById('inputName').value,
+      email: document.getElementById('inputEmail').value,
+      birthDate: document.getElementById('inputBirthDate').value,
+      gender: selectedGender,
+      address: document.getElementById('inputAddress').value,
+      province: provSelect.value,
+      city: citySelect.value,
+      zip: document.getElementById('inputZip').value,
+      avatar: currentAvatarData
+    };
+
+    // Simpan ke localStorage
+    localStorage.setItem('oa_user', JSON.stringify(userData));
+    
+    // Redirect
+    window.location.href = 'index-loggedin.html';
+  });
+
+  /* ---- CEK STATUS LOGIN & PRE-FILL ---- */
+  (function() {
+    const u = localStorage.getItem('oa_user');
+    if (u) {
+      try {
+        const d = JSON.parse(u);
+        if (d.name) {
+          document.getElementById('displayUserName').textContent = d.name;
+          document.getElementById('inputName').value = d.name;
+          
+          if (!d.avatar) {
+            // Set initials in profile avatar only if no image
+            const initials = d.name.substring(0, 2).toUpperCase();
+            profileAvatar.innerHTML = `<span id="avatarPlaceholder">${initials}</span><div class="avatar-edit">✎</div>`;
+            profileAvatar.style.fontSize = '2rem';
+            profileAvatar.style.fontWeight = '700';
+            profileAvatar.style.color = 'var(--green)';
+            profileAvatar.style.borderStyle = 'solid';
+            profileAvatar.style.borderColor = 'var(--border)';
+          }
+        }
+        if (d.avatar) {
+          currentAvatarData = d.avatar;
+          profileAvatar.style.backgroundImage = `url(${d.avatar})`;
+          const ph = document.getElementById('avatarPlaceholder');
+          if (ph) ph.style.display = 'none';
+          profileAvatar.style.borderStyle = 'solid';
+          profileAvatar.style.borderColor = 'var(--border)';
+        }
+        if (d.email) {
+          document.getElementById('inputEmail').value = d.email;
+        }
+        if (d.address) document.getElementById('inputAddress').value = d.address;
+        if (d.zip) document.getElementById('inputZip').value = d.zip;
+        if (d.birthDate) document.getElementById('inputBirthDate').value = d.birthDate;
+        
+        if (d.province) {
+          provSelect.value = d.province;
+          provSelect.dispatchEvent(new Event('change'));
+          if (d.city) citySelect.value = d.city;
+        }
+      } catch (e) { console.error("Error parsing user data", e); }
+    }
+  })();
 </script>
 <script src="cart.js"></script>
 </body>

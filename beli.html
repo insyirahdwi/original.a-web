@@ -1206,6 +1206,26 @@
     document.querySelectorAll('.bank-btn').forEach(b=>b.classList.remove('selected'));
     btn.classList.add('selected');
   }
+
+  /* ---- CEK STATUS LOGIN ---- */
+  (function(){
+    const u=localStorage.getItem('oa_user');
+    if(u){
+      // Update Beranda links and Logo to index-loggedin.html
+      document.querySelectorAll('a[href="index.html"], a[href="beranda.html"]').forEach(link => {
+        link.href = 'index-loggedin.html';
+        // If it has a showPage('index') onclick, we might want to disable it or let it handle its thing
+        // But for consistency with other pages, we let it go to the actual index-loggedin.html
+        link.onclick = null; 
+      });
+      // Also update logo if it uses showPage
+      const logo = document.querySelector('.nav-logo');
+      if(logo && logo.getAttribute('onclick')?.includes('showPage')) {
+          logo.href = 'index-loggedin.html';
+          logo.onclick = null;
+      }
+    }
+  })();
 </script>
 
 <style>

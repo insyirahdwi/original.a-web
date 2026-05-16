@@ -7,23 +7,62 @@
   <title>Portofolio — Original.A | Platform Warisan UMKM Indonesia</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    /* ── Filters ── */
+    /* ── Search & Filters ── */
+    .search-filter-wrap {
+      max-width: 800px;
+      margin: 0 auto 48px;
+      text-align: center;
+    }
+
+    .search-box {
+      position: relative;
+      margin-bottom: 24px;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 16px 24px 16px 54px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      font-family: var(--font-body);
+      font-size: 1rem;
+      color: var(--text-dark);
+      outline: none;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .search-box input:focus {
+      border-color: var(--green);
+      box-shadow: var(--shadow-md);
+    }
+
+    .search-box .icon {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.2rem;
+      color: var(--text-muted);
+    }
+
     .filter-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 12px;
+      gap: 10px;
       justify-content: center;
-      margin-bottom: 48px;
     }
 
     .filter-btn {
-      padding: 8px 20px;
-      background: transparent;
+      padding: 8px 18px;
+      background: var(--white);
       border: 1px solid var(--border);
       border-radius: 100px;
-      font-size: 0.875rem;
-      font-weight: 500;
+      font-size: 0.82rem;
+      font-weight: 600;
       color: var(--text-mid);
+      cursor: pointer;
       transition: var(--transition);
     }
 
@@ -37,6 +76,16 @@
       border-color: var(--green);
       color: var(--white);
     }
+
+    .no-results {
+      text-align: center;
+      padding: 60px 20px;
+      grid-column: 1 / -1;
+    }
+
+    .no-results .icon { font-size: 3rem; margin-bottom: 16px; opacity: 0.3; }
+    .no-results h3 { font-size: 1.2rem; color: var(--text-dark); margin-bottom: 8px; }
+    .no-results p { color: var(--text-muted); font-size: 0.9rem; }
 
     /* ── Toko Grid ── */
     .toko-grid {
@@ -335,178 +384,22 @@
   <section class="section">
     <div class="container">
 
-      <div class="filter-row fade-up">
-        <button class="filter-btn active">Semua Kategori</button>
-        <button class="filter-btn">Makanan &amp; Minuman</button>
-        <button class="filter-btn">Fashion</button>
-        <button class="filter-btn">Kerajinan</button>
-        <button class="filter-btn">Kecantikan</button>
+      <div class="search-filter-wrap fade-up">
+        <div class="search-box">
+          <span class="icon">🔍</span>
+          <input type="text" id="searchInput" placeholder="Cari UMKM, produk, atau daerah asal..."/>
+        </div>
+        <div class="filter-row" id="filterRow">
+          <button class="filter-btn active" data-category="Semua">Semua Kategori</button>
+          <button class="filter-btn" data-category="Makanan & Minuman">Makanan &amp; Minuman</button>
+          <button class="filter-btn" data-category="Fashion">Fashion</button>
+          <button class="filter-btn" data-category="Kerajinan">Kerajinan</button>
+          <button class="filter-btn" data-category="Kecantikan">Kecantikan</button>
+        </div>
       </div>
 
-      <div class="toko-grid">
-
-        <!-- Toko 1 -->
-        <div class="toko-card fade-up">
-          <div class="toko-img">
-            <div class="img-placeholder-lg"><img src="img/porto kopi.png" alt=""></div>
-          </div>
-          <div class="toko-body">
-            <div class="toko-head">
-              <div>
-                <h4 class="toko-name">Kopi Nusantara</h4>
-                <p class="toko-cat">Makanan &amp; Minuman</p>
-              </div>
-              <p class="toko-rating"><span class="icon">★</span> 4.9</p>
-            </div>
-            <div class="toko-stats">
-              <div class="toko-stat">
-                <p class="stat-label">PRODUK</p>
-                <p class="stat-val">24</p>
-              </div>
-              <div class="toko-stat">
-                <p class="stat-label">TERJUAL</p>
-                <p class="stat-val">1.2k+</p>
-              </div>
-            </div>
-            <button class="btn btn-outline btn-toko">Kunjungi Toko</button>
-          </div>
-        </div>
-
-        <!-- Toko 2 -->
-        <div class="toko-card fade-up">
-          <div class="toko-img">
-            <div class="img-placeholder-lg"><img src="img/porto lini tenun.png" alt=""></div>
-          </div>
-          <div class="toko-body">
-            <div class="toko-head">
-              <div>
-                <h4 class="toko-name">Lini Tenun</h4>
-                <p class="toko-cat">Fashion</p>
-              </div>
-              <p class="toko-rating"><span class="icon">★</span> 4.8</p>
-            </div>
-            <div class="toko-stats">
-              <div class="toko-stat">
-                <p class="stat-label">PRODUK</p>
-                <p class="stat-val">45</p>
-              </div>
-              <div class="toko-stat">
-                <p class="stat-label">TERJUAL</p>
-                <p class="stat-val">850+</p>
-              </div>
-            </div>
-            <button class="btn btn-outline btn-toko">Kunjungi Toko</button>
-          </div>
-        </div>
-
-        <!-- Toko 3 -->
-        <div class="toko-card fade-up">
-          <div class="toko-img">
-            <div class="img-placeholder-lg"><img src="img/porto tanah liat.png" alt=""></div>
-          </div>
-          <div class="toko-body">
-            <div class="toko-head">
-              <div>
-                <h4 class="toko-name">Tanah Liat Seru</h4>
-                <p class="toko-cat">Kerajinan</p>
-              </div>
-              <p class="toko-rating"><span class="icon">★</span> 5.0</p>
-            </div>
-            <div class="toko-stats">
-              <div class="toko-stat">
-                <p class="stat-label">PRODUK</p>
-                <p class="stat-val">12</p>
-              </div>
-              <div class="toko-stat">
-                <p class="stat-label">TERJUAL</p>
-                <p class="stat-val">300+</p>
-              </div>
-            </div>
-            <button class="btn btn-outline btn-toko">Kunjungi Toko</button>
-          </div>
-        </div>
-
-        <!-- Toko 4 -->
-        <div class="toko-card fade-up">
-          <div class="toko-img">
-            <div class="img-placeholder-lg"><img src="img/porto aura alami.png" alt=""></div>
-          </div>
-          <div class="toko-body">
-            <div class="toko-head">
-              <div>
-                <h4 class="toko-name">Aura Alami</h4>
-                <p class="toko-cat">Kecantikan</p>
-              </div>
-              <p class="toko-rating"><span class="icon">★</span> 4.7</p>
-            </div>
-            <div class="toko-stats">
-              <div class="toko-stat">
-                <p class="stat-label">PRODUK</p>
-                <p class="stat-val">18</p>
-              </div>
-              <div class="toko-stat">
-                <p class="stat-label">TERJUAL</p>
-                <p class="stat-val">2.5k+</p>
-              </div>
-            </div>
-            <button class="btn btn-outline btn-toko">Kunjungi Toko</button>
-          </div>
-        </div>
-
-        <!-- Toko 5 -->
-        <div class="toko-card fade-up">
-          <div class="toko-img">
-            <div class="img-placeholder-lg"><img src="img/porto batik warisan.png" alt=""></div>
-          </div>
-          <div class="toko-body">
-            <div class="toko-head">
-              <div>
-                <h4 class="toko-name">Batik Warisan</h4>
-                <p class="toko-cat">Fashion</p>
-              </div>
-              <p class="toko-rating"><span class="icon">★</span> 4.9</p>
-            </div>
-            <div class="toko-stats">
-              <div class="toko-stat">
-                <p class="stat-label">PRODUK</p>
-                <p class="stat-val">56</p>
-              </div>
-              <div class="toko-stat">
-                <p class="stat-label">TERJUAL</p>
-                <p class="stat-val">1.8k+</p>
-              </div>
-            </div>
-            <button class="btn btn-outline btn-toko">Kunjungi Toko</button>
-          </div>
-        </div>
-
-        <!-- Toko 6 -->
-        <div class="toko-card fade-up">
-          <div class="toko-img">
-            <div class="img-placeholder-lg"><img src="img/porto rasa warisan.png" alt=""></div>
-          </div>
-          <div class="toko-body">
-            <div class="toko-head">
-              <div>
-                <h4 class="toko-name">Rasa Tradisi</h4>
-                <p class="toko-cat">Makanan &amp; Minuman</p>
-              </div>
-              <p class="toko-rating"><span class="icon">★</span> 4.6</p>
-            </div>
-            <div class="toko-stats">
-              <div class="toko-stat">
-                <p class="stat-label">PRODUK</p>
-                <p class="stat-val">32</p>
-              </div>
-              <div class="toko-stat">
-                <p class="stat-label">TERJUAL</p>
-                <p class="stat-val">3.1k+</p>
-              </div>
-            </div>
-            <button class="btn btn-outline btn-toko">Kunjungi Toko</button>
-          </div>
-        </div>
-
+      <div class="toko-grid" id="tokoGrid">
+        <!-- JS will populate this -->
       </div>
 
       <div style="text-align:center; margin-top:32px;">
@@ -667,12 +560,107 @@
     }, { threshold: 0.1 });
     document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
 
+    /* ---- DATA TOKO ---- */
+    const shops = [
+      { id: 1, name: "Kopi Nusantara", cat: "Makanan & Minuman", rating: 4.9, products: 24, sold: "1.2k+", img: "img/porto kopi.png", origin: "Aceh" },
+      { id: 2, name: "Lini Tenun", cat: "Fashion", rating: 4.8, products: 45, sold: "850+", img: "img/porto lini tenun.png", origin: "NTT" },
+      { id: 3, name: "Tanah Liat Seru", cat: "Kerajinan", rating: 5.0, products: 12, sold: "300+", img: "img/porto tanah liat.png", origin: "Yogyakarta" },
+      { id: 4, name: "Aura Alami", cat: "Kecantikan", rating: 4.7, products: 18, sold: "2.5k+", img: "img/porto aura alami.png", origin: "Bali" },
+      { id: 5, name: "Batik Warisan", cat: "Fashion", rating: 4.9, products: 56, sold: "1.8k+", img: "img/porto batik warisan.png", origin: "Solo" },
+      { id: 6, name: "Rasa Tradisi", cat: "Makanan & Minuman", rating: 4.6, products: 32, sold: "3.1k+", img: "img/porto rasa warisan.png", origin: "Bandung" },
+      { id: 7, name: "Ukiran Jepara", cat: "Kerajinan", rating: 4.8, products: 15, sold: "420+", img: "img/home 1.png", origin: "Jepara" },
+      { id: 8, name: "Sari Herbal", cat: "Kecantikan", rating: 4.5, products: 22, sold: "1.1k+", img: "img/home 2.png", origin: "Malang" }
+    ];
+
+    const tokoGrid = document.getElementById('tokoGrid');
+    const searchInput = document.getElementById('searchInput');
+    const filterButtons = document.querySelectorAll('.filter-btn');
+
+    let currentFilter = "Semua";
+    let currentSearch = "";
+
+    function renderShops() {
+      const filtered = shops.filter(shop => {
+        const matchesCat = currentFilter === "Semua" || shop.cat === currentFilter;
+        const matchesSearch = shop.name.toLowerCase().includes(currentSearch.toLowerCase()) || 
+                              shop.cat.toLowerCase().includes(currentSearch.toLowerCase()) ||
+                              shop.origin.toLowerCase().includes(currentSearch.toLowerCase());
+        return matchesCat && matchesSearch;
+      });
+
+      tokoGrid.innerHTML = "";
+
+      if (filtered.length === 0) {
+        tokoGrid.innerHTML = `
+          <div class="no-results fade-up visible">
+            <div class="icon">🔍</div>
+            <h3>Pencarian Tidak Ditemukan</h3>
+            <p>Maaf, kami tidak menemukan UMKM yang sesuai dengan kriteria Anda. Coba kata kunci lain!</p>
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach((shop, i) => {
+        const card = document.createElement('div');
+        card.className = "toko-card fade-up visible";
+        card.style.transitionDelay = `${i * 50}ms`;
+        card.innerHTML = `
+          <div class="toko-img">
+            <div class="img-placeholder-lg"><img src="${shop.img}" alt="${shop.name}"></div>
+          </div>
+          <div class="toko-body">
+            <div class="toko-head">
+              <div>
+                <h4 class="toko-name">${shop.name}</h4>
+                <p class="toko-cat">${shop.cat}</p>
+                <p style="font-size:0.7rem; color:var(--text-muted); margin-top:2px;">📍 ${shop.origin}</p>
+              </div>
+              <p class="toko-rating"><span class="icon">★</span> ${shop.rating}</p>
+            </div>
+            <div class="toko-stats">
+              <div class="toko-stat">
+                <p class="stat-label">PRODUK</p>
+                <p class="stat-val">${shop.products}</p>
+              </div>
+              <div class="toko-stat">
+                <p class="stat-label">TERJUAL</p>
+                <p class="stat-val">${shop.sold}</p>
+              </div>
+            </div>
+            <button class="btn btn-outline btn-toko">Kunjungi Toko</button>
+          </div>
+        `;
+        tokoGrid.appendChild(card);
+      });
+    }
+
+    searchInput.addEventListener('input', (e) => {
+      currentSearch = e.target.value;
+      renderShops();
+    });
+
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.getAttribute('data-category');
+        renderShops();
+      });
+    });
+
+    // Initial Render
+    renderShops();
+
     /* ---- CEK STATUS LOGIN ---- */
     (function () {
       const u = localStorage.getItem('oa_user');
       if (u) {
         document.getElementById('navGuest').style.display = 'none';
         document.getElementById('navUser').style.display = 'flex';
+        document.querySelectorAll('a[href="index.html"], a[href="beranda.html"]').forEach(link => {
+          link.href = 'index-loggedin.html';
+        });
         try { const d = JSON.parse(u); if (d.name) { document.getElementById('navUserName').textContent = d.name; document.getElementById('navUserAvatar').textContent = d.name.substring(0, 2).toUpperCase(); } } catch (e) { }
       }
     })();
